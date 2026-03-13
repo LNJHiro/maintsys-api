@@ -27,37 +27,85 @@
 
 ## 📌 Sobre o Projeto
 
-Manutenção Industrial 4.0
-Situação Problema "Na era da Indústria 4.0, a disponibilidade das máquinas é crucial para a
-produtividade. Paradas não planejadas custam milhares de reais e atrasam toda a cadeia
-produtiva. Fábricas modernas buscam migrar de anotações em papel para sistemas digitais que
-prevejam e registrem manutenções de forma eficiente."
-"O Senai contratou sua consultoria para acabar com as 'fichas de papel' penduradas nas
-máquinas. Eles precisam de um sistema centralizado onde a equipe de manutenção possa
-registrar intervenções e os gerentes possam acompanhar a saúde dos equipamentos em tempo
-real."
-Desafio: "Sua equipe deve implementar o Back-End do 'MaintSys', uma API para controle de
-manutenção de maquinário industrial. O sistema deve garantir a integridade dos dados e
-permitir que técnicos registrem atividades através de futuros tablets ou terminais industriais."
-Funcionalidades Essenciais:
-1. Gestão de Técnicos e Acesso: Cadastro de técnicos especializados com autenticação
-segura.
-2. Inventário de Máquinas: Cadastro de equipamentos (Número de Série, Modelo,
-Localização no Galpão, Data de Instalação).
-3. Ordens de Serviço (O.S.): Criação de ordens de manutenção (Preventiva ou Corretiva),
-vinculando um técnico a uma máquina específica.
-4. Histórico de Manutenções: Log completo de todas as intervenções realizadas em uma
-máquina, permitindo análise de reincidência de defeitos.
-5. Alertas de Status: Sistema para notificar quando uma máquina muda de status (ex:
-"Máquina 04 em Parada Crítica" ou "Manutenção Concluída").
-Requisitos e Restrições:
-● Back-End desenvolvido em Laravel (PHP).
-● Banco de dados relacional MySQL.
-● Utilizar o Eloquent ORM para modelar as tabelas e relações (ex: Uma Máquina tem muitas
-Ordens de Serviço).
-● API RESTful retornando JSON.
-● Código seguindo padrões PSR e Clean Code.
-● Publicação no GitHub e testes via Insomnia/Postman.
+## 🏭 Manutenção Industrial 4.0
+
+### 📌 Situação-Problema
+Na era da **Indústria 4.0**, a disponibilidade das máquinas é crucial para a produtividade.  
+Paradas não planejadas podem gerar prejuízos de milhares de reais e atrasar toda a cadeia produtiva.
+
+Muitas fábricas ainda utilizam **fichas de papel penduradas nas máquinas** para registrar manutenções, o que dificulta o controle, histórico e análise de falhas.
+
+O **SENAI** contratou uma consultoria para substituir esse método por um **sistema digital centralizado**, onde:
+
+- Técnicos registrem manutenções em tempo real.
+- Gestores acompanhem o estado das máquinas.
+- O histórico de intervenções seja armazenado e analisado.
+
+---
+
+## 🎯 Desafio
+
+Sua equipe deve desenvolver o **Back-End do MaintSys**, uma **API para controle de manutenção de maquinário industrial**.
+
+O sistema deve:
+
+- Garantir **integridade dos dados**
+- Permitir **registro de intervenções por técnicos**
+- Ser preparado para **integração futura com tablets e terminais industriais**
+
+---
+
+# ⚙️ Funcionalidades Essenciais
+
+### 👨‍🔧 1. Gestão de Técnicos e Acesso
+Cadastro de técnicos especializados com sistema de **autenticação segura**.
+
+### 🏭 2. Inventário de Máquinas
+Cadastro de equipamentos contendo:
+
+- Número de série
+- Modelo
+- Localização no galpão
+- Data de instalação
+
+### 📋 3. Ordens de Serviço (O.S.)
+Criação de ordens de manutenção:
+
+- Preventiva
+- Corretiva
+
+Cada ordem deve vincular:
+
+- Um **técnico**
+- Uma **máquina específica**
+
+### 📊 4. Histórico de Manutenções
+Registro completo de todas as intervenções realizadas em uma máquina, permitindo:
+
+- Análise de falhas
+- Identificação de reincidência de defeitos
+- Rastreamento de atividades
+
+### 🚨 5. Alertas de Status
+Sistema de notificação quando uma máquina muda de status, por exemplo:
+
+- `Máquina 04 em Parada Crítica`
+- `Manutenção Concluída`
+
+---
+
+# 🧱 Requisitos Técnicos
+
+- Back-End desenvolvido em **Laravel (PHP)**
+- Banco de dados **MySQL**
+- Utilização do **Eloquent ORM** para modelagem de dados  
+  - Exemplo: *Uma Máquina possui muitas Ordens de Serviço*
+- API **RESTful** retornando dados em **JSON**
+- Código seguindo padrões **PSR** e **Clean Code**
+- Versionamento no **GitHub**
+- Testes de API utilizando **Insomnia ou Postman**
+
+---
 
 ---
 
