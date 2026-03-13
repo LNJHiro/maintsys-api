@@ -29,11 +29,6 @@
 
 O **MaintSys** resolve um problema real do chão de fábrica: o controle de manutenção feito em fichas de papel é lento, suscetível a perdas e impossível de rastrear. O sistema digitaliza esse processo com uma API segura e rastreável, pensada para tablets industriais e terminais de fábrica.
 
-**Dois perfis de usuário:**
-
-- 👷 **Técnico** — abre O.S., registra intervenções, consulta máquinas e alertas  
-- 🏭 **Gestor** — todos os privilégios do técnico + cadastro de máquinas e técnicos, histórico completo e análise de reincidências
-
 ---
 
 ## 🛠️ Tecnologias
