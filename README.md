@@ -27,52 +27,70 @@
 
 ## 📌 Sobre o Projeto
 
-O **MaintSys** resolve um problema real do chão de fábrica: o controle de manutenção feito em fichas de papel é lento, suscetível a perdas e impossível de rastrear. O sistema digitaliza esse processo com uma API segura e rastreável, pensada para tablets industriais e terminais de fábrica.
-
----
-
-## 🛠️ Tecnologias
-
-| Camada | Tecnologia |
-|--------|-----------|
-| Framework | Laravel 11 (PHP 8.2+) |
-| Banco de Dados | MySQL 8.0 + Eloquent ORM |
-| Autenticação | Laravel Sanctum — token Bearer + bcrypt |
-| Padrão de Código | PSR-12 + Clean Code |
-| Versionamento | Git / GitHub — GitFlow simplificado |
-| Gerenciamento | Scrum — 6 sprints |
+Manutenção Industrial 4.0
+Situação Problema "Na era da Indústria 4.0, a disponibilidade das máquinas é crucial para a
+produtividade. Paradas não planejadas custam milhares de reais e atrasam toda a cadeia
+produtiva. Fábricas modernas buscam migrar de anotações em papel para sistemas digitais que
+prevejam e registrem manutenções de forma eficiente."
+"O Senai contratou sua consultoria para acabar com as 'fichas de papel' penduradas nas
+máquinas. Eles precisam de um sistema centralizado onde a equipe de manutenção possa
+registrar intervenções e os gerentes possam acompanhar a saúde dos equipamentos em tempo
+real."
+Desafio: "Sua equipe deve implementar o Back-End do 'MaintSys', uma API para controle de
+manutenção de maquinário industrial. O sistema deve garantir a integridade dos dados e
+permitir que técnicos registrem atividades através de futuros tablets ou terminais industriais."
+Funcionalidades Essenciais:
+1. Gestão de Técnicos e Acesso: Cadastro de técnicos especializados com autenticação
+segura.
+2. Inventário de Máquinas: Cadastro de equipamentos (Número de Série, Modelo,
+Localização no Galpão, Data de Instalação).
+3. Ordens de Serviço (O.S.): Criação de ordens de manutenção (Preventiva ou Corretiva),
+vinculando um técnico a uma máquina específica.
+4. Histórico de Manutenções: Log completo de todas as intervenções realizadas em uma
+máquina, permitindo análise de reincidência de defeitos.
+5. Alertas de Status: Sistema para notificar quando uma máquina muda de status (ex:
+"Máquina 04 em Parada Crítica" ou "Manutenção Concluída").
+Requisitos e Restrições:
+● Back-End desenvolvido em Laravel (PHP).
+● Banco de dados relacional MySQL.
+● Utilizar o Eloquent ORM para modelar as tabelas e relações (ex: Uma Máquina tem muitas
+Ordens de Serviço).
+● API RESTful retornando JSON.
+● Código seguindo padrões PSR e Clean Code.
+● Publicação no GitHub e testes via Insomnia/Postman.
 
 ---
 
 ## 📋 Requisitos Funcionais
 
-| ID | Funcionalidade | Prioridade |
-|----|---------------|-----------|
-| RF01 | Cadastro de técnicos com autenticação segura por token | 🔴 Alta |
-| RF02 | Cadastro de máquinas: N° Série, Modelo, Localização e Data de Instalação | 🔴 Alta |
-| RF03 | Criação de O.S. Preventiva ou Corretiva, vinculando técnico e máquina | 🔴 Alta |
-| RF04 | Log completo de intervenções por máquina (histórico de manutenções) | 🔴 Alta |
-| RF05 | Notificações automáticas ao técnico/gestor por mudança de status | 🟡 Média |
-| RF06 | Consulta e filtragem de O.S. por técnico, máquina ou período | 🟡 Média |
-| RF07 | Análise de reincidência de defeitos por máquina | 🟡 Média |
-| RF08 | Encerramento e atualização de status de O.S. pelo técnico responsável | 🔴 Alta |
+Os **Requisitos Funcionais** descrevem **as funcionalidades do sistema**, ou seja, as ações que o sistema deve executar para atender às necessidades dos usuários.
+
+Eles representam **o que o sistema faz**.
+
+**Exemplos no MaintSys:**
+- Cadastro de técnicos com autenticação segura.
+- Cadastro de máquinas com número de série, modelo e localização.
+- Criação de Ordens de Serviço (preventiva ou corretiva).
+- Registro de intervenções realizadas pelos técnicos.
+- Consulta do histórico de manutenção de uma máquina.
+- Atualização do status de uma Ordem de Serviço.
 
 ---
 
 ## ⚙️ Requisitos Não Funcionais
 
-| ID | Categoria | Descrição | Prioridade |
-|----|-----------|-----------|-----------|
-| RNF01 | Linguagem e Framework | Back-end em PHP com Laravel (MVC, middlewares, service providers) | 🔴 Alta |
-| RNF02 | Banco de Dados | MySQL com Eloquent ORM, migrations e seeders versionados | 🔴 Alta |
-| RNF03 | Padrão de API | RESTful com respostas em JSON e verbos HTTP semânticos | 🔴 Alta |
-| RNF04 | Segurança | Sanctum, bcrypt, rotas protegidas por middleware, prevenção de SQL Injection | 🔴 Alta |
-| RNF05 | Qualidade de Código | PSR-12 + Clean Code: responsabilidade única, sem duplicações | 🔴 Alta |
-| RNF06 | Versionamento | GitHub com GitFlow, branches por funcionalidade | 🔴 Alta |
-| RNF07 | Testabilidade | Endpoints testáveis via Postman/Insomnia com collection documentada | 🟡 Média |
-| RNF08 | Integridade dos Dados | FK com constraints; histórico imutável — registros apenas encerrados | 🔴 Alta |
-| RNF09 | Desempenho | Consultas de histórico < 2s via eager loading do Eloquent | 🟡 Média |
-| RNF10 | Compatibilidade | API stateless para integração com tablets e terminais industriais | 🟢 Baixa |
+Os **Requisitos Não Funcionais** descrevem **como o sistema deve funcionar**, incluindo regras de qualidade, desempenho, segurança e padrões técnicos.
+
+Eles não representam funcionalidades diretas, mas **características que garantem qualidade e confiabilidade do sistema**.
+
+**Exemplos no MaintSys:**
+- A API deve seguir o padrão **RESTful** com respostas em **JSON**.
+- O sistema deve utilizar **Laravel 11 e PHP 8.2+**.
+- A autenticação deve utilizar **Laravel Sanctum com tokens Bearer**.
+- O banco de dados deve garantir **integridade com chaves estrangeiras (FK)**.
+- Consultas de histórico devem responder em **menos de 2 segundos**.
+- O código deve seguir o padrão **PSR-12 e boas práticas de Clean Code**.
+
 
 ---
 
