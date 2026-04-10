@@ -7,6 +7,7 @@
 <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white"/>
 <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white"/>
 <img src="https://img.shields.io/badge/Sanctum-FF2D20?style=for-the-badge&logo=laravel&logoColor=white"/>
+<img src="https://img.shields.io/badge/JSON-000000?style=for-the-badge&logo=json&logoColor=white"/>
 
 > API RESTful que substitui fichas de papel pelo controle digital de manutenção industrial — conectando técnicos, gestores e máquinas em tempo real.
 
@@ -20,8 +21,8 @@
 
 | Recurso | Link |
 |-------|------|
-| 🎨 Protótipo (Figma) | https://cleat-pickle-20252208.figma.site/login |
-| 📋 Quadro do Projeto (Trello) | https://trello.com/invite/b/699895865de97ce9e1ed0a19/ATTI092d2e5ed783761fc1dc5a293b494341499AB6EA/projeto-integrador |
+| 📋 **Link: Trello**| [Trello](https://trello.com/invite/b/699895865de97ce9e1ed0a19/ATTI092d2e5ed783761fc1dc5a293b494341499AB6EA/projeto-integrador) |
+| 🎨 **Link: Figma** | [Figma](https://cleat-pickle-20252208.figma.site/login) |
 
 ---
 
@@ -52,6 +53,25 @@ O sistema deve:
 - Garantir **integridade dos dados**
 - Permitir **registro de intervenções por técnicos**
 - Ser preparado para **integração futura com tablets e terminais industriais**
+
+---
+
+## 📋 Metodologia e Planejamento
+
+### 📌 Levantamento de Requisitos
+Foram identificados problemas na gestão de manutenção industrial, como falta de organização, demora nos atendimentos e ausência de histórico, definindo as principais funcionalidades do sistema.
+
+### 🎨 Prototipagem
+Interfaces desenvolvidas no **Figma** para estruturar telas como login, cadastro e dashboard, garantindo melhor visualização e experiência do usuário.
+
+### 🔄 Metodologias Ágeis
+O projeto é desenvolvido por meio de **sprints**, permitindo entregas contínuas, organização das tarefas e evolução gradual do sistema.
+
+### 📦 Versionamento
+Utilização do **Git e GitHub** para controle de versões, permitindo acompanhamento das alterações, colaboração entre a equipe e segurança no desenvolvimento.
+
+### 📄 Documentação
+Documentação planejada para descrever **endpoints da API**, padronização REST, tratamento de erros e organização das respostas em JSON.
 
 ---
 
@@ -107,8 +127,6 @@ Sistema de notificação quando uma máquina muda de status, por exemplo:
 
 ---
 
----
-
 ## 📋 Requisitos Funcionais
 
 Os **Requisitos Funcionais** descrevem **as funcionalidades do sistema**, ou seja, as ações que o sistema deve executar para atender às necessidades dos usuários.
@@ -138,7 +156,6 @@ Eles não representam funcionalidades diretas, mas **características que garant
 - O banco de dados deve garantir **integridade com chaves estrangeiras (FK)**.
 - Consultas de histórico devem responder em **menos de 2 segundos**.
 - O código deve seguir o padrão **PSR-12 e boas práticas de Clean Code**.
-
 
 ---
 
