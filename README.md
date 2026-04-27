@@ -176,7 +176,7 @@ Eles não representam funcionalidades diretas, mas **características que garant
 
 | Douglas Nogueira | Hayron de Oliveira | Gabriel Marques |
 |:---:|:---:|:---:|
-| Desenvolvedor | Desenvolvedor | Desenvolvedor |
+| Desenvolvedor | PO / Scrum Master | Desenvolvedor |
 
 <div align="center">
 <sub>SENAI Limeira, SP · Projeto Integrador — Indústria 4.0 · 2026</sub>
