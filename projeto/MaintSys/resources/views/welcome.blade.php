@@ -1,352 +1,832 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name', 'MAINTSYS') }}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MaintSys - Sistema de gestão de manutenção inteligente. Gerencie ordens de serviço, máquinas, técnicos e histórico em um único lugar.">
+    <meta name="theme-color" content="#f5d547">
+    
+    <title>{{ config('app.name', 'MaintSys') }} - Sistema de Gestão de Manutenção</title>
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23f5d547'/><text x='50' y='65' font-size='70' font-weight='bold' text-anchor='middle' fill='%23111'>☼</text></svg>">
+    
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800,900" rel="stylesheet" />
+
     <style>
-        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
         :root {
-            --accent: #e8c547;
-            --accent2: #f0d76a;
-            --text: #f0ede6;
-            --muted: #8a8f9e;
-            --border: rgba(255,255,255,0.07);
+            --bg: #0b0d12;
+            --bg-2: #11141b;
+            --bg-3: #090b10;
+            --text: #f7f2e8;
+            --muted: #9ca3af;
+            --yellow: #f5d547;
+            --yellow-2: #ffe45c;
+            --yellow-dark: #e5c23d;
+            --border: rgba(255, 255, 255, 0.12);
         }
 
-        html, body {
-            background: #0d0f14;
-            color: var(--text);
-            font-family: 'DM Sans', sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
             min-height: 100vh;
-            overflow-x: hidden;
+            font-family: 'Instrument Sans', Arial, sans-serif;
+            background:
+                radial-gradient(circle at top center, rgba(245, 213, 71, 0.08), transparent 35%),
+                linear-gradient(180deg, var(--bg), #07080c);
+            color: var(--text);
+            line-height: 1.6;
         }
 
-        .glow {
-            position: absolute; top: -150px; left: 50%; transform: translateX(-50%);
-            width: 700px; height: 400px;
-            background: radial-gradient(ellipse at center, rgba(232,197,71,0.07) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        nav {
-            position: relative; z-index: 10;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 1.5rem 3rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .logo {
-            display: flex; align-items: center; gap: 10px;
-            font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.25rem;
-            letter-spacing: 0.08em; color: var(--text);
+        a {
             text-decoration: none;
+            color: inherit;
         }
 
-        .logo-icon {
-            width: 32px; height: 32px;
-            background: var(--accent);
-            border-radius: 6px;
-            display: flex; align-items: center; justify-content: center;
+        /* ==================== NAVBAR ==================== */
+        .navbar {
+            width: 100%;
+            height: 86px;
+            padding: 0 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            background: rgba(11, 13, 18, 0.88);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
 
-        .nav-links { display: flex; align-items: center; gap: 2rem; }
-
-        .nav-links a {
-            color: var(--muted); text-decoration: none; font-size: 0.9rem;
-            transition: color 0.2s;
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text);
+            font-weight: 900;
+            font-size: 24px;
+            letter-spacing: 0.5px;
+            transition: 0.2s ease;
         }
-        .nav-links a:hover { color: var(--text); }
 
-        .btn-nav {
-            background: var(--accent) !important;
-            color: #0d0f14 !important;
-            border-radius: 8px !important;
-            padding: 0.5rem 1.3rem !important;
-            font-weight: 500 !important;
+        .brand:hover {
+            color: var(--yellow);
         }
-        .btn-nav:hover { background: var(--accent2) !important; color: #0d0f14 !important; }
 
+        .brand-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: var(--yellow);
+            color: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 20px;
+            transition: 0.2s ease;
+        }
+
+        .brand:hover .brand-icon {
+            transform: scale(1.05) rotate(10deg);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-link {
+            color: #c9d1d9;
+            font-size: 15px;
+            font-weight: 500;
+            transition: 0.2s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--yellow);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--yellow);
+            transition: width 0.2s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .btn-top {
+            background: var(--yellow);
+            color: #111;
+            padding: 12px 22px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 800;
+            transition: 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid var(--yellow);
+        }
+
+        .btn-top:hover {
+            background: var(--yellow-2);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(245, 213, 71, 0.2);
+        }
+
+        .btn-top.logout {
+            background: transparent;
+            color: #c9d1d9;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 18px;
+        }
+
+        .btn-top.logout:hover {
+            background: rgba(255, 0, 0, 0.1);
+            color: #ff6b6b;
+            border-color: #ff6b6b;
+        }
+
+        /* ==================== HERO ==================== */
         .hero {
-            position: relative; z-index: 5;
-            display: flex; flex-direction: column; align-items: center;
+            min-height: calc(100vh - 86px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 24px;
             text-align: center;
-            padding: 6rem 2rem 4rem;
+        }
+
+        .hero-inner {
+            max-width: 980px;
+            width: 100%;
         }
 
         .badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(232,197,71,0.1);
-            border: 1px solid rgba(232,197,71,0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
             border-radius: 999px;
-            padding: 0.35rem 1.1rem;
-            font-size: 0.8rem; color: var(--accent);
-            margin-bottom: 2rem;
+            border: 1px solid rgba(245, 213, 71, 0.35);
+            background: rgba(245, 213, 71, 0.08);
+            color: var(--yellow);
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 42px;
+            animation: slideUp 0.6s ease-out;
         }
 
         .badge-dot {
-            width: 6px; height: 6px;
-            background: var(--accent);
+            width: 7px;
+            height: 7px;
             border-radius: 50%;
-            animation: pulse 2s infinite;
-            flex-shrink: 0;
+            background: var(--yellow);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
         }
 
-        h1 {
-            font-family: 'Syne', sans-serif;
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            font-weight: 800;
-            line-height: 1.05;
-            letter-spacing: -0.02em;
-            max-width: 780px;
-            color: var(--text);
+        .hero h1 {
+            font-size: clamp(54px, 8vw, 116px);
+            line-height: 0.93;
+            font-weight: 900;
+            letter-spacing: -5px;
+            margin-bottom: 34px;
+            animation: slideUp 0.6s ease-out 0.1s backwards;
         }
 
-        h1 em { color: var(--accent); font-style: normal; }
+        .hero h1 span {
+            color: var(--yellow);
+            display: block;
+        }
 
-        .subtitle {
-            margin-top: 1.5rem;
-            font-size: 1.05rem;
-            color: var(--muted);
-            max-width: 500px;
+        .hero p {
+            color: #aab2c0;
+            max-width: 620px;
+            margin: 0 auto;
+            font-size: 18px;
             line-height: 1.7;
+            animation: slideUp 0.6s ease-out 0.2s backwards;
         }
 
-        .cta-group {
-            display: flex; gap: 1rem; margin-top: 2.5rem;
-            flex-wrap: wrap; justify-content: center;
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-top: 38px;
+            animation: slideUp 0.6s ease-out 0.3s backwards;
+        }
+
+        .btn-primary,
+        .btn-secondary,
+        .btn-outline {
+            min-width: 190px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 15px 26px;
+            border-radius: 11px;
+            font-size: 16px;
+            font-weight: 800;
+            transition: 0.2s ease;
+            border: 1px solid transparent;
+            cursor: pointer;
         }
 
         .btn-primary {
-            background: var(--accent);
-            color: #0d0f14;
-            border: none; border-radius: 10px;
-            padding: 0.85rem 2rem;
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 500; font-size: 1rem;
-            cursor: pointer; text-decoration: none;
-            transition: background 0.2s, transform 0.15s;
-            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--yellow);
+            color: #111;
+            border: 1px solid var(--yellow);
         }
-        .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+
+        .btn-primary:hover {
+            background: var(--yellow-2);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(245, 213, 71, 0.3);
+        }
 
         .btn-secondary {
             background: transparent;
-            color: var(--text);
-            border: 1px solid rgba(255,255,255,0.12);
-            border-radius: 10px;
-            padding: 0.85rem 2rem;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1rem;
-            cursor: pointer; text-decoration: none;
-            transition: border-color 0.2s, transform 0.15s;
-            display: inline-flex; align-items: center; gap: 8px;
-        }
-        .btn-secondary:hover { border-color: rgba(255,255,255,0.25); transform: translateY(-2px); }
-
-        .stats {
-            display: flex; gap: 3rem; margin-top: 4rem;
-            flex-wrap: wrap; justify-content: center; align-items: center;
+            color: var(--yellow);
+            border: 1px solid rgba(245, 213, 71, 0.45);
         }
 
-        .stat { text-align: center; }
-        .stat-num {
-            font-family: 'Syne', sans-serif;
-            font-size: 2rem; font-weight: 700;
-            color: var(--text);
-        }
-        .stat-num em { color: var(--accent); font-style: normal; }
-        .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
-        .divider { width: 1px; height: 40px; background: var(--border); }
-
-        .features {
-            position: relative; z-index: 5;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            margin: 0 3rem 3rem;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            overflow: hidden;
-            background: var(--border);
+        .btn-secondary:hover {
+            background: rgba(245, 213, 71, 0.09);
+            transform: translateY(-2px);
         }
 
-        .feature {
-            background: #13161d;
-            padding: 2rem;
-            transition: background 0.2s;
-        }
-        .feature:hover { background: #1a1e28; }
-
-        .feature-icon {
-            width: 44px; height: 44px;
-            background: rgba(232,197,71,0.1);
-            border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 1.2rem;
-        }
-        .feature-icon svg {
-            width: 22px; height: 22px;
-            stroke: var(--accent); fill: none;
-            stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+        .btn-outline {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.18);
         }
 
-        .feature h3 {
-            font-family: 'Syne', sans-serif;
-            font-size: 1rem; font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text);
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-2px);
         }
-        .feature p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
 
-        footer {
-            position: relative; z-index: 5;
+        /* ==================== METRICS ==================== */
+        .metrics {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0;
+            margin-top: 70px;
+            animation: slideUp 0.6s ease-out 0.4s backwards;
+        }
+
+        .metric {
+            padding: 0 38px;
+            border-right: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .metric:last-child {
+            border-right: none;
+        }
+
+        .metric-value {
+            font-size: 30px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1px;
+        }
+
+        .metric-value span {
+            color: var(--yellow);
+        }
+
+        .metric-label {
+            color: #9ca3af;
+            font-size: 13px;
+            margin-top: 6px;
+        }
+
+        /* ==================== RECURSOS SECTION ==================== */
+        .recursos-section {
+            padding: 80px 24px;
+            background: var(--bg-3);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .recursos-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .recursos-title {
+            font-size: 42px;
+            font-weight: 900;
+            margin-bottom: 18px;
+            color: #fff;
             text-align: center;
-            padding: 2rem;
-            border-top: 1px solid var(--border);
-            font-size: 0.82rem; color: var(--muted);
         }
 
-        @media (max-width: 900px) {
-            .features { grid-template-columns: repeat(2, 1fr); margin: 0 1.5rem 2rem; }
+        .recursos-subtitle {
+            color: #9ca3af;
+            font-size: 17px;
+            max-width: 680px;
+            margin: 0 auto 60px;
+            text-align: center;
         }
-        @media (max-width: 600px) {
-            nav { padding: 1rem 1.5rem; }
-            .nav-links .hide-mobile { display: none; }
-            .features { grid-template-columns: 1fr; margin: 0 1rem 2rem; }
-            .stats { gap: 1.5rem; }
-            .divider { display: none; }
+
+        .recursos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .recurso-card {
+            background: var(--bg-2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            transition: 0.3s ease;
+        }
+
+        .recurso-card:hover {
+            border-color: rgba(245, 213, 71, 0.3);
+            background: rgba(245, 213, 71, 0.02);
+            transform: translateY(-4px);
+        }
+
+        .recurso-card h3 {
+            color: var(--yellow);
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .recurso-card p {
+            color: #9ca3af;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* ==================== FOOTER ==================== */
+        .footer {
+            padding: 50px 24px;
+            background: var(--bg);
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .footer-container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h4 {
+            color: var(--text);
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col a {
+            color: var(--muted);
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        .footer-col a:hover {
+            color: var(--yellow);
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .footer-brand-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: var(--yellow);
+            color: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 16px;
+        }
+
+        .footer-brand span {
+            font-weight: 900;
+            color: var(--text);
+        }
+
+        .footer-description {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+
+        .footer-divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.08);
+            margin-bottom: 24px;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-copyright {
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        /* ==================== RESPONSIVE ==================== */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 20px;
+                height: 70px;
+            }
+
+            .brand {
+                font-size: 20px;
+            }
+
+            .brand-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 16px;
+            }
+
+            .nav-right {
+                gap: 12px;
+            }
+
+            .nav-link {
+                display: none;
+            }
+
+            .btn-top {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .hero {
+                min-height: calc(100vh - 70px);
+                padding: 60px 16px;
+            }
+
+            .hero h1 {
+                letter-spacing: -2px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+
+            .btn-primary,
+            .btn-secondary,
+            .btn-outline {
+                width: 100%;
+                min-width: unset;
+            }
+
+            .metrics {
+                flex-direction: column;
+                gap: 24px;
+                margin-top: 50px;
+            }
+
+            .metric {
+                border-right: none;
+                padding: 0;
+            }
+
+            .recursos-section {
+                padding: 60px 16px;
+            }
+
+            .recursos-title {
+                font-size: 32px;
+            }
+
+            .recursos-subtitle {
+                margin-bottom: 40px;
+            }
+
+            .recursos-grid {
+                gap: 16px;
+            }
+
+            .recurso-card {
+                padding: 20px;
+            }
+
+            .footer-content {
+                gap: 24px;
+                margin-bottom: 24px;
+            }
+
+            .footer-bottom {
+                justify-content: center;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0 16px;
+            }
+
+            .brand {
+                font-size: 18px;
+                gap: 8px;
+            }
+
+            .brand-icon {
+                width: 28px;
+                height: 28px;
+            }
+
+            .hero h1 {
+                font-size: clamp(36px, 10vw, 60px);
+                line-height: 1;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .hero-actions {
+                gap: 12px;
+            }
+
+            .badge {
+                font-size: 12px;
+                padding: 6px 14px;
+                margin-bottom: 24px;
+            }
+
+            .recursos-title {
+                font-size: 28px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="glow"></div>
-
-<nav>
-    <a href="{{ url('/') }}" class="logo">
-        <div class="logo-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d0f14" stroke-width="2.5" stroke-linecap="round">
-                <circle cx="12" cy="12" r="3"/>
-                <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-            </svg>
-        </div>
-        {{ config('app.name', 'MAINTSYS') }}
-    </a>
-
-    <div class="nav-links">
-        <a href="#features" class="hide-mobile">Recursos</a>
-        <a href="#" class="hide-mobile">Suporte</a>
-        @if (Route::has('login'))
-            <a href="{{ route('login') }}" class="btn-nav">Entrar</a>
-        @endif
-    </div>
-</nav>
-
-<section class="hero">
-    <div class="badge">
-        <div class="badge-dot"></div>
-        Sistema de Gestão de Manutenção
-    </div>
-
-    <h1>Manutenção inteligente,<br><em>sem complicação</em></h1>
-
-    <p class="subtitle">
-        Gerencie ordens de serviço, máquinas, técnicos e histórico em um único lugar. Eficiência total para sua operação.
-    </p>
-
-    <div class="cta-group">
-        @if (Route::has('login'))
-        <a href="{{ route('login') }}" class="btn-primary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-            Acessar o sistema
+    <header class="navbar">
+        <a href="{{ url('/') }}" class="brand" aria-label="MaintSys - Voltar para home">
+            <span class="brand-icon">☼</span>
+            <span>MaintSys</span>
         </a>
-        @endif
-        <a href="#features" class="btn-secondary">
-            Ver recursos
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-        </a>
-    </div>
 
-    <div class="stats">
-        <div class="stat">
-            <div class="stat-num">100<em>%</em></div>
-            <div class="stat-label">Rastreabilidade</div>
-        </div>
-        <div class="divider"></div>
-        <div class="stat">
-            <div class="stat-num"><em>↑</em>40%</div>
-            <div class="stat-label">Produtividade</div>
-        </div>
-        <div class="divider"></div>
-        <div class="stat">
-            <div class="stat-num">24<em>/7</em></div>
-            <div class="stat-label">Disponibilidade</div>
-        </div>
-    </div>
-</section>
+        <nav class="nav-right" aria-label="Navegação principal">
+            <a href="#recursos" class="nav-link">Recursos</a>
+            <a href="#suporte" class="nav-link">Suporte</a>
 
-<div class="features" id="features">
-    <div class="feature">
-        <div class="feature-icon">
-            <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        </div>
-        <h3>Dashboard em tempo real</h3>
-        <p>Visualize indicadores, ordens abertas e status das máquinas em um painel centralizado.</p>
-    </div>
+            @auth
+                <a href="{{ route('dashboard') }}" class="btn-top" title="Ir para o painel de controle">
+                    Dashboard
+                </a>
+                
+                <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                    @csrf
+                    <button type="submit" class="btn-top logout" title="Sair da conta" aria-label="Fazer logout">
+                        Sair
+                    </button>
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="nav-link" title="Entrar na sua conta">
+                    Entrar
+                </a>
 
-    <div class="feature">
-        <div class="feature-icon">
-            <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-        </div>
-        <h3>Gestão de máquinas</h3>
-        <p>Cadastre equipamentos, vincule histórico e acompanhe o ciclo de vida de cada ativo.</p>
-    </div>
+                <a href="{{ route('register') }}" class="btn-top" title="Criar uma nova conta">
+                    Criar conta
+                </a>
+            @endauth
+        </nav>
+    </header>
 
-    <div class="feature">
-        <div class="feature-icon">
-            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        </div>
-        <h3>Controle de técnicos</h3>
-        <p>Atribua chamados, monitore disponibilidade e acompanhe a performance da equipe.</p>
-    </div>
+    <main>
+        <section class="hero">
+            <section class="hero-inner">
+                <div class="badge">
+                    <span class="badge-dot"></span>
+                    Sistema de Gestão de Manutenção
+                </div>
 
-    <div class="feature">
-        <div class="feature-icon">
-            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        </div>
-        <h3>Ordens de serviço</h3>
-        <p>Abra, gerencie e encerre ordens com histórico completo e tempo de execução.</p>
-    </div>
+                <h1>
+                    Manutenção inteligente,
+                    <span>sem complicação</span>
+                </h1>
 
-    <div class="feature">
-        <div class="feature-icon">
-            <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <h3>Histórico e relatórios</h3>
-        <p>Acesse registros completos e gere relatórios de desempenho para tomada de decisão.</p>
-    </div>
+                <p>
+                    Gerencie ordens de serviço, máquinas, técnicos e histórico em
+                    um único lugar. Eficiência total para sua operação.
+                </p>
 
-    <div class="feature">
-        <div class="feature-icon">
-            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-        </div>
-        <h3>Controle de acesso</h3>
-        <p>Perfis para administradores, técnicos e gestores com permissões granulares.</p>
-    </div>
-</div>
+                <div class="hero-actions">
+                    @auth
+                        <a href="{{ route('dashboard') }}" class="btn-primary">
+                            → Acessar dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}" class="btn-primary">
+                            → Acessar o sistema
+                        </a>
 
-<footer>
-    &copy; {{ date('Y') }} {{ config('app.name', 'MAINTSYS') }} &mdash; Sistema de Gestão de Manutenção
-</footer>
+                        <a href="{{ route('register') }}" class="btn-secondary">
+                            + Criar conta
+                        </a>
+                    @endauth
+
+                    <a href="#recursos" class="btn-outline">
+                        Ver recursos ▼
+                    </a>
+                </div>
+
+                <div class="metrics">
+                    <div class="metric">
+                        <div class="metric-value">100<span>%</span></div>
+                        <div class="metric-label">Rastreabilidade</div>
+                    </div>
+
+                    <div class="metric">
+                        <div class="metric-value"><span>↑</span>40%</div>
+                        <div class="metric-label">Produtividade</div>
+                    </div>
+
+                    <div class="metric">
+                        <div class="metric-value">24/7</div>
+                        <div class="metric-label">Disponibilidade</div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <section id="recursos" class="recursos-section" aria-labelledby="recursos-title">
+            <div class="recursos-container">
+                <h2 id="recursos-title" class="recursos-title">Recursos do sistema</h2>
+
+                <p class="recursos-subtitle">
+                    Controle completo para manutenção preventiva, corretiva, técnicos, máquinas e histórico de intervenções.
+                </p>
+
+                <div class="recursos-grid">
+                    <div class="recurso-card">
+                        <h3>Ordens de Serviço</h3>
+                        <p>Abra, acompanhe e conclua ordens de manutenção com prioridade e status.</p>
+                    </div>
+
+                    <div class="recurso-card">
+                        <h3>Máquinas</h3>
+                        <p>Cadastre máquinas, acompanhe status e identifique paradas críticas.</p>
+                    </div>
+
+                    <div class="recurso-card">
+                        <h3>Técnicos</h3>
+                        <p>Gerencie técnicos ativos, especialidades, contatos e atendimentos.</p>
+                    </div>
+
+                    <div class="recurso-card">
+                        <h3>Histórico</h3>
+                        <p>Consulte manutenções realizadas, soluções aplicadas, custos e tempo de parada.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer" id="suporte">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-col">
+                    <div class="footer-brand">
+                        <span class="footer-brand-icon">☼</span>
+                        <span>MaintSys</span>
+                    </div>
+                    <p class="footer-description">
+                        Sistema inteligente de gestão de manutenção para maximizar a eficiência operacional.
+                    </p>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Navegação</h4>
+                    <ul>
+                        <li><a href="{{ url('/') }}">Home</a></li>
+                        <li><a href="#recursos">Recursos</a></li>
+                        @auth
+                            <li><a href="{{ route('dashboard') }}">Dashboard</a></li>
+                        @endauth
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Suporte</h4>
+                    <ul>
+                        <li><a href="mailto:suporte@maintsys.com" title="Enviar email de suporte">Email de Suporte</a></li>
+                        <li><a href="#" title="Ver documentação">Documentação</a></li>
+                        <li><a href="#" title="Ver FAQ">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#" title="Ver termos de serviço">Termos de Serviço</a></li>
+                        <li><a href="#" title="Ver política de privacidade">Privacidade</a></li>
+                        <li><a href="#" title="Ver cookies">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-divider"></div>
+
+            <div class="footer-bottom">
+                <p class="footer-copyright">
+                    © {{ date('Y') }} MaintSys. Todos os direitos reservados.
+                </p>
+                <div class="footer-social">
+                    <a href="#" aria-label="GitHub" title="Siga no GitHub">GitHub</a>
+                    <a href="#" aria-label="LinkedIn" title="Siga no LinkedIn">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>
