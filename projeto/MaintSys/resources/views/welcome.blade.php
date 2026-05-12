@@ -4,26 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="MaintSys - Sistema de gestão de manutenção inteligente. Gerencie ordens de serviço, máquinas, técnicos e histórico em um único lugar.">
-    <meta name="theme-color" content="#f5d547">
+    <meta name="theme-color" content="#003087">
     
     <title>{{ config('app.name', 'MaintSys') }} - Sistema de Gestão de Manutenção</title>
 
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23f5d547'/><text x='50' y='65' font-size='70' font-weight='bold' text-anchor='middle' fill='%23111'>☼</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23003087'/><text x='50' y='68' font-size='60' font-weight='bold' text-anchor='middle' fill='%23FFFFFF'>S</text></svg>">
     
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800,900" rel="stylesheet" />
 
     <style>
         :root {
-            --bg: #0b0d12;
-            --bg-2: #11141b;
-            --bg-3: #090b10;
-            --text: #f7f2e8;
-            --muted: #9ca3af;
-            --yellow: #f5d547;
-            --yellow-2: #ffe45c;
-            --yellow-dark: #e5c23d;
-            --border: rgba(255, 255, 255, 0.12);
+            --bg: #F5F7FA;
+            --bg-2: #FFFFFF;
+            --bg-3: #EEF1F6;
+            --text: #1A1A2E;
+            --muted: #6B7280;
+            --yellow: #003087;
+            --yellow-2: #0052A5;
+            --yellow-dark: #001F5A;
+            --border: #D0D7DE;
         }
 
         * {
@@ -40,8 +40,8 @@
             min-height: 100vh;
             font-family: 'Instrument Sans', Arial, sans-serif;
             background:
-                radial-gradient(circle at top center, rgba(245, 213, 71, 0.08), transparent 35%),
-                linear-gradient(180deg, var(--bg), #07080c);
+                radial-gradient(circle at top center, rgba(0, 48, 135, 0.06), transparent 35%),
+                linear-gradient(180deg, var(--bg), #E8ECF5);
             color: var(--text);
             line-height: 1.6;
         }
@@ -60,7 +60,7 @@
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid var(--border);
-            background: rgba(11, 13, 18, 0.88);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
             position: sticky;
             top: 0;
@@ -87,7 +87,7 @@
             height: 34px;
             border-radius: 8px;
             background: var(--yellow);
-            color: #111;
+            color: #FFFFFF;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -107,7 +107,7 @@
         }
 
         .nav-link {
-            color: #c9d1d9;
+            color: #555555;
             font-size: 15px;
             font-weight: 500;
             transition: 0.2s ease;
@@ -135,7 +135,7 @@
 
         .btn-top {
             background: var(--yellow);
-            color: #111;
+            color: #FFFFFF;
             padding: 12px 22px;
             border-radius: 10px;
             font-size: 15px;
@@ -150,18 +150,18 @@
         .btn-top:hover {
             background: var(--yellow-2);
             transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(245, 213, 71, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 48, 135, 0.2);
         }
 
         .btn-top.logout {
             background: transparent;
-            color: #c9d1d9;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #555555;
+            border: 1px solid rgba(0, 0, 0, 0.15);
             padding: 10px 18px;
         }
 
         .btn-top.logout:hover {
-            background: rgba(255, 0, 0, 0.1);
+            background: rgba(207, 34, 46, 0.08);
             color: #ff6b6b;
             border-color: #ff6b6b;
         }
@@ -187,8 +187,8 @@
             gap: 8px;
             padding: 8px 18px;
             border-radius: 999px;
-            border: 1px solid rgba(245, 213, 71, 0.35);
-            background: rgba(245, 213, 71, 0.08);
+            border: 1px solid rgba(0, 48, 135, 0.35);
+            background: rgba(0, 48, 135, 0.08);
             color: var(--yellow);
             font-size: 13px;
             font-weight: 700;
@@ -239,7 +239,7 @@
         }
 
         .hero p {
-            color: #aab2c0;
+            color: var(--muted);
             max-width: 620px;
             margin: 0 auto;
             font-size: 18px;
@@ -276,35 +276,35 @@
 
         .btn-primary {
             background: var(--yellow);
-            color: #111;
+            color: #FFFFFF;
             border: 1px solid var(--yellow);
         }
 
         .btn-primary:hover {
             background: var(--yellow-2);
             transform: translateY(-2px);
-            box-shadow: 0 12px 24px rgba(245, 213, 71, 0.3);
+            box-shadow: 0 12px 24px rgba(0, 48, 135, 0.3);
         }
 
         .btn-secondary {
             background: transparent;
             color: var(--yellow);
-            border: 1px solid rgba(245, 213, 71, 0.45);
+            border: 1px solid rgba(0, 48, 135, 0.45);
         }
 
         .btn-secondary:hover {
-            background: rgba(245, 213, 71, 0.09);
+            background: rgba(0, 48, 135, 0.09);
             transform: translateY(-2px);
         }
 
         .btn-outline {
             background: transparent;
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: var(--text);
+            border: 1px solid rgba(0, 0, 0, 0.18);
         }
 
         .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.06);
+            background: rgba(0, 0, 0, 0.04);
             transform: translateY(-2px);
         }
 
@@ -320,7 +320,7 @@
 
         .metric {
             padding: 0 38px;
-            border-right: 1px solid rgba(255, 255, 255, 0.12);
+            border-right: 1px solid var(--border);
         }
 
         .metric:last-child {
@@ -330,7 +330,7 @@
         .metric-value {
             font-size: 30px;
             font-weight: 900;
-            color: #fff;
+            color: var(--text);
             letter-spacing: -1px;
         }
 
@@ -339,7 +339,7 @@
         }
 
         .metric-label {
-            color: #9ca3af;
+            color: var(--muted);
             font-size: 13px;
             margin-top: 6px;
         }
@@ -348,7 +348,7 @@
         .recursos-section {
             padding: 80px 24px;
             background: var(--bg-3);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid var(--border);
         }
 
         .recursos-container {
@@ -360,12 +360,12 @@
             font-size: 42px;
             font-weight: 900;
             margin-bottom: 18px;
-            color: #fff;
+            color: var(--text);
             text-align: center;
         }
 
         .recursos-subtitle {
-            color: #9ca3af;
+            color: var(--muted);
             font-size: 17px;
             max-width: 680px;
             margin: 0 auto 60px;
@@ -380,15 +380,15 @@
 
         .recurso-card {
             background: var(--bg-2);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border);
             border-radius: 16px;
             padding: 24px;
             transition: 0.3s ease;
         }
 
         .recurso-card:hover {
-            border-color: rgba(245, 213, 71, 0.3);
-            background: rgba(245, 213, 71, 0.02);
+            border-color: rgba(0, 48, 135, 0.3);
+            background: rgba(0, 48, 135, 0.02);
             transform: translateY(-4px);
         }
 
@@ -399,7 +399,7 @@
         }
 
         .recurso-card p {
-            color: #9ca3af;
+            color: var(--muted);
             line-height: 1.6;
             font-size: 14px;
         }
@@ -408,7 +408,7 @@
         .footer {
             padding: 50px 24px;
             background: var(--bg);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid var(--border);
         }
 
         .footer-container {
@@ -462,7 +462,7 @@
             height: 28px;
             border-radius: 6px;
             background: var(--yellow);
-            color: #111;
+            color: #FFFFFF;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -484,7 +484,7 @@
 
         .footer-divider {
             height: 1px;
-            background: rgba(255, 255, 255, 0.08);
+            background: var(--border);
             margin-bottom: 24px;
         }
 
@@ -649,9 +649,9 @@
 <body>
 
     <header class="navbar">
-        <a href="{{ url('/') }}" class="brand" aria-label="MaintSys - Voltar para home">
-            <span class="brand-icon">☼</span>
-            <span>MaintSys</span>
+        <a href="{{ url('/') }}" class="brand" aria-label="SENAI MaintSys - Voltar para home">
+            <span class="brand-icon">S</span>
+            <span>SENAI MaintSys</span>
         </a>
 
         <nav class="nav-right" aria-label="Navegação principal">
@@ -776,8 +776,8 @@
             <div class="footer-content">
                 <div class="footer-col">
                     <div class="footer-brand">
-                        <span class="footer-brand-icon">☼</span>
-                        <span>MaintSys</span>
+                        <span class="footer-brand-icon">S</span>
+                        <span>SENAI MaintSys</span>
                     </div>
                     <p class="footer-description">
                         Sistema inteligente de gestão de manutenção para maximizar a eficiência operacional.
@@ -818,7 +818,7 @@
 
             <div class="footer-bottom">
                 <p class="footer-copyright">
-                    © {{ date('Y') }} MaintSys. Todos os direitos reservados.
+                    © {{ date('Y') }} SENAI MaintSys. Todos os direitos reservados.
                 </p>
                 <div class="footer-social">
                     <a href="#" aria-label="GitHub" title="Siga no GitHub">GitHub</a>

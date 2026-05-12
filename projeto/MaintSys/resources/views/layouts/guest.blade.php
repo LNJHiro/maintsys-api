@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#f5d547">
+    <meta name="theme-color" content="#003087">
     
     <title>@yield('title', 'MaintSys')</title>
 
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23f5d547'/><text x='50' y='65' font-size='70' font-weight='bold' text-anchor='middle' fill='%23111'>☼</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23003087'/><text x='50' y='68' font-size='60' font-weight='bold' text-anchor='middle' fill='%23FFFFFF'>S</text></svg>">
     
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800,900" rel="stylesheet" />
 
     <style>
         :root {
-            --bg: #0b0d12;
-            --bg-2: #11141b;
-            --text: #f7f2e8;
-            --muted: #9ca3af;
-            --yellow: #f5d547;
-            --yellow-2: #ffe45c;
-            --border: rgba(255, 255, 255, 0.12);
-            --error: #ff6b6b;
-            --success: #51cf66;
+            --bg: #F5F7FA;
+            --bg-2: #FFFFFF;
+            --text: #1A1A2E;
+            --muted: #6B7280;
+            --yellow: #003087;
+            --yellow-2: #0052A5;
+            --border: #D0D7DE;
+            --error: #CF222E;
+            --success: #2DA44E;
         }
 
         * {
@@ -39,8 +39,8 @@
             min-height: 100vh;
             font-family: 'Instrument Sans', Arial, sans-serif;
             background:
-                radial-gradient(circle at top center, rgba(245, 213, 71, 0.08), transparent 35%),
-                linear-gradient(180deg, var(--bg), #07080c);
+                radial-gradient(circle at top center, rgba(0, 48, 135, 0.06), transparent 35%),
+                linear-gradient(180deg, var(--bg), #E8ECF5);
             color: var(--text);
             display: flex;
             flex-direction: column;
@@ -60,7 +60,7 @@
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid var(--border);
-            background: rgba(11, 13, 18, 0.88);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
             position: sticky;
             top: 0;
@@ -87,7 +87,7 @@
             height: 34px;
             border-radius: 8px;
             background: var(--yellow);
-            color: #111;
+            color: #FFFFFF;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -107,7 +107,7 @@
         }
 
         .nav-link {
-            color: #c9d1d9;
+            color: #555555;
             font-size: 15px;
             font-weight: 500;
             transition: 0.2s ease;
@@ -119,7 +119,7 @@
 
         .btn-top {
             background: var(--yellow);
-            color: #111;
+            color: #FFFFFF;
             padding: 12px 22px;
             border-radius: 10px;
             font-size: 15px;
@@ -132,7 +132,7 @@
         .btn-top:hover {
             background: var(--yellow-2);
             transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(245, 213, 71, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 48, 135, 0.2);
         }
 
         /* ==================== CONTAINER ==================== */
@@ -151,7 +151,7 @@
             border: 1px solid var(--border);
             border-radius: 20px;
             padding: 48px 32px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
             animation: slideUp 0.6s ease-out;
         }
 
@@ -171,7 +171,7 @@
             height: 56px;
             border-radius: 12px;
             background: var(--yellow);
-            color: #111;
+            color: #FFFFFF;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -210,9 +210,9 @@
         .form-group input {
             width: 100%;
             padding: 12px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid var(--border);
             border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
+            background: #F5F7FA;
             color: var(--text);
             font-size: 15px;
             font-family: 'Instrument Sans', Arial, sans-serif;
@@ -220,14 +220,14 @@
         }
 
         .form-group input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
+            color: #9CA3AF;
         }
 
         .form-group input:focus {
             outline: none;
             border-color: var(--yellow);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 0 0 3px rgba(245, 213, 71, 0.1);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(0, 48, 135, 0.1);
         }
 
         .form-error {
@@ -249,7 +249,7 @@
             width: 100%;
             padding: 14px 24px;
             background: var(--yellow);
-            color: #111;
+            color: #FFFFFF;
             border: 1px solid var(--yellow);
             border-radius: 10px;
             font-size: 16px;
@@ -262,7 +262,7 @@
         .btn-submit:hover {
             background: var(--yellow-2);
             transform: translateY(-2px);
-            box-shadow: 0 12px 24px rgba(245, 213, 71, 0.3);
+            box-shadow: 0 12px 24px rgba(0, 48, 135, 0.3);
         }
 
         .btn-submit:active {
@@ -419,9 +419,9 @@
 <body>
 
     <header class="navbar">
-        <a href="{{ url('/') }}" class="brand" aria-label="MaintSys - Voltar para home">
-            <span class="brand-icon">☼</span>
-            <span>MaintSys</span>
+        <a href="{{ url('/') }}" class="brand" aria-label="SENAI MaintSys - Voltar para home">
+            <span class="brand-icon">S</span>
+            <span>SENAI MaintSys</span>
         </a>
 
         <nav class="nav-right" aria-label="Navegação">

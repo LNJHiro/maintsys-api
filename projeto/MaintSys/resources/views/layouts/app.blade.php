@@ -8,19 +8,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600;700;900&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg:        #0a0d10;
-            --surface:   #111418;
-            --card:      #161b22;
-            --border:    #21262d;
-            --border-hi: #30363d;
-            --text:      #e6edf3;
-            --muted:     #7d8590;
-            --accent:    #f0a500;
-            --accent2:   #e36209;
-            --green:     #3fb950;
-            --red:       #f85149;
-            --yellow:    #d29922;
-            --blue:      #388bfd;
+            --bg:        #F0F2F5;
+            --surface:   #FFFFFF;
+            --card:      #FFFFFF;
+            --border:    #D0D7DE;
+            --border-hi: #B0BEC5;
+            --text:      #1A1A2E;
+            --muted:     #6B7280;
+            --accent:    #003087;
+            --accent2:   #E63329;
+            --green:     #2DA44E;
+            --red:       #CF222E;
+            --yellow:    #9A6700;
+            --blue:      #0550AE;
             --mono:      'Share Tech Mono', monospace;
             --sans:      'Barlow', sans-serif;
             --cond:      'Barlow Condensed', sans-serif;
@@ -98,7 +98,7 @@
         .sidebar nav a:hover,
         .sidebar nav a.active {
             color: var(--text);
-            background: rgba(240,165,0,0.06);
+            background: rgba(0,48,135,0.06);
             border-left-color: var(--accent);
         }
 
@@ -191,7 +191,7 @@
 
         .alert-success { background: rgba(63,185,80,.08); border-color: var(--green); color: var(--green); }
         .alert-error   { background: rgba(248,81,73,.08);  border-color: var(--red);   color: var(--red); }
-        .alert-warning { background: rgba(240,165,0,.08);  border-color: var(--accent);color: var(--accent); }
+        .alert-warning { background: rgba(0,48,135,.08);   border-color: var(--accent);color: var(--accent); }
 
         /* ── PAGE HEADER ── */
         .page-header {
@@ -232,6 +232,7 @@
         .stat-card {
             background: var(--card);
             border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
             padding: 16px;
             position: relative;
             overflow: hidden;
@@ -271,6 +272,7 @@
         .table-wrap {
             background: var(--card);
             border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
             overflow-x: auto;
         }
 
@@ -297,7 +299,7 @@
         }
 
         tbody tr:last-child { border-bottom: none; }
-        tbody tr:hover { background: rgba(255,255,255,0.02); }
+        tbody tr:hover { background: rgba(0,48,135,0.03); }
 
         tbody td {
             padding: 11px 14px;
@@ -343,7 +345,7 @@
         .btn-primary {
             background: var(--accent);
             border-color: var(--accent);
-            color: #000;
+            color: #FFFFFF;
         }
 
         .btn-primary:hover { background: var(--accent2); border-color: var(--accent2); }
@@ -494,8 +496,8 @@
 <!-- SIDEBAR -->
 <aside class="sidebar">
     <div class="sidebar-logo">
-        <div class="sys-name">MAINT<span style="color:var(--muted)">SYS</span></div>
-        <div class="sys-sub">Manutenção Industrial 4.0</div>
+        <div class="sys-name">SENAI<span style="color:var(--accent2)">.</span></div>
+        <div class="sys-sub">MaintSys — Manutenção Industrial</div>
     </div>
 
     <div class="sidebar-section">// sistema</div>
@@ -540,13 +542,13 @@
     <!-- TOPBAR -->
     <div class="topbar">
         <div class="breadcrumb">
-            <span>MAINTSYS</span>
+            <span>SENAI</span>
             <span class="sep">/</span>
             {!! $__env->yieldContent('breadcrumb', '<span>dashboard</span>') !!}
         </div>
 
         @if(session('alerta'))
-            <div style="margin-left:auto; font-family:var(--mono); font-size:11px; color:var(--accent); padding: 4px 12px; border: 1px solid rgba(240,165,0,.3); background: rgba(240,165,0,.06);">
+            <div style="margin-left:auto; font-family:var(--mono); font-size:11px; color:var(--accent); padding: 4px 12px; border: 1px solid rgba(0,48,135,.3); background: rgba(0,48,135,.06);">
                 {{ session('alerta') }}
             </div>
         @endif
