@@ -11,7 +11,9 @@
         {{ $ordem->numero }}
     </div>
     <div style="display:flex;gap:8px">
+        @if(auth()->user()->hasPermission('ordens.editar'))
         <a href="{{ route('ordens.edit', $ordem) }}" class="btn btn-primary">Editar O.S.</a>
+        @endif
     </div>
 </div>
 

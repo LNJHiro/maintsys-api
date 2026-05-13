@@ -13,7 +13,7 @@
         <small>// inventário de equipamentos</small>
         Máquinas
     </div>
-    @if(auth()->user()->isAdmin())
+    @if(auth()->user()->hasPermission('maquinas.criar'))
     <a href="{{ route('maquinas.create') }}" class="btn btn-primary">+ Nova Máquina</a>
     @endif
 </div>
@@ -30,7 +30,7 @@
         <thead>
             <tr>
                 <th>#</th><th>Nº Série</th><th>Modelo</th><th>Fabricante</th>
-                <th>Localização</th><th>Instalação</th><th>Status</th><th>O.S.</th><th>Ações</th>
+                <th>Localização</th><th>Cadastro</th><th>Status</th><th>O.S.</th><th>Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -42,7 +42,7 @@
                 <td style="color:var(--muted)">{{ $m->fabricante ?? '—' }}</td>
                 <td>{{ $m->localizacao }}</td>
                 <td class="mono" style="font-size:11px;color:var(--muted)">
-                    {{ $m->data_instalacao ? $m->data_instalacao->format('d/m/Y') : '—' }}
+                    {{ $m->data_cadastro ? $m->data_cadastro->format('d/m/Y') : '—' }}
                 </td>
                 <td>
                     @php $sc = match($m->status){
@@ -57,8 +57,10 @@
                 <td>
                     <div class="actions">
                         <a href="{{ route('maquinas.show', $m) }}" class="btn btn-secondary btn-sm">Ver</a>
-                        @if(auth()->user()->isAdmin())
+                        @if(auth()->user()->hasPermission('maquinas.editar'))
                         <a href="{{ route('maquinas.edit', $m) }}" class="btn btn-secondary btn-sm">Editar</a>
+                        @endif
+                        @if(auth()->user()->hasPermission('maquinas.deletar'))
                         <form method="POST" action="{{ route('maquinas.destroy', $m) }}"
                               onsubmit="confirmDelete(this, 'Excluir a máquina {{ $m->modelo }}?'); return false;">
                             @csrf @method('DELETE')

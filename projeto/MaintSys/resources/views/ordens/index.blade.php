@@ -13,7 +13,9 @@
         <small>// gestão de O.S.</small>
         Ordens de Serviço
     </div>
+    @if(auth()->user()->hasPermission('ordens.criar'))
     <a href="{{ route('ordens.create') }}" class="btn btn-primary">+ Nova O.S.</a>
+    @endif
 </div>
 
 <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
@@ -86,12 +88,16 @@
                 <td>
                     <div class="actions">
                         <a href="{{ route('ordens.show', $os) }}" class="btn btn-secondary btn-sm">Ver</a>
+                        @if(auth()->user()->hasPermission('ordens.editar'))
                         <a href="{{ route('ordens.edit', $os) }}" class="btn btn-secondary btn-sm">Editar</a>
+                        @endif
+                        @if(auth()->user()->hasPermission('ordens.deletar'))
                         <form method="POST" action="{{ route('ordens.destroy', $os) }}"
                               onsubmit="confirmDelete(this, 'Excluir O.S. {{ $os->numero }}?'); return false;">
                             @csrf @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Del</button>
                         </form>
+                        @endif
                     </div>
                 </td>
             </tr>

@@ -106,7 +106,7 @@
                 <td>
                     <div class="actions">
                         <a href="{{ route('historico.show', $h) }}" class="btn btn-secondary btn-sm">Ver</a>
-                        @if(auth()->user()->isAdmin())
+                        @if(auth()->user()->hasPermission('historico.deletar'))
                         <form method="POST" action="{{ route('historico.destroy', $h) }}"
                               onsubmit="confirmDelete(this, 'Excluir este registro de histórico?'); return false;">
                             @csrf @method('DELETE')

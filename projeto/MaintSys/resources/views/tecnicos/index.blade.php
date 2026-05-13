@@ -13,7 +13,9 @@
         <small>// equipe de manutenção</small>
         Técnicos
     </div>
+    @if(auth()->user()->hasPermission('tecnicos.criar'))
     <a href="{{ route('tecnicos.create') }}" class="btn btn-primary">+ Novo Técnico</a>
+    @endif
 </div>
 
 <div class="table-wrap">
@@ -63,12 +65,16 @@
                 <td>
                     <div class="actions">
                         <a href="{{ route('tecnicos.show', $t) }}" class="btn btn-secondary btn-sm">Ver</a>
+                        @if(auth()->user()->hasPermission('tecnicos.editar'))
                         <a href="{{ route('tecnicos.edit', $t) }}" class="btn btn-secondary btn-sm">Editar</a>
+                        @endif
+                        @if(auth()->user()->hasPermission('tecnicos.deletar'))
                         <form method="POST" action="{{ route('tecnicos.destroy', $t) }}"
                               onsubmit="confirmDelete(this, 'Excluir o técnico {{ $t->nome }}?'); return false;">
                             @csrf @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Del</button>
                         </form>
+                        @endif
                     </div>
                 </td>
             </tr>

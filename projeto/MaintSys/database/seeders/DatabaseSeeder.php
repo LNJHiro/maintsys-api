@@ -13,7 +13,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(UserSeeder::class);
+        $this->call(PermissionSeeder::class);
 
+        // Para desabilitar os dados fake, comente as linhas abaixo:
+        /*
         // Técnicos
         $tecnicos = Tecnico::factory()->count(10)->create();
 
@@ -42,5 +45,6 @@ class DatabaseSeeder extends Seeder
                 $historico->tecnico_id = $ordem->tecnico_id;
                 $historico->save();
             });
+        */
     }
 }

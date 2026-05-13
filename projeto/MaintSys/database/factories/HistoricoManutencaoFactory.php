@@ -24,8 +24,6 @@ class HistoricoManutencaoFactory extends Factory
             'tipo' => fake()->randomElement([
                 'preventiva',
                 'corretiva',
-                'preditiva',
-                'inspecao',
             ]),
             'descricao' => fake()->paragraph(),
             'solucao' => fake()->paragraph(),

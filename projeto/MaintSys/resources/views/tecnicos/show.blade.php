@@ -11,7 +11,9 @@
         {{ $tecnico->nome }}
     </div>
     <div style="display:flex;gap:8px">
+        @if(auth()->user()->hasPermission('tecnicos.editar'))
         <a href="{{ route('tecnicos.edit', $tecnico) }}" class="btn btn-primary">Editar</a>
+        @endif
     </div>
 </div>
 

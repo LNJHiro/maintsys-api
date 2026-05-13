@@ -16,13 +16,13 @@ class Maquina extends Model
         'modelo',
         'fabricante',
         'localizacao',
-        'data_instalacao',
+        'data_cadastro',
         'status',
         'descricao',
     ];
 
     protected $casts = [
-        'data_instalacao' => 'date',
+        'data_cadastro' => 'date',
     ];
 
     public function ordens()

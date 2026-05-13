@@ -49,9 +49,9 @@
 
         <div class="form-row">
             <div class="form-group">
-                <label>Data de Instalação</label>
-                <input type="date" name="data_instalacao" class="form-control"
-                       value="{{ old('data_instalacao', $maquina->data_instalacao?->format('Y-m-d')) }}">
+                <label>Data de Cadastro</label>
+                <input type="date" name="data_cadastro" class="form-control"
+                       value="{{ old('data_cadastro', $maquina->data_cadastro?->format('Y-m-d')) }}">
             </div>
             <div class="form-group">
                 <label>Status *</label>

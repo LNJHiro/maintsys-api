@@ -29,7 +29,7 @@ class MaquinaFactory extends Factory
                 'Utilidades',
                 'Envase',
             ]),
-            'data_instalacao' => fake()->date(),
+            'data_cadastro' => fake()->date(),
             'status' => fake()->randomElement([
                 'operacional',
                 'em_manutencao',

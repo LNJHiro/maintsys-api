@@ -48,9 +48,9 @@
 
         <div class="form-row">
             <div class="form-group">
-                <label>Data de Instalação</label>
-                <input type="date" name="data_instalacao" class="form-control"
-                       value="{{ old('data_instalacao') }}">
+                <label>Data de Cadastro</label>
+                <input type="date" name="data_cadastro" class="form-control"
+                       value="{{ old('data_cadastro') }}">
             </div>
             <div class="form-group">
                 <label>Status *</label>

@@ -20,6 +20,7 @@
 
 {{-- STATS --}}
 <div class="stats-grid">
+    @if(auth()->user()->hasPermission('dashboard.maquinas'))
     <div class="stat-card">
         <div class="stat-label">Total Máquinas</div>
         <div class="stat-value">{{ $stats['maquinas_total'] }}</div>
@@ -36,10 +37,14 @@
         <div class="stat-label">Parada Crítica</div>
         <div class="stat-value" style="color:var(--red)">{{ $stats['parada_critica'] }}</div>
     </div>
+    @endif
+    @if(auth()->user()->hasPermission('dashboard.tecnicos'))
     <div class="stat-card blue">
         <div class="stat-label">Técnicos Ativos</div>
         <div class="stat-value" style="color:var(--blue)">{{ $stats['tecnicos_ativos'] }}</div>
     </div>
+    @endif
+    @if(auth()->user()->hasPermission('dashboard.ordens'))
     <div class="stat-card">
         <div class="stat-label">O.S. Abertas</div>
         <div class="stat-value">{{ $stats['os_abertas'] }}</div>
@@ -52,10 +57,11 @@
         <div class="stat-label">Concluídas Hoje</div>
         <div class="stat-value" style="color:var(--green)">{{ $stats['os_concluidas_hoje'] }}</div>
     </div>
+    @endif
 </div>
 
 {{-- ALERTAS DE PARADA CRÍTICA --}}
-@if($alertas->count() > 0)
+@if(auth()->user()->hasPermission('dashboard.alertas') && $alertas->count() > 0)
 <div style="margin-bottom:24px;border:1px solid rgba(248,81,73,.3);background:rgba(248,81,73,.04);padding:16px;border-radius:4px;">
     <div style="font-family:var(--mono);font-size:10px;color:var(--red);letter-spacing:2px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
         ⚠ // ALERTAS — MÁQUINAS EM PARADA CRÍTICA
@@ -65,6 +71,7 @@
     </div>
 
     @foreach($alertas as $m)
+
         <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(248,81,73,.1);gap:12px;">
             <span style="font-family:var(--cond);font-size:15px;font-weight:600;flex:1;">{{ $m->modelo }}</span>
             <span style="font-family:var(--mono);font-size:11px;color:var(--muted);flex:1;">{{ $m->localizacao }}</span>
@@ -80,6 +87,7 @@
 <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:20px;">
 
     {{-- ORDENS ATIVAS --}}
+    @if(auth()->user()->hasPermission('dashboard.ordens'))
     <div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
             <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;">
@@ -156,10 +164,13 @@
         </div>
     </div>
 
+    @endif
+
     {{-- COLUNA DIREITA --}}
     <div style="display:flex;flex-direction:column;gap:20px;">
 
         {{-- ÚLTIMAS MANUTENÇÕES --}}
+        @if(auth()->user()->hasPermission('dashboard.historico'))
         <div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
                 <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;">
@@ -207,6 +218,8 @@
             </div>
         </div>
 
+        @endif
+
         {{-- AÇÕES RÁPIDAS --}}
         <div>
             <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:10px;">
@@ -214,17 +227,21 @@
             </div>
 
             <div style="display:flex;flex-direction:column;gap:8px;">
+                @if(auth()->user()->hasPermission('ordens.criar'))
                 <a href="{{ route('ordens.create') }}" class="btn btn-primary" style="justify-content:center;">
                     + Nova Ordem de Serviço
                 </a>
-
+                @endif
+                @if(auth()->user()->hasPermission('maquinas.criar'))
                 <a href="{{ route('maquinas.create') }}" class="btn btn-secondary" style="justify-content:center;">
                     + Cadastrar Máquina
                 </a>
-
+                @endif
+                @if(auth()->user()->hasPermission('tecnicos.criar'))
                 <a href="{{ route('tecnicos.create') }}" class="btn btn-secondary" style="justify-content:center;">
                     + Cadastrar Técnico
                 </a>
+                @endif
             </div>
         </div>
 

@@ -11,9 +11,15 @@
         {{ $maquina->modelo }}
     </div>
     <div style="display:flex;gap:8px">
+        @if(auth()->user()->hasPermission('historico.visualizar'))
         <a href="{{ route('historico.por-maquina', $maquina) }}" class="btn btn-secondary">◎ Histórico</a>
+        @endif
+        @if(auth()->user()->hasPermission('ordens.criar'))
         <a href="{{ route('ordens.create') }}?maquina_id={{ $maquina->id }}" class="btn btn-secondary">+ O.S.</a>
+        @endif
+        @if(auth()->user()->hasPermission('maquinas.editar'))
         <a href="{{ route('maquinas.edit', $maquina) }}" class="btn btn-primary">Editar</a>
+        @endif
     </div>
 </div>
 
@@ -37,7 +43,7 @@
                 ['Modelo',       $maquina->modelo],
                 ['Fabricante',   $maquina->fabricante ?? '—'],
                 ['Localização',  $maquina->localizacao],
-                ['Instalação',   $maquina->data_instalacao?->format('d/m/Y') ?? '—'],
+                ['Cadastro',     $maquina->data_cadastro?->format('d/m/Y') ?? '—'],
                 ['Total O.S.',   $maquina->ordens->count()],
             ] as [$label, $value])
             <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">

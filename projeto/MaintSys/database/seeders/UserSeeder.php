@@ -12,6 +12,14 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::firstOrCreate([
+            'email' => 'master@senai.br',
+        ], [
+            'name' => 'Admin Master SENAI',
+            'password' => Hash::make('master123'),
+            'role' => 'admin_master',
+        ]);
+
+        User::firstOrCreate([
             'email' => 'admin@senai.br',
         ], [
             'name' => 'Administrador SENAI',

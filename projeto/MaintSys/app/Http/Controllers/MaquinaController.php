@@ -31,7 +31,7 @@ class MaquinaController extends Controller
             'modelo'          => 'required|string|max:255',
             'fabricante'      => 'nullable|string|max:255',
             'localizacao'     => 'required|string|max:255',
-            'data_instalacao' => 'nullable|date',
+            'data_cadastro' => 'nullable|date',
             'status'          => 'required|in:operacional,em_manutencao,parada_critica,inativa',
             'descricao'       => 'nullable|string',
         ]);
@@ -63,7 +63,7 @@ class MaquinaController extends Controller
             'modelo'          => 'required|string|max:255',
             'fabricante'      => 'nullable|string|max:255',
             'localizacao'     => 'required|string|max:255',
-            'data_instalacao' => 'nullable|date',
+            'data_cadastro' => 'nullable|date',
             'status'          => 'required|in:operacional,em_manutencao,parada_critica,inativa',
             'descricao'       => 'nullable|string',
         ]);
