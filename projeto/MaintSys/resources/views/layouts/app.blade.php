@@ -26,6 +26,22 @@
             --cond:      'Barlow Condensed', sans-serif;
         }
 
+        [data-theme="dark"] {
+            --bg:        #0F1419;
+            --surface:   #1A1F2E;
+            --card:      #24293F;
+            --border:    #2D3748;
+            --border-hi: #3E495C;
+            --text:      #E8E8F0;
+            --muted:     #9CA3AF;
+            --accent:    #4A9EFF;
+            --accent2:   #FF6B6B;
+            --green:     #4CAF50;
+            --red:       #FF6B6B;
+            --yellow:    #FFB84D;
+            --blue:      #4A9EFF;
+        }
+
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
@@ -172,6 +188,28 @@
 
         .topbar .breadcrumb span { color: var(--accent); }
         .topbar .breadcrumb .sep { color: var(--border-hi); }
+
+        .theme-toggle {
+            margin-left: auto;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 12px;
+            font-size: 13px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: var(--sans);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(0,48,135,0.06);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
 
         /* ── CONTENT ── */
         .content {
@@ -549,10 +587,15 @@
         </div>
 
         @if(session('alerta'))
-            <div style="margin-left:auto; font-family:var(--mono); font-size:11px; color:var(--accent); padding: 4px 12px; border: 1px solid rgba(0,48,135,.3); background: rgba(0,48,135,.06);">
+            <div style="font-family:var(--mono); font-size:11px; color:var(--accent); padding: 4px 12px; border: 1px solid rgba(0,48,135,.3); background: rgba(0,48,135,.06);">
                 {{ session('alerta') }}
             </div>
         @endif
+
+        <button id="theme-toggle" class="theme-toggle" title="Alternar tema">
+            <span id="theme-icon">🌙</span>
+            <span id="theme-label">Escuro</span>
+        </button>
     </div>
 
     <!-- CONTENT -->
@@ -568,6 +611,45 @@
         @yield('content')
     </div>
 </div>
+
+<script>
+(function() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    const themeLabel = document.getElementById('theme-label');
+    const html = document.documentElement;
+
+    // Verificar tema salvo ou preferência do sistema
+    function initTheme() {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = saved || (prefersDark ? 'dark' : 'light');
+        applyTheme(theme);
+    }
+
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            html.setAttribute('data-theme', 'dark');
+            themeIcon.textContent = '☀️';
+            themeLabel.textContent = 'Claro';
+        } else {
+            html.removeAttribute('data-theme');
+            themeIcon.textContent = '🌙';
+            themeLabel.textContent = 'Escuro';
+        }
+        localStorage.setItem('theme', theme);
+    }
+
+    function toggleTheme() {
+        const current = html.getAttribute('data-theme');
+        const newTheme = current === 'dark' ? 'light' : 'dark';
+        applyTheme(newTheme);
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+    initTheme();
+})();
+</script>
 
 @stack('scripts')
 </body>

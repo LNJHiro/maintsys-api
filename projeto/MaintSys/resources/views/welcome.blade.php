@@ -26,6 +26,18 @@
             --border: #D0D7DE;
         }
 
+        [data-theme="dark"] {
+            --bg: #0F1419;
+            --bg-2: #1A1F2E;
+            --bg-3: #24293F;
+            --text: #E8E8F0;
+            --muted: #9CA3AF;
+            --yellow: #4A9EFF;
+            --yellow-2: #6BB4FF;
+            --yellow-dark: #2A6FD9;
+            --border: #2D3748;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -112,6 +124,31 @@
             font-weight: 500;
             transition: 0.2s ease;
             position: relative;
+        }
+
+        [data-theme="dark"] .nav-link {
+            color: #B0B5C5;
+        }
+
+        .theme-toggle-header {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 12px;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+        }
+
+        .theme-toggle-header:hover {
+            background: rgba(0, 48, 135, 0.1);
+            border-color: var(--yellow);
+            color: var(--yellow);
         }
 
         .nav-link:hover {
@@ -658,6 +695,11 @@
             <a href="#recursos" class="nav-link">Recursos</a>
             <a href="#suporte" class="nav-link">Suporte</a>
 
+            <button id="theme-toggle-welcome" class="theme-toggle-header" title="Alternar tema">
+                <span id="theme-icon-welcome">🌙</span>
+                <span>Escuro</span>
+            </button>
+
             @auth
                 <a href="{{ route('dashboard') }}" class="btn-top" title="Ir para o painel de controle">
                     Dashboard
@@ -827,6 +869,43 @@
             </div>
         </div>
     </footer>
+
+<script>
+(function() {
+    const themeToggle = document.getElementById('theme-toggle-welcome');
+    const themeIcon = document.getElementById('theme-icon-welcome');
+    const html = document.documentElement;
+
+    function initTheme() {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = saved || (prefersDark ? 'dark' : 'light');
+        applyTheme(theme);
+    }
+
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            html.setAttribute('data-theme', 'dark');
+            themeIcon.textContent = '☀️';
+            themeToggle.querySelector('span:last-child').textContent = 'Claro';
+        } else {
+            html.removeAttribute('data-theme');
+            themeIcon.textContent = '🌙';
+            themeToggle.querySelector('span:last-child').textContent = 'Escuro';
+        }
+        localStorage.setItem('theme', theme);
+    }
+
+    function toggleTheme() {
+        const current = html.getAttribute('data-theme');
+        const newTheme = current === 'dark' ? 'light' : 'dark';
+        applyTheme(newTheme);
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+    initTheme();
+})();
+</script>
 
 </body>
 </html>

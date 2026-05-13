@@ -17,10 +17,22 @@
             --border: #D0D7DE;
             --border-input: #D0D7DE;
             --card: #FFFFFF;
+            --bg-gradient: linear-gradient(135deg, #F5F7FA 0%, #E8ECF5 100%);
+        }
+
+        [data-theme="dark"] {
+            --accent: #4A9EFF;
+            --accent2: #FF6B6B;
+            --text: #E8E8F0;
+            --muted: #9CA3AF;
+            --border: #2D3748;
+            --border-input: #2D3748;
+            --card: #24293F;
+            --bg-gradient: linear-gradient(135deg, #0F1419 0%, #1A1F2E 100%);
         }
 
         html, body {
-            background: linear-gradient(135deg, #F5F7FA 0%, #E8ECF5 100%);
+            background: var(--bg-gradient);
             color: var(--text);
             font-family: 'DM Sans', sans-serif;
             min-height: 100vh;
@@ -55,6 +67,27 @@
             background: var(--accent);
             border-radius: 6px;
             display: flex; align-items: center; justify-content: center;
+        }
+
+        .theme-toggle-nav {
+            margin-left: auto;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 6px 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .theme-toggle-nav:hover {
+            background: rgba(0, 48, 135, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         /* MAIN */
@@ -237,6 +270,10 @@
         <img src="/senai.webp" alt="SENAI" style="height:30px;width:auto">
         {{ config('app.name', 'MAINTSYS') }}
     </a>
+    <button id="theme-toggle-login" class="theme-toggle-nav" title="Alternar tema">
+        <span id="theme-icon-login">🌙</span>
+        <span>Escuro</span>
+    </button>
 </nav>
 
 <main>
@@ -310,5 +347,41 @@
     &copy; {{ date('Y') }} {{ config('app.name', 'MAINTSYS') }} &mdash; Sistema de Gestão de Manutenção
 </footer>
 
+<script>
+(function() {
+    const themeToggle = document.getElementById('theme-toggle-login');
+    const themeIcon = document.getElementById('theme-icon-login');
+    const html = document.documentElement;
+
+    function initTheme() {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = saved || (prefersDark ? 'dark' : 'light');
+        applyTheme(theme);
+    }
+
+    function applyTheme(theme) {
+        if (theme === 'dark') {
+            html.setAttribute('data-theme', 'dark');
+            themeIcon.textContent = '☀️';
+            themeToggle.querySelector('span:last-child').textContent = 'Claro';
+        } else {
+            html.removeAttribute('data-theme');
+            themeIcon.textContent = '🌙';
+            themeToggle.querySelector('span:last-child').textContent = 'Escuro';
+        }
+        localStorage.setItem('theme', theme);
+    }
+
+    function toggleTheme() {
+        const current = html.getAttribute('data-theme');
+        const newTheme = current === 'dark' ? 'light' : 'dark';
+        applyTheme(newTheme);
+    }
+
+    themeToggle.addEventListener('click', toggleTheme);
+    initTheme();
+})();
+</script>
 </body>
 </html>

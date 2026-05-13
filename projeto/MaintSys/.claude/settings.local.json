@@ -4,7 +4,8 @@
       "Bash(Get-Content \"C:\\\\laragon\\\\www\\\\maintsys-api\\\\projeto\\\\MaintSys\\\\resources\\\\views\\\\layouts\\\\app.blade.php\")",
       "Bash(Measure-Object -Line)",
       "Bash(php artisan *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }
