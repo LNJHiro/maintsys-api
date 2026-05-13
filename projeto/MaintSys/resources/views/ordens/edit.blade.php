@@ -114,6 +114,19 @@
             </div>
         </div>
 
+        {{-- CAMPOS DE PREVENTIVA AUTOMÁTICA --}}
+        <div id="campos-preventiva" style="display:none; border-top:1px solid var(--border); padding-top:18px; margin-top:4px;">
+            <div style="font-family:var(--mono);font-size:10px;color:var(--blue);letter-spacing:2px;margin-bottom:14px;">
+                📅 // AGENDAR PRÓXIMA PREVENTIVA
+            </div>
+            <div class="form-group">
+                <label>Data da Próxima Manutenção Preventiva</label>
+                <input type="date" name="proxima_preventiva" class="form-control"
+                       value="{{ old('proxima_preventiva') }}">
+                <small style="color:var(--muted);display:block;margin-top:4px">Deixe em branco se não quiser agendar automaticamente</small>
+            </div>
+        </div>
+
         <div style="display:flex;gap:10px;margin-top:18px">
             <button type="submit" class="btn btn-primary">Salvar Alterações</button>
             <a href="{{ route('ordens.show', $ordem) }}" class="btn btn-secondary">Cancelar</a>
@@ -124,14 +137,21 @@
 @push('scripts')
 <script>
     const statusSelect = document.getElementById('status-select');
+    const tipoSelect = document.querySelector('select[name="tipo"]');
     const camposConclusao = document.getElementById('campos-conclusao');
+    const camposPreventiva = document.getElementById('campos-preventiva');
 
-    function toggleConclusao() {
-        camposConclusao.style.display = statusSelect.value === 'concluida' ? 'block' : 'none';
+    function toggleCampos() {
+        const isConcluida = statusSelect.value === 'concluida';
+        const isPreventiva = tipoSelect.value === 'preventiva';
+
+        camposConclusao.style.display = isConcluida ? 'block' : 'none';
+        camposPreventiva.style.display = (isConcluida && isPreventiva) ? 'block' : 'none';
     }
 
-    statusSelect.addEventListener('change', toggleConclusao);
-    toggleConclusao();
+    statusSelect.addEventListener('change', toggleCampos);
+    tipoSelect.addEventListener('change', toggleCampos);
+    toggleCampos();
 </script>
 @endpush
 

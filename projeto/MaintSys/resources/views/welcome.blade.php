@@ -650,8 +650,8 @@
 
     <header class="navbar">
         <a href="{{ url('/') }}" class="brand" aria-label="SENAI MaintSys - Voltar para home">
-            <span class="brand-icon">S</span>
-            <span>SENAI MaintSys</span>
+            <img src="/senai.webp" alt="SENAI" style="height:30px;width:auto">
+            <span>MaintSys</span>
         </a>
 
         <nav class="nav-right" aria-label="Navegação principal">

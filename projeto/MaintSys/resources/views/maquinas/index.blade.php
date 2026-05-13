@@ -13,7 +13,9 @@
         <small>// inventário de equipamentos</small>
         Máquinas
     </div>
+    @if(auth()->user()->isAdmin())
     <a href="{{ route('maquinas.create') }}" class="btn btn-primary">+ Nova Máquina</a>
+    @endif
 </div>
 
 <div class="stats-grid" style="grid-template-columns: repeat(4,1fr)">
@@ -55,12 +57,14 @@
                 <td>
                     <div class="actions">
                         <a href="{{ route('maquinas.show', $m) }}" class="btn btn-secondary btn-sm">Ver</a>
+                        @if(auth()->user()->isAdmin())
                         <a href="{{ route('maquinas.edit', $m) }}" class="btn btn-secondary btn-sm">Editar</a>
                         <form method="POST" action="{{ route('maquinas.destroy', $m) }}"
                               onsubmit="confirmDelete(this, 'Excluir a máquina {{ $m->modelo }}?'); return false;">
                             @csrf @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Del</button>
                         </form>
+                        @endif
                     </div>
                 </td>
             </tr>

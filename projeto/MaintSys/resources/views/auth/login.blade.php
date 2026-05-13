@@ -10,17 +10,17 @@
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --accent: #e8c547;
-            --accent2: #f0d76a;
-            --text: #f0ede6;
-            --muted: #8a8f9e;
-            --border: rgba(255,255,255,0.07);
-            --border-input: rgba(255,255,255,0.12);
-            --card: #13161d;
+            --accent: #003087;
+            --accent2: #E63329;
+            --text: #1A1A2E;
+            --muted: #6B7280;
+            --border: #D0D7DE;
+            --border-input: #D0D7DE;
+            --card: #FFFFFF;
         }
 
         html, body {
-            background: #0d0f14;
+            background: linear-gradient(135deg, #F5F7FA 0%, #E8ECF5 100%);
             color: var(--text);
             font-family: 'DM Sans', sans-serif;
             min-height: 100vh;
@@ -31,7 +31,7 @@
         .glow {
             position: fixed; top: -150px; left: 50%; transform: translateX(-50%);
             width: 600px; height: 400px;
-            background: radial-gradient(ellipse at center, rgba(232,197,71,0.07) 0%, transparent 70%);
+            background: radial-gradient(ellipse at center, rgba(0,48,135,0.06) 0%, transparent 70%);
             pointer-events: none; z-index: 0;
         }
 
@@ -233,13 +233,8 @@
 <div class="glow"></div>
 
 <nav>
-    <a href="{{ url('/') }}" class="logo">
-        <div class="logo-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0d0f14" stroke-width="2.5" stroke-linecap="round">
-                <circle cx="12" cy="12" r="3"/>
-                <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-            </svg>
-        </div>
+    <a href="{{ url('/') }}" class="logo" style="gap:12px">
+        <img src="/senai.webp" alt="SENAI" style="height:30px;width:auto">
         {{ config('app.name', 'MAINTSYS') }}
     </a>
 </nav>

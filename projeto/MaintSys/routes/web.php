@@ -25,20 +25,32 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 // Rotas protegidas por autenticação
 Route::middleware('auth')->group(function () {
 
-    // Máquinas
-    Route::resource('maquinas', MaquinaController::class);
+    // Máquinas — leitura para todos, escrita apenas para admin
+    Route::get('/maquinas', [MaquinaController::class, 'index'])->name('maquinas.index');
+    Route::get('/maquinas/{id}', [MaquinaController::class, 'show'])->name('maquinas.show');
+    Route::middleware('admin')->group(function () {
+        Route::get('/maquinas/create', [MaquinaController::class, 'create'])->name('maquinas.create');
+        Route::post('/maquinas', [MaquinaController::class, 'store'])->name('maquinas.store');
+        Route::get('/maquinas/{id}/edit', [MaquinaController::class, 'edit'])->name('maquinas.edit');
+        Route::put('/maquinas/{id}', [MaquinaController::class, 'update'])->name('maquinas.update');
+        Route::delete('/maquinas/{id}', [MaquinaController::class, 'destroy'])->name('maquinas.destroy');
+    });
 
-    // Técnicos
-    Route::resource('tecnicos', TecnicoController::class);
+    // Técnicos — apenas admin
+    Route::middleware('admin')->group(function () {
+        Route::resource('tecnicos', TecnicoController::class);
+    });
 
-    // Ordens de Serviço
+    // Ordens de Serviço — todos autenticados
     Route::resource('ordens', OrdemServicoController::class);
 
     // Histórico de manutenções
     Route::get('/historico', [HistoricoController::class, 'index'])->name('historico.index');
     Route::get('/historico/{id}', [HistoricoController::class, 'show'])->name('historico.show');
-    Route::post('/historico', [HistoricoController::class, 'store'])->name('historico.store');
-    Route::delete('/historico/{id}', [HistoricoController::class, 'destroy'])->name('historico.destroy');
+    Route::middleware('admin')->group(function () {
+        Route::post('/historico', [HistoricoController::class, 'store'])->name('historico.store');
+        Route::delete('/historico/{id}', [HistoricoController::class, 'destroy'])->name('historico.destroy');
+    });
     Route::get('/historico/maquina/{maquinaId}', [HistoricoController::class, 'porMaquina'])->name('historico.por-maquina');
 
     // Profile

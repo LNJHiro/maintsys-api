@@ -106,11 +106,13 @@
                 <td>
                     <div class="actions">
                         <a href="{{ route('historico.show', $h) }}" class="btn btn-secondary btn-sm">Ver</a>
+                        @if(auth()->user()->isAdmin())
                         <form method="POST" action="{{ route('historico.destroy', $h) }}"
                               onsubmit="confirmDelete(this, 'Excluir este registro de histórico?'); return false;">
                             @csrf @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm">Del</button>
                         </form>
+                        @endif
                     </div>
                 </td>
             </tr>

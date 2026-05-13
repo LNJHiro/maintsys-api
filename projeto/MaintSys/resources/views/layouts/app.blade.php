@@ -496,8 +496,9 @@
 <!-- SIDEBAR -->
 <aside class="sidebar">
     <div class="sidebar-logo">
-        <div class="sys-name">SENAI<span style="color:var(--accent2)">.</span></div>
-        <div class="sys-sub">MaintSys — Manutenção Industrial</div>
+        <img src="/senai.webp" alt="SENAI" style="height:50px;margin-bottom:12px;width:auto">
+        <div class="sys-name">MaintSys<span style="color:var(--accent2)">.</span></div>
+        <div class="sys-sub">Manutenção Industrial</div>
     </div>
 
     <div class="sidebar-section">// sistema</div>

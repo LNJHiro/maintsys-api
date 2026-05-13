@@ -78,6 +78,7 @@ class OrdemServicoController extends Controller
             'maquina_id'    => 'required|exists:maquinas,id',
             'tecnico_id'    => 'required|exists:tecnicos,id',
             'data_prevista' => 'nullable|date',
+            'proxima_preventiva' => 'nullable|date|after:today',
         ]);
         if ($data['status'] === 'concluida' && $statusAnterior !== 'concluida') {
             $data['data_conclusao'] = now();
@@ -101,6 +102,21 @@ class OrdemServicoController extends Controller
             if ($osAbertas === 0) {
                 $maquina->update(['status' => 'operacional']);
                 session()->flash('alerta', "✅ {$maquina->modelo} voltou a ser Operacional.");
+            }
+
+            if ($ordem->tipo === 'preventiva' && $request->filled('proxima_preventiva')) {
+                OrdemServico::create([
+                    'numero'        => OrdemServico::gerarNumero(),
+                    'tipo'          => 'preventiva',
+                    'status'        => 'aberta',
+                    'prioridade'    => $ordem->prioridade,
+                    'descricao'     => 'Manutenção preventiva programada (gerada automaticamente)',
+                    'maquina_id'    => $ordem->maquina_id,
+                    'tecnico_id'    => $ordem->tecnico_id,
+                    'data_abertura' => now(),
+                    'data_prevista' => $request->proxima_preventiva,
+                ]);
+                session()->flash('alerta', "📅 Próxima manutenção preventiva agendada para {$request->proxima_preventiva}.");
             }
         }
         $ordem->update($data);

@@ -67,7 +67,7 @@
         <div class="form-row">
             <div class="form-group">
                 <label>Telefone</label>
-                <input type="text" name="telefone" class="form-control"
+                <input type="text" name="telefone" id="telefone" class="form-control"
                        value="{{ old('telefone', $tecnico->telefone) }}">
             </div>
             <div class="form-group" style="display:flex;align-items:center;gap:10px;padding-top:22px">
@@ -87,5 +87,26 @@
         </div>
     </form>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const telefoneInput = document.getElementById('telefone');
+    if (telefoneInput) {
+        telefoneInput.addEventListener('input', function(e) {
+            let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+            if (v.length > 10) {
+                v = v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            } else if (v.length > 6) {
+                v = v.replace(/(\d{2})(\d{4})(\d*)/, '($1) $2-$3');
+            } else if (v.length > 2) {
+                v = v.replace(/(\d{2})(\d*)/, '($1) $2');
+            }
+            e.target.value = v;
+        });
+    }
+});
+</script>
+@endpush
 
 @endsection
