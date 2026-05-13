@@ -21,7 +21,8 @@
       "Bash(Get-ChildItem -Path \"C:\\\\laragon\\\\www\\\\maintsys-api\\\\projeto\\\\MaintSys\\\\database\\\\migrations\" -Filter \"*.php\")",
       "Bash(Select-Object Name)",
       "Bash(Sort-Object Name)",
-      "Bash(git commit -m 'ajustar logo senai no sidebar *)"
+      "Bash(git commit -m 'ajustar logo senai no sidebar *)",
+      "PowerShell(php -l app/Http/Controllers/OrdemServicoController.php; php -l app/Models/OrdemServico.php; php artisan route:clear; php artisan view:clear)"
     ]
   }
 }

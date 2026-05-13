@@ -79,8 +79,16 @@ class OrdemServico extends Model
 
     public static function gerarNumero(): string
     {
-        $data = now()->format('Ymd');
-        $ultimo = self::whereDate('created_at', today())->count() + 1;
-        return 'OS-' . $data . '-' . str_pad($ultimo, 4, '0', STR_PAD_LEFT);
+        $prefix = 'OS-' . now()->format('Ymd') . '-';
+
+        // lockForUpdate evita colisão do número quando duas O.S.
+        // são geradas em paralelo dentro da mesma transação.
+        $ultimo = self::where('numero', 'like', $prefix . '%')
+            ->lockForUpdate()
+            ->orderByDesc('numero')
+            ->value('numero');
+
+        $proximo = $ultimo ? ((int) substr($ultimo, -4)) + 1 : 1;
+        return $prefix . str_pad($proximo, 4, '0', STR_PAD_LEFT);
     }
 }

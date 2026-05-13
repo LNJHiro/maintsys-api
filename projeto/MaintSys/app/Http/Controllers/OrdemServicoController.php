@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\OrdemServico;
 use App\Models\Maquina;
 use App\Models\Tecnico;
@@ -39,15 +40,21 @@ class OrdemServicoController extends Controller
             'tecnico_id'    => 'required|exists:tecnicos,id',
             'data_prevista' => 'nullable|date',
         ]);
-        $data['numero']        = OrdemServico::gerarNumero();
-        $data['status']        = 'aberta';
-        $data['data_abertura'] = now();
-        $ordem = OrdemServico::create($data);
-        $maquina = Maquina::find($data['maquina_id']);
-        if ($maquina->status === 'operacional') {
-            $maquina->update(['status' => 'em_manutencao']);
-            session()->flash('alerta', "🔧 Máquina {$maquina->modelo} passou para Em Manutenção.");
-        }
+
+        $ordem = DB::transaction(function () use ($data) {
+            $data['numero']        = OrdemServico::gerarNumero();
+            $data['status']        = 'aberta';
+            $data['data_abertura'] = now();
+            $ordem = OrdemServico::create($data);
+
+            $maquina = Maquina::find($data['maquina_id']);
+            if ($maquina->status === 'operacional') {
+                $maquina->update(['status' => 'em_manutencao']);
+                session()->flash('alerta', "🔧 Máquina {$maquina->modelo} passou para Em Manutenção.");
+            }
+            return $ordem;
+        });
+
         return redirect()->route('ordens.index')->with('success', "O.S. {$ordem->numero} criada com sucesso!");
     }
 
@@ -78,48 +85,67 @@ class OrdemServicoController extends Controller
             'maquina_id'    => 'required|exists:maquinas,id',
             'tecnico_id'    => 'required|exists:tecnicos,id',
             'data_prevista' => 'nullable|date',
-            'proxima_preventiva' => 'nullable|date|after:today',
+            'proxima_preventiva' => 'nullable|date|after_or_equal:today',
         ]);
-        if ($data['status'] === 'concluida' && $statusAnterior !== 'concluida') {
-            $data['data_conclusao'] = now();
-            HistoricoManutencao::create([
-    'maquina_id'         => $ordem->maquina_id,
-    'tecnico_id'         => $ordem->tecnico_id,
-    'ordem_id'           => $ordem->id,
-    'tipo'               => $ordem->tipo,
-    'descricao'          => $ordem->descricao,
-    'solucao'            => $data['solucao'] ?? null,
-    'tempo_parada_horas' => $request->input('tempo_parada_horas', 0),
-    'custo'              => $request->input('custo', 0),
-    'pecas_utilizadas'   => $request->input('pecas_utilizadas'),
-    'data_inicio'        => $ordem->data_abertura,
-    'data_fim'           => now(),
-]);
-            $maquina = Maquina::find($ordem->maquina_id);
-            $osAbertas = OrdemServico::where('maquina_id', $maquina->id)
-                ->whereIn('status', ['aberta', 'em_andamento'])
-                ->where('id', '!=', $ordem->id)->count();
-            if ($osAbertas === 0) {
-                $maquina->update(['status' => 'operacional']);
-                session()->flash('alerta', "✅ {$maquina->modelo} voltou a ser Operacional.");
-            }
 
-            if ($ordem->tipo === 'preventiva' && $request->filled('proxima_preventiva')) {
-                OrdemServico::create([
-                    'numero'        => OrdemServico::gerarNumero(),
-                    'tipo'          => 'preventiva',
-                    'status'        => 'aberta',
-                    'prioridade'    => $ordem->prioridade,
-                    'descricao'     => 'Manutenção preventiva programada (gerada automaticamente)',
-                    'maquina_id'    => $ordem->maquina_id,
-                    'tecnico_id'    => $ordem->tecnico_id,
-                    'data_abertura' => now(),
-                    'data_prevista' => $request->proxima_preventiva,
-                ]);
-                session()->flash('alerta', "📅 Próxima manutenção preventiva agendada para {$request->proxima_preventiva}.");
-            }
+        // Bloqueia reabrir/cancelar uma O.S. já concluída — caso contrário o histórico
+        // e a próxima preventiva (já gerados na conclusão original) ficariam órfãos.
+        if ($statusAnterior === 'concluida' && $data['status'] !== 'concluida') {
+            return back()->withInput()->with('error',
+                'Não é possível alterar o status de uma O.S. já concluída. Crie uma nova O.S. se necessário.');
         }
-        $ordem->update($data);
+
+        $alertas = [];
+
+        DB::transaction(function () use ($request, $ordem, $statusAnterior, &$data, &$alertas) {
+            if ($data['status'] === 'concluida' && $statusAnterior !== 'concluida') {
+                $data['data_conclusao'] = now();
+
+                HistoricoManutencao::create([
+                    'maquina_id'         => $ordem->maquina_id,
+                    'tecnico_id'         => $ordem->tecnico_id,
+                    'ordem_id'           => $ordem->id,
+                    'tipo'               => $ordem->tipo,
+                    'descricao'          => $ordem->descricao,
+                    'solucao'            => $data['solucao'] ?? null,
+                    'tempo_parada_horas' => $request->input('tempo_parada_horas', 0),
+                    'custo'              => $request->input('custo', 0),
+                    'pecas_utilizadas'   => $request->input('pecas_utilizadas'),
+                    'data_inicio'        => $ordem->data_abertura,
+                    'data_fim'           => now(),
+                ]);
+
+                $maquina = Maquina::find($ordem->maquina_id);
+                $osAbertas = OrdemServico::where('maquina_id', $maquina->id)
+                    ->whereIn('status', ['aberta', 'em_andamento'])
+                    ->where('id', '!=', $ordem->id)->count();
+                if ($osAbertas === 0) {
+                    $maquina->update(['status' => 'operacional']);
+                    $alertas[] = "✅ {$maquina->modelo} voltou a ser Operacional.";
+                }
+
+                if ($ordem->tipo === 'preventiva' && $request->filled('proxima_preventiva')) {
+                    OrdemServico::create([
+                        'numero'        => OrdemServico::gerarNumero(),
+                        'tipo'          => 'preventiva',
+                        'status'        => 'aberta',
+                        'prioridade'    => $ordem->prioridade,
+                        'descricao'     => 'Manutenção preventiva programada (gerada automaticamente)',
+                        'maquina_id'    => $ordem->maquina_id,
+                        'tecnico_id'    => $ordem->tecnico_id,
+                        'data_abertura' => now(),
+                        'data_prevista' => $request->proxima_preventiva,
+                    ]);
+                    $alertas[] = "📅 Próxima manutenção preventiva agendada para {$request->proxima_preventiva}.";
+                }
+            }
+            $ordem->update($data);
+        });
+
+        if (!empty($alertas)) {
+            session()->flash('alerta', implode(' • ', $alertas));
+        }
+
         return redirect()->route('ordens.index')->with('success', "O.S. {$ordem->numero} atualizada!");
     }
 
