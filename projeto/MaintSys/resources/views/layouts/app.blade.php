@@ -72,7 +72,7 @@
             background: var(--bg);
             color: var(--text);
             font-family: var(--sans);
-            font-size: 14px;
+            font-size: 18px;
             min-height: 100vh;
             display: flex;
         }
@@ -143,8 +143,8 @@
 
         .sidebar-product {
             font-family: var(--cond);
-            font-size: 17px;
-            font-weight: 700;
+            font-size: 19px;
+            font-weight: 800;
             color: rgba(255,255,255,.9);
             letter-spacing: 1.5px;
             text-transform: uppercase;
@@ -153,7 +153,7 @@
 
         .sidebar-sub {
             font-family: var(--mono);
-            font-size: 9px;
+            font-size: 14px;
             color: rgba(255,255,255,.55);
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -164,7 +164,7 @@
         .sidebar-section {
             padding: 18px 16px 6px;
             font-family: var(--mono);
-            font-size: 9px;
+            font-size: 14px;
             color: var(--muted);
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -174,11 +174,11 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 9px 20px;
+            padding: 12px 20px;
             color: var(--muted);
             font-family: var(--cond);
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 20px;
+            font-weight: 700;
             letter-spacing: 0.5px;
             border-left: 3px solid transparent;
             transition: all .15s;
@@ -205,7 +205,7 @@
             background: rgba(255,59,71,.12);
         }
 
-        .sidebar nav a .icon { font-size: 15px; width: 20px; text-align: center; }
+        .sidebar nav a .icon { font-size: 20px; width: 24px; text-align: center; }
 
         .sidebar-footer {
             margin-top: auto;
@@ -217,14 +217,14 @@
 
         .user-name {
             font-family: var(--cond);
-            font-weight: 700;
-            font-size: 14px;
+            font-weight: 800;
+            font-size: 18px;
             color: var(--text);
         }
 
         .user-email {
             color: var(--muted);
-            font-size: 11px;
+            font-size: 16px;
             margin-top: 2px;
         }
 
@@ -251,12 +251,12 @@
             align-items: center;
             gap: 6px;
             margin-top: 12px;
-            padding: 6px 14px;
+            padding: 10px 16px;
             background: transparent;
             border: 1px solid var(--border-hi);
             color: var(--muted);
             font-family: var(--mono);
-            font-size: 10px;
+            font-size: 16px;
             letter-spacing: 1px;
             cursor: pointer;
             transition: all .15s;
@@ -309,7 +309,7 @@
             align-items: center;
             gap: 8px;
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: 16px;
             color: var(--muted);
         }
 
@@ -321,11 +321,11 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            padding: 6px 14px;
+            padding: 10px 16px;
             background: transparent;
             border: 1px solid var(--border);
             color: var(--muted);
-            font-size: 12px;
+            font-size: 18px;
             font-family: var(--sans);
             cursor: pointer;
             border-radius: 4px;
@@ -350,12 +350,12 @@
 
         /* ── ALERTS ── */
         .alert {
-            padding: 11px 16px;
+            padding: 14px 18px;
             margin-bottom: 18px;
             border-left: 3px solid;
             font-family: var(--cond);
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 18px;
+            font-weight: 700;
             border-radius: 0 4px 4px 0;
         }
 
@@ -389,8 +389,8 @@
 
         .page-title {
             font-family: var(--cond);
-            font-size: 26px;
-            font-weight: 700;
+            font-size: 28px;
+            font-weight: 800;
             letter-spacing: 0.5px;
             text-transform: uppercase;
             color: var(--text);
@@ -399,7 +399,7 @@
         .page-title small {
             display: block;
             font-family: var(--mono);
-            font-size: 10px;
+            font-size: 16px;
             color: var(--red);
             letter-spacing: 2px;
             margin-bottom: 4px;
@@ -417,7 +417,7 @@
         .stat-card {
             background: var(--card);
             border: 1px solid var(--border);
-            padding: 16px;
+            padding: 18px;
             position: relative;
             overflow: hidden;
             transition: box-shadow .2s;
@@ -440,7 +440,7 @@
 
         .stat-label {
             font-family: var(--mono);
-            font-size: 9px;
+            font-size: 16px;
             color: var(--muted);
             letter-spacing: 2px;
             text-transform: uppercase;
@@ -449,8 +449,8 @@
 
         .stat-value {
             font-family: var(--cond);
-            font-size: 36px;
-            font-weight: 700;
+            font-size: 40px;
+            font-weight: 800;
             line-height: 1;
             color: var(--text);
         }
@@ -465,10 +465,10 @@
         table { width: 100%; border-collapse: collapse; }
 
         thead th {
-            padding: 10px 14px;
+            padding: 12px 16px;
             text-align: left;
             font-family: var(--mono);
-            font-size: 10px;
+            font-size: 16px;
             letter-spacing: 1.5px;
             text-transform: uppercase;
             color: var(--muted);
@@ -489,17 +489,17 @@
         [data-theme="dark"] tbody tr:hover { background: rgba(255,59,71,.05); }
 
         tbody td {
-            padding: 11px 14px;
-            font-size: 13px;
+            padding: 14px 16px;
+            font-size: 18px;
             color: var(--text);
         }
 
         /* ── BADGES ── */
         .badge {
             display: inline-block;
-            padding: 2px 8px;
+            padding: 4px 10px;
             font-family: var(--mono);
-            font-size: 10px;
+            font-size: 16px;
             letter-spacing: 1px;
             text-transform: uppercase;
             border: 1px solid;
@@ -523,10 +523,10 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            padding: 7px 16px;
+            padding: 10px 18px;
             font-family: var(--cond);
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 18px;
+            font-weight: 700;
             letter-spacing: 0.3px;
             text-decoration: none;
             border: 1px solid;
@@ -572,7 +572,7 @@
             border-color: var(--red-badge);
         }
 
-        .btn-sm { padding: 4px 10px; font-size: 11px; }
+        .btn-sm { padding: 6px 12px; font-size: 16px; }
 
         /* ── FORMS ── */
         .form-card {
@@ -587,7 +587,7 @@
         .form-group label {
             display: block;
             font-family: var(--mono);
-            font-size: 10px;
+            font-size: 16px;
             color: var(--muted);
             letter-spacing: 1.5px;
             text-transform: uppercase;
@@ -596,12 +596,12 @@
 
         .form-control {
             width: 100%;
-            padding: 9px 12px;
+            padding: 12px 14px;
             background: var(--surface);
             border: 1px solid var(--border-hi);
             color: var(--text);
             font-family: var(--sans);
-            font-size: 13px;
+            font-size: 18px;
             outline: none;
             transition: border-color .15s, box-shadow .15s;
             border-radius: 3px;
@@ -642,9 +642,9 @@
         }
 
         .pagination a, .pagination span {
-            padding: 4px 10px;
+            padding: 6px 12px;
             font-family: var(--mono);
-            font-size: 11px;
+            font-size: 16px;
             border: 1px solid var(--border);
             color: var(--muted);
             transition: all .1s;
@@ -671,9 +671,9 @@
 {{-- MODAL DE CONFIRMAÇÃO --}}
 <div id="modal-confirm" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;">
     <div style="background:var(--card);border:1px solid var(--border);border-top:3px solid var(--red);max-width:420px;width:90%;padding:32px;position:relative;border-radius:0 0 4px 4px;">
-        <div style="font-family:var(--mono);font-size:10px;color:var(--red);letter-spacing:3px;margin-bottom:16px;">⚠ // CONFIRMAR EXCLUSÃO</div>
-        <div id="modal-msg" style="font-family:var(--cond);font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px;"></div>
-        <div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:28px;">Esta ação não pode ser desfeita.</div>
+        <div style="font-family:var(--mono);font-size:16px;color:var(--red);letter-spacing:3px;margin-bottom:16px;">⚠ // CONFIRMAR EXCLUSÃO</div>
+        <div id="modal-msg" style="font-family:var(--cond);font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;"></div>
+        <div style="font-family:var(--mono);font-size:16px;color:var(--muted);margin-bottom:28px;">Esta ação não pode ser desfeita.</div>
         <div style="display:flex;gap:10px;justify-content:flex-end;">
             <button onclick="modalCancel()" class="btn btn-secondary">Cancelar</button>
             <button id="modal-confirm-btn" class="btn btn-danger" style="background:rgba(220,38,38,.1);">Confirmar Exclusão</button>
@@ -786,7 +786,7 @@ document.addEventListener('DOMContentLoaded', function () {
         </div>
 
         @if(session('alerta'))
-        <div style="font-family:var(--mono);font-size:11px;color:var(--red);padding:4px 12px;border:1px solid rgba(227,0,15,.3);background:rgba(227,0,15,.06);border-radius:3px;">
+        <div style="font-family:var(--mono);font-size:16px;color:var(--red);padding:8px 14px;border:1px solid rgba(227,0,15,.3);background:rgba(227,0,15,.06);border-radius:3px;">
             {{ session('alerta') }}
         </div>
         @endif

@@ -33,7 +33,7 @@
                 'parada_critica'=>'red',default=>'gray'
             }; @endphp
             <div style="margin-bottom:20px">
-                <span class="badge badge-{{ $sc }}" style="font-size:12px;padding:4px 12px">
+                <span class="badge badge-{{ $sc }}" style="font-size:16px;padding:6px 14px">
                     {{ $maquina->status_label }}
                 </span>
             </div>
@@ -46,16 +46,16 @@
                 ['Cadastro',     $maquina->data_cadastro?->format('d/m/Y') ?? '—'],
                 ['Total O.S.',   $maquina->ordens->count()],
             ] as [$label, $value])
-            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)">
-                <span style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px">{{ $label }}</span>
-                <span style="font-family:var(--cond);font-size:14px;font-weight:500">{{ $value }}</span>
+            <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
+                <span style="font-family:var(--mono);font-size:14px;color:var(--muted);letter-spacing:1px">{{ $label }}</span>
+                <span style="font-family:var(--cond);font-size:18px;font-weight:500">{{ $value }}</span>
             </div>
             @endforeach
 
             @if($maquina->descricao)
             <div style="margin-top:16px">
-                <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:6px">DESCRIÇÃO</div>
-                <p style="font-size:13px;color:var(--muted);line-height:1.5">{{ $maquina->descricao }}</p>
+                <div style="font-family:var(--mono);font-size:14px;color:var(--muted);letter-spacing:1px;margin-bottom:6px">DESCRIÇÃO</div>
+                <p style="font-size:18px;color:var(--muted);line-height:1.5">{{ $maquina->descricao }}</p>
             </div>
             @endif
         </div>
@@ -63,7 +63,7 @@
 
     {{-- ORDENS DE SERVIÇO --}}
     <div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:10px">
+        <div style="font-family:var(--mono);font-size:16px;color:var(--muted);letter-spacing:2px;margin-bottom:10px">
             // ORDENS DE SERVIÇO
         </div>
         <div class="table-wrap">
@@ -81,7 +81,7 @@
                 <tbody>
                     @forelse($maquina->ordens->sortByDesc('created_at') as $os)
                     <tr>
-                        <td class="mono" style="font-size:11px;color:var(--accent)">
+                        <td class="mono" style="font-size:18px;color:var(--accent)">
                             <a href="{{ route('ordens.show', $os) }}" style="color:var(--accent)">{{ $os->numero }}</a>
                         </td>
                         <td><span class="badge {{ $os->tipo==='corretiva'?'badge-orange':'badge-blue' }}">{{ $os->tipo_label }}</span></td>
@@ -94,10 +94,10 @@
                             @php $sc2 = match($os->status){'aberta'=>'blue','em_andamento'=>'yellow','concluida'=>'green',default=>'gray'}; @endphp
                             <span class="badge badge-{{ $sc2 }}">{{ $os->status_label }}</span>
                         </td>
-                        <td class="mono" style="font-size:11px;color:var(--muted)">{{ $os->data_abertura->format('d/m/Y') }}</td>
+                        <td class="mono" style="font-size:18px;color:var(--muted)">{{ $os->data_abertura->format('d/m/Y') }}</td>
                     </tr>
                     @empty
-                    <tr><td colspan="6" style="color:var(--muted);font-family:var(--mono);font-size:11px;padding:20px">— sem ordens de serviço —</td></tr>
+                    <tr><td colspan="6" style="color:var(--muted);font-family:var(--mono);font-size:18px;padding:20px">— sem ordens de serviço —</td></tr>
                     @endforelse
                 </tbody>
             </table>

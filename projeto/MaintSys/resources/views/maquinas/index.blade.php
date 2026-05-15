@@ -36,12 +36,12 @@
         <tbody>
             @forelse($maquinas as $m)
             <tr>
-                <td class="mono" style="color:var(--muted);font-size:11px">{{ $m->id }}</td>
-                <td class="mono" style="font-size:11px;color:var(--accent)">{{ $m->numero_serie }}</td>
+                <td class="mono" style="color:var(--muted);font-size:18px">{{ $m->id }}</td>
+                <td class="mono" style="font-size:18px;color:var(--accent)">{{ $m->numero_serie }}</td>
                 <td style="font-weight:500">{{ $m->modelo }}</td>
                 <td style="color:var(--muted)">{{ $m->fabricante ?? '—' }}</td>
                 <td>{{ $m->localizacao }}</td>
-                <td class="mono" style="font-size:11px;color:var(--muted)">
+                <td class="mono" style="font-size:18px;color:var(--muted)">
                     {{ $m->data_cadastro ? $m->data_cadastro->format('d/m/Y') : '—' }}
                 </td>
                 <td>
@@ -53,7 +53,7 @@
                     }; @endphp
                     <span class="badge badge-{{ $sc }}">{{ $m->status_label }}</span>
                 </td>
-                <td class="mono" style="text-align:center">{{ $m->ordens_count }}</td>
+                <td class="mono" style="text-align:center;font-size:18px">{{ $m->ordens_count }}</td>
                 <td>
                     <div class="actions">
                         <a href="{{ route('maquinas.show', $m) }}" class="btn btn-secondary btn-sm">Ver</a>
@@ -72,7 +72,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="9" style="text-align:center;color:var(--muted);font-family:var(--mono);padding:32px">
+                <td colspan="9" style="text-align:center;color:var(--muted);font-family:var(--mono);font-size:18px;padding:32px">
                     — nenhuma máquina cadastrada —
                 </td>
             </tr>
