@@ -131,7 +131,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 13px;
+            font-size: 14px;
             color: rgba(255,255,255,.8);
             font-weight: 500;
         }
@@ -172,7 +172,7 @@
         }
 
         .auth-topbar-link {
-            font-size: 13px;
+            font-size: 14px;
             color: var(--muted);
             transition: color .15s;
         }
@@ -188,7 +188,7 @@
             border-radius: 4px;
             background: transparent;
             color: var(--muted);
-            font-size: 12px;
+            font-size: 13px;
             font-family: var(--sans);
             cursor: pointer;
             transition: all .15s;
@@ -230,7 +230,7 @@
         .form-group label {
             display: block;
             font-family: var(--mono);
-            font-size: 10px;
+            font-size: 12px;
             color: var(--muted);
             letter-spacing: 1.5px;
             text-transform: uppercase;
@@ -270,7 +270,7 @@
             display: block;
             margin-top: 5px;
             font-family: var(--mono);
-            font-size: 10px;
+            font-size: 12px;
             color: var(--error);
         }
 
@@ -301,7 +301,7 @@
         .auth-alt {
             margin-top: 20px;
             text-align: center;
-            font-size: 13px;
+            font-size: 14px;
             color: var(--muted);
         }
 
@@ -324,7 +324,7 @@
             display: flex;
             align-items: center;
             gap: 7px;
-            font-size: 13px;
+            font-size: 14px;
             color: var(--muted);
             cursor: pointer;
         }
@@ -335,7 +335,7 @@
         }
 
         .forgot {
-            font-size: 13px;
+            font-size: 14px;
             color: var(--muted);
             transition: color .15s;
         }

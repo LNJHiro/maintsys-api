@@ -94,7 +94,7 @@
         }
 
         .logo-product {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 900;
             color: var(--text);
             letter-spacing: -0.3px;
@@ -111,8 +111,8 @@
         }
 
         .nav-link {
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 15px;
+            font-weight: 700;
             color: var(--muted);
             transition: color .18s;
             position: relative;
@@ -142,8 +142,8 @@
         .btn-outline-nav {
             padding: 8px 18px;
             border-radius: 6px;
-            font-size: 14px;
-            font-weight: 700;
+            font-size: 15px;
+            font-weight: 800;
             color: var(--red);
             border: 1.5px solid var(--red);
             background: transparent;
@@ -160,7 +160,7 @@
         .btn-red-nav {
             padding: 9px 20px;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 800;
             background: var(--red);
             color: var(--white);
@@ -249,8 +249,8 @@
         }
 
         .hero-eyebrow {
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 800;
             letter-spacing: 3px;
             text-transform: uppercase;
             color: rgba(255,255,255,.7);
@@ -258,7 +258,7 @@
         }
 
         .hero-title {
-            font-size: clamp(36px, 4vw, 58px);
+            font-size: clamp(40px, 4.2vw, 64px);
             font-weight: 900;
             color: var(--white);
             line-height: .97;
@@ -270,13 +270,13 @@
             font-style: normal;
             display: block;
             color: rgba(255,255,255,.75);
-            font-size: .62em;
+            font-size: .68em;
             letter-spacing: -1px;
             margin-top: 4px;
         }
 
         .hero-desc {
-            font-size: 16px;
+            font-size: 17px;
             color: rgba(255,255,255,.82);
             line-height: 1.65;
             max-width: 400px;
@@ -292,7 +292,7 @@
         .btn-white {
             padding: 14px 28px;
             border-radius: 6px;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 800;
             background: var(--white);
             color: var(--red);
@@ -314,8 +314,8 @@
         .btn-outline-white {
             padding: 13px 24px;
             border-radius: 6px;
-            font-size: 15px;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: 800;
             background: transparent;
             color: var(--white);
             border: 1.5px solid rgba(255,255,255,.5);
@@ -343,8 +343,8 @@
         }
 
         .hero-tagline {
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 800;
             letter-spacing: 3px;
             text-transform: uppercase;
             color: var(--red);
@@ -352,7 +352,7 @@
         }
 
         .hero-right h2 {
-            font-size: clamp(22px, 2.8vw, 34px);
+            font-size: clamp(24px, 3vw, 38px);
             font-weight: 900;
             letter-spacing: -1px;
             line-height: 1.15;
@@ -361,7 +361,7 @@
         }
 
         .hero-right p {
-            font-size: 15px;
+            font-size: 16px;
             color: var(--muted);
             line-height: 1.65;
             max-width: 380px;
@@ -389,7 +389,7 @@
         }
 
         .stat-box-val {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 900;
             letter-spacing: -2px;
             color: var(--red);
@@ -398,8 +398,8 @@
         }
 
         .stat-box-lbl {
-            font-size: 12px;
-            font-weight: 600;
+            font-size: 13px;
+            font-weight: 700;
             color: var(--muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -477,8 +477,8 @@
         }
 
         .section-label {
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 800;
             letter-spacing: 3px;
             text-transform: uppercase;
             color: var(--red);
@@ -486,7 +486,7 @@
         }
 
         .section-title {
-            font-size: clamp(26px, 3.5vw, 40px);
+            font-size: clamp(28px, 3.8vw, 44px);
             font-weight: 900;
             letter-spacing: -1.5px;
             line-height: 1.1;
@@ -543,14 +543,14 @@
         }
 
         .feat-title {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 800;
             color: var(--text);
             margin-bottom: 8px;
         }
 
         .feat-desc {
-            font-size: 13.5px;
+            font-size: 14.5px;
             color: var(--muted);
             line-height: 1.6;
         }
@@ -599,8 +599,8 @@
         .cta-text { padding-left: 32px; }
 
         .cta-eyebrow {
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 800;
             letter-spacing: 3px;
             text-transform: uppercase;
             color: var(--red);
@@ -608,7 +608,7 @@
         }
 
         .cta-final h2 {
-            font-size: clamp(28px, 3.5vw, 44px);
+            font-size: clamp(30px, 3.8vw, 48px);
             font-weight: 900;
             letter-spacing: -1.5px;
             color: var(--white);
@@ -617,7 +617,7 @@
         }
 
         .cta-final p {
-            font-size: 15px;
+            font-size: 16px;
             color: rgba(255,255,255,.55);
             max-width: 480px;
         }
@@ -633,7 +633,7 @@
         .btn-red-lg {
             padding: 14px 28px;
             border-radius: 6px;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 800;
             background: var(--red);
             color: var(--white);
@@ -654,8 +654,8 @@
         .btn-ghost-lg {
             padding: 13px 28px;
             border-radius: 6px;
-            font-size: 15px;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: 800;
             background: transparent;
             color: rgba(255,255,255,.65);
             border: 1.5px solid rgba(255,255,255,.2);
@@ -694,7 +694,7 @@
         }
 
         .footer-brand-sub {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 700;
             color: rgba(255,255,255,.4);
             letter-spacing: 1px;
@@ -703,14 +703,14 @@
         }
 
         .footer-desc {
-            font-size: 13px;
+            font-size: 14px;
             color: rgba(255,255,255,.4);
             line-height: 1.65;
             max-width: 280px;
         }
 
         .footer-col h5 {
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -722,7 +722,7 @@
         .footer-col li { margin-bottom: 10px; }
 
         .footer-col a {
-            font-size: 13px;
+            font-size: 14px;
             color: rgba(255,255,255,.5);
             transition: color .18s;
         }
@@ -740,7 +740,7 @@
         }
 
         .footer-copy {
-            font-size: 12px;
+            font-size: 13px;
             color: rgba(255,255,255,.3);
         }
 
@@ -752,7 +752,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 12px;
+            font-size: 13px;
             color: rgba(255,255,255,.3);
         }
 
