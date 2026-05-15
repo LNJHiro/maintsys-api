@@ -6,7 +6,7 @@
     <div style="margin-bottom: 32px;">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 16px;">
             <div>
-                <div style="font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;">
+                <div style="font-family: var(--mono); font-size: 13px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;">
                     // acesso & permissões
                 </div>
                 <h1 style="font-family: var(--cond); font-size: 32px; font-weight: 700; color: var(--text); margin-bottom: 8px;">
@@ -36,7 +36,7 @@
             <div>
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 4px; overflow: hidden;">
                     <div style="background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px;">
-                        <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase;">
+                        <div style="font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase;">
                             Usuários
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                             <button
                                 onclick="selectUser({{ $user->id }}, '{{ $user->name }}')"
                                 id="user-btn-{{ $user->id }}"
-                                style="width: 100%; padding: 12px 14px; background: transparent; border: none; border-bottom: 1px solid var(--border); color: var(--muted); font-family: var(--sans); font-size: 13px; text-align: left; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 8px;"
+                                style="width: 100%; padding: 12px 14px; background: transparent; border: none; border-bottom: 1px solid var(--border); color: var(--muted); font-family: var(--sans); font-size: 15px; text-align: left; cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 8px;"
                             >
                                 <span style="flex: 1;">{{ $user->name }}</span>
                                 @if($userHasIndividual[$user->id])
@@ -63,12 +63,12 @@
             <div id="user-permissions-container" style="display: none;">
                 <div style="background: var(--card); border: 1px solid var(--border); border-radius: 4px; padding: 20px;">
                     <div style="margin-bottom: 24px;">
-                        <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px;">
+                        <div style="font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px;">
                             Permissões de
                         </div>
                         <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                             <h2 id="selected-user-name" style="font-family: var(--cond); font-size: 24px; font-weight: 700; color: var(--text); margin: 0;"></h2>
-                            <span id="perm-source-badge" style="display: none; padding: 3px 10px; font-family: var(--mono); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; border: 1px solid; border-radius: 2px;"></span>
+                            <span id="perm-source-badge" style="display: none; padding: 3px 10px; font-family: var(--mono); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; border: 1px solid; border-radius: 2px;"></span>
                         </div>
                     </div>
 
@@ -81,7 +81,7 @@
                             type="button"
                             id="user-save-btn"
                             onclick="saveUserPermissions()"
-                            style="flex: 2; min-width: 160px; padding: 12px 16px; background: var(--accent); color: white; font-family: var(--cond); font-size: 13px; font-weight: 600; letter-spacing: 0.5px; border: 1px solid var(--accent); cursor: pointer; transition: all 0.15s; border-radius: 4px;"
+                            style="flex: 2; min-width: 160px; padding: 12px 16px; background: var(--accent); color: white; font-family: var(--cond); font-size: 15px; font-weight: 600; letter-spacing: 0.5px; border: 1px solid var(--accent); cursor: pointer; transition: all 0.15s; border-radius: 4px;"
                         >
                             ✓ SALVAR PERMISSÕES
                         </button>
@@ -90,7 +90,7 @@
                             id="user-reset-btn"
                             onclick="resetToRole()"
                             title="Remove a configuração individual e volta a usar as permissões do nível"
-                            style="flex: 1; min-width: 100px; padding: 12px 16px; background: transparent; color: var(--yellow); font-family: var(--cond); font-size: 11px; font-weight: 600; letter-spacing: 0.5px; border: 1px solid rgba(154,103,0,.4); cursor: pointer; transition: all 0.15s; border-radius: 4px;"
+                            style="flex: 1; min-width: 100px; padding: 12px 16px; background: transparent; color: var(--yellow); font-family: var(--cond); font-size: 14px; font-weight: 600; letter-spacing: 0.5px; border: 1px solid rgba(154,103,0,.4); cursor: pointer; transition: all 0.15s; border-radius: 4px;"
                         >
                             ↺ RESETAR
                         </button>
@@ -125,7 +125,7 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
             @foreach(['admin' => 'Administrador', 'usuario' => 'Usuário'] as $roleKey => $roleLabel)
                 <div style="background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 4px;">
-                    <h2 style="font-family: var(--cond); font-size: 16px; font-weight: 700; color: var(--text); margin: 0 0 20px 0; text-transform: uppercase;">
+                    <h2 style="font-family: var(--cond); font-size: 18px; font-weight: 700; color: var(--text); margin: 0 0 20px 0; text-transform: uppercase;">
                         {{ $roleLabel }}
                     </h2>
 
@@ -133,7 +133,7 @@
                         @csrf
                         @foreach($permissions as $modulo => $perms)
                             <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border);">
-                                <h3 style="font-family: var(--cond); font-size: 12px; font-weight: 700; color: var(--text); text-transform: uppercase; margin: 0 0 12px 0;">
+                                <h3 style="font-family: var(--cond); font-size: 15px; font-weight: 700; color: var(--text); text-transform: uppercase; margin: 0 0 12px 0;">
                                     @switch($modulo)
                                         @case('maquinas')
                                             ⚙ Máquinas
@@ -185,7 +185,7 @@
         </div>
 
         <div style="margin-top: 24px; background: rgba(227,0,15,.06); border: 1px solid rgba(227,0,15,.2); border-radius: 4px; padding: 16px;">
-            <div style="font-family: var(--mono); font-size: 9px; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px;">
+            <div style="font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px;">
                 ℹ️ NÍVEL DE ACESSO
             </div>
             <div style="font-family: var(--sans); font-size: 13px; color: var(--text); line-height: 1.6;">

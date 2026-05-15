@@ -13,7 +13,7 @@
         <small>// visão geral</small>
         Dashboard
     </div>
-    <div style="font-family:var(--mono);font-size:11px;color:var(--muted)">
+    <div style="font-family:var(--mono);font-size:18px;color:var(--muted)">
         {{ now()->format('d/m/Y H:i') }}
     </div>
 </div>
@@ -63,9 +63,9 @@
 {{-- ALERTAS DE PARADA CRÍTICA --}}
 @if(auth()->user()->hasPermission('dashboard.alertas') && $alertas->count() > 0)
 <div style="margin-bottom:24px;border:1px solid rgba(248,81,73,.3);background:rgba(248,81,73,.04);padding:16px;border-radius:4px;">
-    <div style="font-family:var(--mono);font-size:10px;color:var(--red);letter-spacing:2px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
+    <div style="font-family:var(--mono);font-size:18px;color:var(--red);letter-spacing:2px;margin-bottom:12px;display:flex;align-items:center;gap:8px;">
         ⚠ // ALERTAS — MÁQUINAS EM PARADA CRÍTICA
-        <span style="background:rgba(248,81,73,.15);color:var(--red);padding:1px 8px;font-size:10px;border:1px solid rgba(248,81,73,.3);">
+        <span style="background:rgba(248,81,73,.15);color:var(--red);padding:4px 10px;font-size:18px;border:1px solid rgba(248,81,73,.3);">
             {{ $alertas->count() }}
         </span>
     </div>
@@ -73,8 +73,8 @@
     @foreach($alertas as $m)
 
         <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(248,81,73,.1);gap:12px;">
-            <span style="font-family:var(--cond);font-size:15px;font-weight:600;flex:1;">{{ $m->modelo }}</span>
-            <span style="font-family:var(--mono);font-size:11px;color:var(--muted);flex:1;">{{ $m->localizacao }}</span>
+            <div style="font-family:var(--cond);font-size:18px;font-weight:600;flex:1;">{{ $m->modelo }}</span>
+            <span style="font-family:var(--mono);font-size:18px;color:var(--muted);flex:1;">{{ $m->localizacao }}</span>
             <a href="{{ route('ordens.create') }}?maquina_id={{ $m->id }}" class="btn btn-danger btn-sm">
                 + Abrir O.S.
             </a>
@@ -90,10 +90,10 @@
     @if(auth()->user()->hasPermission('dashboard.ordens'))
     <div>
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;">
+            <div style="font-family:var(--mono);font-size:18px;color:var(--muted);letter-spacing:2px;">
                 // ORDENS DE SERVIÇO ATIVAS
             </div>
-            <a href="{{ route('ordens.index') }}" style="font-family:var(--mono);font-size:10px;color:var(--accent);text-decoration:none;letter-spacing:1px;">
+            <a href="{{ route('ordens.index') }}" style="font-family:var(--mono);font-size:18px;color:var(--accent);text-decoration:none;letter-spacing:1px;">
                 ver todas →
             </a>
         </div>
@@ -113,7 +113,7 @@
                 <tbody>
                     @forelse($ordensRecentes as $ordem)
                         <tr style="cursor:pointer;" onclick="window.location.href=this.dataset.href" data-href="{{ route('ordens.show', $ordem->id) }}">
-                            <td class="mono" style="font-size:11px;color:var(--accent)">
+                            <td class="mono" style="font-size:18px;color:var(--accent)">
                                 {{ $ordem->numero }}
                             </td>
 
@@ -154,7 +154,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" style="color:var(--muted);font-family:var(--mono);font-size:11px;text-align:center;padding:20px;">
+                            <td colspan="5" style="color:var(--muted);font-family:var(--mono);font-size:18px;text-align:center;padding:20px;">
                                 — sem ordens ativas —
                             </td>
                         </tr>
@@ -173,10 +173,10 @@
         @if(auth()->user()->hasPermission('dashboard.historico'))
         <div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-                <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;">
+                <div style="font-family:var(--mono);font-size:18px;color:var(--muted);letter-spacing:2px;">
                     // ÚLTIMAS MANUTENÇÕES
                 </div>
-                <a href="{{ route('historico.index') }}" style="font-family:var(--mono);font-size:10px;color:var(--accent);text-decoration:none;letter-spacing:1px;">
+                <a href="{{ route('historico.index') }}" style="font-family:var(--mono);font-size:18px;color:var(--accent);text-decoration:none;letter-spacing:1px;">
                     ver todas →
                 </a>
             </div>
@@ -202,13 +202,13 @@
                                     </span>
                                 </td>
 
-                                <td style="color:var(--muted);font-family:var(--mono);font-size:11px;">
+                                <td style="color:var(--muted);font-family:var(--mono);font-size:18px;">
                                     {{ optional($h->data_inicio)->format('d/m H:i') }}
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" style="color:var(--muted);font-family:var(--mono);font-size:11px;text-align:center;padding:20px;">
+                                <td colspan="3" style="color:var(--muted);font-family:var(--mono);font-size:18px;text-align:center;padding:20px;">
                                     — sem registros —
                                 </td>
                             </tr>
@@ -222,7 +222,7 @@
 
         {{-- AÇÕES RÁPIDAS --}}
         <div>
-            <div style="font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:2px;margin-bottom:10px;">
+            <div style="font-family:var(--mono);font-size:18px;color:var(--muted);letter-spacing:2px;margin-bottom:10px;">
                 // AÇÕES RÁPIDAS
             </div>
 

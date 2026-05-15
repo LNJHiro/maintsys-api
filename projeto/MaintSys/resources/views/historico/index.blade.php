@@ -78,7 +78,7 @@
         <tbody>
             @forelse($historicos as $h)
             <tr>
-                <td class="mono" style="color:var(--muted);font-size:11px">{{ $h->id }}</td>
+                <td class="mono" style="color:var(--muted);font-size:18px">{{ $h->id }}</td>
                 <td style="font-weight:500">{{ $h->maquina->modelo ?? '—' }}</td>
                 <td>
                     <span class="badge {{ $h->tipo === 'corretiva' ? 'badge-orange' : 'badge-blue' }}">
@@ -86,21 +86,21 @@
                     </span>
                 </td>
                 <td style="color:var(--muted)">{{ $h->tecnico->nome ?? '—' }}</td>
-                <td class="mono" style="font-size:11px">
+                <td class="mono" style="font-size:18px">
                     @if($h->ordem)
                         <a href="{{ route('ordens.show', $h->ordem) }}" style="color:var(--accent)">{{ $h->ordem->numero }}</a>
                     @else
                         <span style="color:var(--muted)">—</span>
                     @endif
                 </td>
-                <td class="mono" style="font-size:11px;color:var(--muted)">{{ $h->data_inicio->format('d/m/Y H:i') }}</td>
-                <td class="mono" style="font-size:11px;color:var(--muted)">
+                <td class="mono" style="font-size:18px;color:var(--muted)">{{ $h->data_inicio->format('d/m/Y H:i') }}</td>
+                <td class="mono" style="font-size:18px;color:var(--muted)">
                     {{ $h->data_fim ? $h->data_fim->format('d/m/Y H:i') : '—' }}
                 </td>
-                <td class="mono" style="font-size:11px;text-align:center">
+                <td class="mono" style="font-size:18px;text-align:center">
                     {{ $h->tempo_parada_horas > 0 ? number_format($h->tempo_parada_horas, 1) : '—' }}
                 </td>
-                <td class="mono" style="font-size:11px;color:{{ $h->custo > 0 ? 'var(--accent)' : 'var(--muted)' }}">
+                <td class="mono" style="font-size:18px;color:{{ $h->custo > 0 ? 'var(--accent)' : 'var(--muted)' }}">
                     {{ $h->custo > 0 ? 'R$ '.number_format($h->custo, 2, ',', '.') : '—' }}
                 </td>
                 <td>
