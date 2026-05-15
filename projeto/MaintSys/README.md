@@ -1,58 +1,212 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# MaintSys — Sistema de Gerenciamento de Manutenção
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistema web para gerenciamento de manutenção industrial, desenvolvido com Laravel 13 e Tailwind CSS 4. Permite controlar máquinas, ordens de serviço, técnicos e histórico de manutenções com sistema granular de permissões por papel (role).
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tecnologias
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+| Camada | Tecnologia |
+|--------|------------|
+| Backend | PHP 8.3+, Laravel 13 |
+| Frontend | Blade, Tailwind CSS 4, Vite 8 |
+| Banco de dados | MySQL (produção) / SQLite (dev) |
+| Testes | PHPUnit 12.5 |
+| Estilo de código | Laravel Pint |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Requisitos
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- PHP 8.3+
+- Composer
+- Node.js 18+
+- MySQL 8+
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Instalação
 
 ```bash
-composer require laravel/boost --dev
+# 1. Clonar o repositório
+git clone <url> maintsys
+cd maintsys
 
-php artisan boost:install
+# 2. Setup completo (instala dependências, configura .env, roda migrations)
+composer run setup
+
+# 3. Configurar o banco no .env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=maintsys
+DB_USERNAME=root
+DB_PASSWORD=
+
+# 4. Rodar seeders para dados iniciais
+php artisan db:seed
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## Desenvolvimento
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+# Iniciar todos os serviços (Laravel + Queue + Logs + Vite)
+composer run dev
 
-## Code of Conduct
+# Ou individualmente:
+php artisan serve        # Servidor PHP
+npm run dev              # Vite (hot reload)
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Acesse: `http://localhost:8000`
 
-## Security Vulnerabilities
+**Usuários iniciais criados pelo seeder:**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Email | Senha | Role |
+|-------|-------|------|
+| `admin@maintsys.com` | `password` | admin_master |
+| `gerente@maintsys.com` | `password` | admin |
+| `tecnico@maintsys.com` | `password` | usuario |
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Estrutura do projeto
+
+```
+app/
+├── Http/
+│   ├── Controllers/        # DashboardController, MaquinaController, OrdemServicoController,
+│   │                       # TecnicoController, HistoricoController, AccessController,
+│   │                       # UserManagementController, ProfileController
+│   ├── Middleware/         # CheckPermission, CheckAdmin, CheckAdminAccess, CheckMaster
+│   └── Requests/           # Form Requests com validação
+├── Models/                 # User, Maquina, Tecnico, OrdemServico, HistoricoManutencao,
+│                           # Permission, RolePermission, UserPermission
+└── Providers/
+database/
+├── migrations/             # 12 migrations
+├── seeders/                # UserSeeder, PermissionSeeder, DatabaseSeeder
+└── factories/              # 5 factories para testes
+resources/
+├── css/app.css             # Tailwind + variáveis do tema SENAI
+├── js/app.js
+└── views/                  # Blade templates por módulo
+routes/
+├── web.php                 # Rotas principais
+└── auth.php                # Rotas de autenticação
+```
+
+---
+
+## Módulos
+
+### Dashboard
+Painel com estatísticas de máquinas, técnicos e ordens. Exibe alertas de parada crítica e ações rápidas. As seções visíveis dependem das permissões do usuário logado.
+
+### Máquinas
+Cadastro de equipamentos com número de série, modelo, fabricante, localização e status.
+
+**Status possíveis:** `operacional`, `em_manutencao`, `parada_critica`, `inativa`
+
+O status é atualizado automaticamente ao abrir/concluir ordens de serviço.
+
+### Ordens de Serviço
+Rastreamento de manutenções com número único (`OS-YYYYMMDD-####`), tipo (preventiva/corretiva), status, prioridade e vínculo com máquina e técnico.
+
+**Automações:**
+- Abrir O.S. → máquina muda para `em_manutencao`
+- Concluir O.S. → registra no histórico automaticamente
+- Concluir O.S. preventiva com data fornecida → cria a próxima preventiva automaticamente
+- Concluir última O.S. aberta da máquina → máquina volta a `operacional`
+
+### Técnicos
+Cadastro de técnicos com matrícula, especialidade e contato. Não é possível excluir técnicos com ordens vinculadas.
+
+### Histórico de Manutenções
+Registro de todas as manutenções realizadas com peças utilizadas, tempo de parada, custo e observações. Criado automaticamente ao concluir uma O.S., ou manualmente.
+
+### Gestão de Usuários
+Criação e gerenciamento de usuários do sistema (apenas admin/admin_master). Suporta atribuição de permissões individuais que sobrescrevem as permissões de papel.
+
+### Gerenciamento de Acesso
+Painel para configurar permissões por papel (role) e por usuário individualmente.
+
+---
+
+## Sistema de Permissões
+
+O sistema usa três roles: `admin_master`, `admin`, `usuario`.
+
+As permissões são verificadas em dois níveis:
+1. Permissões atribuídas ao papel (role) do usuário
+2. Permissões individuais do usuário (sobrescrevem as do papel)
+
+**Permissões disponíveis:**
+
+| Módulo | Permissões |
+|--------|------------|
+| Máquinas | `maquinas.visualizar`, `maquinas.criar`, `maquinas.editar`, `maquinas.deletar` |
+| Técnicos | `tecnicos.visualizar`, `tecnicos.criar`, `tecnicos.editar`, `tecnicos.deletar` |
+| Ordens | `ordens.visualizar`, `ordens.criar`, `ordens.editar`, `ordens.deletar` |
+| Histórico | `historico.visualizar`, `historico.criar`, `historico.deletar` |
+| Dashboard | `dashboard.maquinas`, `dashboard.tecnicos`, `dashboard.ordens`, `dashboard.alertas`, `dashboard.historico` |
+
+**Middlewares disponíveis nas rotas:**
+
+```php
+->middleware('perm:maquinas.criar')   // Permissão específica
+->middleware('admin')                  // admin ou admin_master
+->middleware('admin_access')           // Acesso ao painel de administração
+->middleware('master')                 // Apenas admin_master
+```
+
+---
+
+## Banco de Dados
+
+```
+users                   → usuários do sistema
+maquinas                → inventário de equipamentos
+tecnicos                → técnicos de manutenção
+ordens_servico          → ordens de serviço (FK: maquinas, tecnicos)
+historico_manutencoes   → histórico (FK: maquinas, tecnicos, ordens_servico)
+permissions             → permissões disponíveis
+role_permissions        → permissões por papel
+user_permissions        → permissões individuais por usuário
+sessions                → sessões de usuário
+password_reset_tokens   → tokens de redefinição de senha
+```
+
+---
+
+## Testes
+
+```bash
+# Executar todos os testes
+composer run test
+
+# Ou diretamente
+php artisan test
+```
+
+---
+
+## Comandos úteis
+
+```bash
+php artisan migrate:fresh --seed   # Resetar banco e popular com dados de exemplo
+php artisan tinker                 # REPL interativo
+php artisan pint                   # Corrigir estilo de código
+npm run build                      # Build para produção
+```
+
+---
+
+## Tema
+
+A interface usa o tema SENAI com:
+- Cor primária: `#E3000F` (vermelho SENAI)
+- Fontes: Barlow (texto), Barlow Condensed (títulos), Share Tech Mono (monospace)
+- Suporte a modo escuro via `data-theme="dark"` no elemento raiz
