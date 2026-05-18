@@ -73,7 +73,7 @@
     @foreach($alertas as $m)
 
         <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(248,81,73,.1);gap:12px;">
-            <div style="font-family:var(--cond);font-size:18px;font-weight:600;flex:1;">{{ $m->modelo }}</span>
+            <div style="font-family:var(--cond);font-size:18px;font-weight:600;flex:1;">{{ $m->modelo }}</div>
             <span style="font-family:var(--mono);font-size:18px;color:var(--muted);flex:1;">{{ $m->localizacao }}</span>
             <a href="{{ route('ordens.create') }}?maquina_id={{ $m->id }}" class="btn btn-danger btn-sm">
                 + Abrir O.S.
