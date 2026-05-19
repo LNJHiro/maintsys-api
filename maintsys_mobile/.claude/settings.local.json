@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\54888644829\\\\Desktop\\\\Douglas\\\\maintsys-api\\\\projeto\\\\MaintSys\\\\app\" -Recurse -File | ForEach-Object { $_.FullName.Replace\\(\"C:\\\\Users\\\\54888644829\\\\Desktop\\\\Douglas\\\\maintsys-api\\\\projeto\\\\MaintSys\\\\app\\\\\", \"\"\\) })"
+    ]
+  }
+}
