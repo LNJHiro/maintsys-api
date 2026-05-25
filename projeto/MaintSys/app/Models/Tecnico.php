@@ -3,16 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Model;
 
-class Tecnico extends Authenticatable
+class Tecnico extends Model
 {
-    use HasFactory, Notifiable;
+    use HasFactory;
 
     protected $table = 'tecnicos';
 
     protected $fillable = [
+        'user_id',
         'nome',
         'matricula',
         'email',
@@ -35,6 +35,11 @@ class Tecnico extends Authenticatable
     public function ordens()
     {
         return $this->hasMany(OrdemServico::class, 'tecnico_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function historicos()

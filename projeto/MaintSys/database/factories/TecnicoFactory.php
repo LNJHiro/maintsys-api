@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Tecnico;
+use App\Models\User;
 
 class TecnicoFactory extends Factory
 {
@@ -12,11 +13,21 @@ class TecnicoFactory extends Factory
 
     public function definition(): array
     {
+        $nome = fake()->name();
+        $email = fake()->unique()->safeEmail();
+        $password = Hash::make('password');
+
         return [
-            'nome' => fake()->name(),
+            'user_id' => User::factory()->state([
+                'name' => $nome,
+                'email' => $email,
+                'password' => $password,
+                'role' => 'usuario',
+            ]),
+            'nome' => $nome,
             'matricula' => fake()->unique()->numerify('TEC-####'),
-            'email' => fake()->unique()->safeEmail(),
-            'password' => Hash::make('password'),
+            'email' => $email,
+            'password' => $password,
             'especialidade' => fake()->randomElement([
                 'Mecânica',
                 'Elétrica',

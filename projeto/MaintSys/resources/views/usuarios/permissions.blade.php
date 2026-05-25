@@ -25,9 +25,11 @@
                 </span>
             </p>
         </div>
+        @if(auth()->user()->hasPermission('usuarios.editar'))
         <a href="{{ route('usuarios.edit', $user) }}" style="padding: 10px 16px; background: var(--accent); color: white; font-family: var(--cond); font-size: 13px; font-weight: 600; border: 1px solid var(--accent); text-decoration: none; cursor: pointer; transition: all 0.15s; border-radius: 4px; display: flex; align-items: center; gap: 6px;">
             ✏️ EDITAR USUÁRIO
         </a>
+        @endif
     </div>
 
     <!-- PERMISSÕES GRID -->
@@ -112,9 +114,11 @@
         <a href="{{ route('usuarios.index') }}" style="padding: 12px 16px; background: transparent; color: var(--muted); font-family: var(--cond); font-size: 13px; font-weight: 600; letter-spacing: 0.5px; border: 1px solid var(--border-hi); text-decoration: none; cursor: pointer; transition: all 0.15s; text-align: center; border-radius: 4px;">
             ← VOLTAR À LISTA
         </a>
+        @if(auth()->user()->hasPermission('acesso.gerenciar'))
         <a href="{{ route('acesso.index') }}" style="padding: 12px 16px; background: var(--accent); color: white; font-family: var(--cond); font-size: 13px; font-weight: 600; letter-spacing: 0.5px; border: 1px solid var(--accent); text-decoration: none; cursor: pointer; transition: all 0.15s; text-align: center; border-radius: 4px;">
             🔐 GERENCIAR PERMISSÕES
         </a>
+        @endif
     </div>
 </div>
 @endsection

@@ -32,13 +32,15 @@ Route::middleware('auth')->group(function () {
         Route::get('/maquinas/create', [MaquinaController::class, 'create'])->name('maquinas.create');
         Route::post('/maquinas', [MaquinaController::class, 'store'])->name('maquinas.store');
     });
-    Route::get('/maquinas', [MaquinaController::class, 'index'])->name('maquinas.index');
+    Route::middleware('perm:maquinas.visualizar')->group(function () {
+        Route::get('/maquinas', [MaquinaController::class, 'index'])->name('maquinas.index');
+        Route::get('/maquinas/{id}', [MaquinaController::class, 'show'])->name('maquinas.show');
+    });
     Route::middleware('perm:maquinas.editar')->group(function () {
         Route::get('/maquinas/{id}/edit', [MaquinaController::class, 'edit'])->name('maquinas.edit');
         Route::put('/maquinas/{id}', [MaquinaController::class, 'update'])->name('maquinas.update');
     });
     Route::middleware('perm:maquinas.deletar')->delete('/maquinas/{id}', [MaquinaController::class, 'destroy'])->name('maquinas.destroy');
-    Route::get('/maquinas/{id}', [MaquinaController::class, 'show'])->name('maquinas.show');
 
     // Técnicos
     Route::middleware('perm:tecnicos.criar')->group(function () {
@@ -82,10 +84,11 @@ Route::middleware('auth')->group(function () {
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/notificacoes/lidas', [ProfileController::class, 'markNotificationsAsRead'])->name('profile.notifications.read');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Gerenciamento de Acesso — admin_master + admin
-    Route::middleware('admin_access')->group(function () {
+    // Gerenciamento de Acesso
+    Route::middleware('perm:acesso.gerenciar')->group(function () {
         Route::get('/acesso', [AccessController::class, 'index'])->name('acesso.index');
         Route::post('/acesso/usuario/{user}/permissoes', [AccessController::class, 'updateUserPermissions'])->name('acesso.updateUserPermissions');
         Route::post('/acesso/role/{role}', [AccessController::class, 'updateRole'])->name('acesso.updateRole');
@@ -93,16 +96,21 @@ Route::middleware('auth')->group(function () {
         Route::patch('/acesso/usuario/{user}', [AccessController::class, 'updateUsuario'])->name('acesso.updateUsuario');
     });
 
-    // Gerenciamento de usuários — admin_master + admin (mas admin não pode editar admin_master)
-    Route::middleware('admin_access')->group(function () {
-        Route::get('/usuarios', [UserManagementController::class, 'index'])->name('usuarios.index');
+    // Gerenciamento de usuários
+    Route::middleware('perm:usuarios.visualizar')->get('/usuarios', [UserManagementController::class, 'index'])->name('usuarios.index');
+
+    Route::middleware('perm:usuarios.criar')->group(function () {
         Route::get('/usuarios/criar', [UserManagementController::class, 'create'])->name('usuarios.create');
         Route::post('/usuarios', [UserManagementController::class, 'store'])->name('usuarios.store');
+    });
+
+    Route::middleware('perm:usuarios.editar')->group(function () {
         Route::get('/usuarios/{user}/editar', [UserManagementController::class, 'edit'])->name('usuarios.edit');
         Route::put('/usuarios/{user}', [UserManagementController::class, 'update'])->name('usuarios.update');
-        Route::delete('/usuarios/{user}', [UserManagementController::class, 'destroy'])->name('usuarios.destroy');
-        Route::get('/usuarios/{user}/permissoes', [UserManagementController::class, 'showPermissions'])->name('usuarios.permissions');
     });
+
+    Route::middleware('perm:usuarios.deletar')->delete('/usuarios/{user}', [UserManagementController::class, 'destroy'])->name('usuarios.destroy');
+    Route::middleware('perm:usuarios.permissoes')->get('/usuarios/{user}/permissoes', [UserManagementController::class, 'showPermissions'])->name('usuarios.permissions');
 });
 
 require __DIR__.'/auth.php';

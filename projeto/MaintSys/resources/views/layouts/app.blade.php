@@ -753,12 +753,16 @@ document.addEventListener('DOMContentLoaded', function () {
     @if(auth()->user()->canManageUsers())
     <div class="sidebar-section">// admin</div>
     <nav>
+        @if(auth()->user()->hasPermission('usuarios.visualizar'))
         <a href="{{ route('usuarios.index') }}" class="{{ request()->routeIs('usuarios.*') ? 'active' : '' }}">
             <span class="icon">👥</span> Usuários
         </a>
+        @endif
+        @if(auth()->user()->hasPermission('acesso.gerenciar'))
         <a href="{{ route('acesso.index') }}" class="{{ request()->routeIs('acesso.*') ? 'active' : '' }}">
             <span class="icon">🔐</span> Gerenciar Acesso
         </a>
+        @endif
     </nav>
     @endif
 
@@ -766,6 +770,15 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="user-name">{{ auth()->user()->name }}</div>
         <div class="user-email">{{ auth()->user()->email }}</div>
         <div class="user-role">{{ auth()->user()->role }}</div>
+        @php($unreadNotificationsCount = auth()->user()->unreadNotifications()->count())
+        <a href="{{ route('profile.edit') }}" class="btn-logout" style="text-decoration:none;">
+            Perfil
+            @if($unreadNotificationsCount > 0)
+                <span class="badge badge-red" style="font-size:10px;padding:2px 6px;margin-left:4px;">
+                    {{ $unreadNotificationsCount }}
+                </span>
+            @endif
+        </a>
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="btn-logout">↩ Sair do sistema</button>

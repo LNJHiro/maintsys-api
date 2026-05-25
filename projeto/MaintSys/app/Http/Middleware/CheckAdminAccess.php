@@ -17,7 +17,7 @@ class CheckAdminAccess
     {
         $user = auth()->user();
 
-        if (!$user || !in_array($user->role, ['admin_master', 'admin'])) {
+        if (!$user || !$user->hasPermission('acesso.gerenciar')) {
             abort(403, 'Apenas administradores têm acesso a esta seção.');
         }
 

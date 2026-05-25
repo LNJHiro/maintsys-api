@@ -66,9 +66,9 @@ Acesse: `http://localhost:8000`
 
 | Email | Senha | Role |
 |-------|-------|------|
-| `admin@maintsys.com` | `password` | admin_master |
-| `gerente@maintsys.com` | `password` | admin |
-| `tecnico@maintsys.com` | `password` | usuario |
+| `master@senai.br` | `master123` | admin_master |
+| `admin@senai.br` | `admin123` | admin |
+| `usuario@senai.br` | `usuario123` | usuario |
 
 ---
 

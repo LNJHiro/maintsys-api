@@ -87,6 +87,11 @@ class MaquinaController extends Controller
             return redirect()->route('maquinas.index')
                 ->with('error', 'Não é possível excluir: existem Ordens de Serviço vinculadas.');
         }
+        if ($maquina->historicos()->exists()) {
+            return redirect()->route('maquinas.index')
+                ->with('error', 'Nao e possivel excluir: existem historicos vinculados a esta maquina.');
+        }
+
         $maquina->delete();
         return redirect()->route('maquinas.index')->with('success', 'Máquina excluída com sucesso!');
     }

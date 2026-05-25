@@ -150,6 +150,14 @@
                                         @case('dashboard')
                                             ◆ Dashboard
                                             @break
+                                        @case('usuarios')
+                                            Usuarios
+                                            @break
+                                        @case('acesso')
+                                            Acesso
+                                            @break
+                                        @default
+                                            {{ ucfirst($modulo) }}
                                     @endswitch
                                 </h3>
 
@@ -272,7 +280,7 @@ function selectUser(userId, userName) {
         title.style.textTransform = 'uppercase';
         title.style.margin = '0 0 12px 0';
 
-        const icons = { maquinas: '⚙', tecnicos: '👤', ordens: '📋', historico: '⏱', dashboard: '◆' };
+        const icons = { maquinas: '⚙', tecnicos: '👤', ordens: '📋', historico: '⏱', dashboard: '◆', usuarios: 'U', acesso: 'A' };
         title.textContent = (icons[modulo] || '•') + ' ' + modulo.charAt(0).toUpperCase() + modulo.slice(1);
 
         section.appendChild(title);
@@ -402,7 +410,7 @@ function resetToRole() {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
-        body: JSON.stringify({ permissions: [] })
+        body: JSON.stringify({ inherit: true })
     })
     .then(response => response.json())
     .then(data => {

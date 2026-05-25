@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(PermissionSeeder::class);
 
-        // Para desabilitar os dados fake, comente as linhas abaixo:
+        // // Para desabilitar os dados fake, comente as linhas abaixo:
         // // Técnicos
         // $tecnicos = Tecnico::factory()->count(10)->create();
 

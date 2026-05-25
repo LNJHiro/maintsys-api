@@ -40,10 +40,19 @@ class PermissionSeeder extends Seeder
             ['name' => 'dashboard.ordens', 'descricao' => 'Ver cards e tabela de ordens', 'modulo' => 'dashboard'],
             ['name' => 'dashboard.alertas', 'descricao' => 'Ver alertas de parada crítica', 'modulo' => 'dashboard'],
             ['name' => 'dashboard.historico', 'descricao' => 'Ver últimas manutenções', 'modulo' => 'dashboard'],
+            // Usuarios
+            ['name' => 'usuarios.visualizar', 'descricao' => 'Ver usuarios', 'modulo' => 'usuarios'],
+            ['name' => 'usuarios.criar', 'descricao' => 'Criar usuario', 'modulo' => 'usuarios'],
+            ['name' => 'usuarios.editar', 'descricao' => 'Editar usuario', 'modulo' => 'usuarios'],
+            ['name' => 'usuarios.deletar', 'descricao' => 'Deletar usuario', 'modulo' => 'usuarios'],
+            ['name' => 'usuarios.permissoes', 'descricao' => 'Ver permissoes de usuarios', 'modulo' => 'usuarios'],
+
+            // Acesso
+            ['name' => 'acesso.gerenciar', 'descricao' => 'Gerenciar permissoes', 'modulo' => 'acesso'],
         ];
 
         foreach ($permissions as $perm) {
-            Permission::firstOrCreate(['name' => $perm['name']], $perm);
+            Permission::updateOrCreate(['name' => $perm['name']], $perm);
         }
 
         // Configurar permissões padrão do role 'admin'
@@ -53,8 +62,16 @@ class PermissionSeeder extends Seeder
         }
 
         // Configurar permissões padrão do role 'usuario'
-        $usuarioPerms = Permission::where('name', 'like', '%.visualizar')
-            ->orWhereIn('name', ['ordens.criar', 'ordens.editar', 'dashboard.maquinas', 'dashboard.ordens'])
+        $usuarioPerms = Permission::whereIn('name', [
+                'maquinas.visualizar',
+                'tecnicos.visualizar',
+                'ordens.visualizar',
+                'historico.visualizar',
+                'ordens.criar',
+                'ordens.editar',
+                'dashboard.maquinas',
+                'dashboard.ordens',
+            ])
             ->pluck('id')->toArray();
         foreach ($usuarioPerms as $permId) {
             RolePermission::firstOrCreate(['role' => 'usuario', 'permission_id' => $permId]);

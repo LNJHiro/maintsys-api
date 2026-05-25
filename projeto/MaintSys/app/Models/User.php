@@ -10,11 +10,14 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    protected ?array $permissionNamesCache = null;
+
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
+        'permissions_overridden',
     ];
 
     protected $hidden = [
@@ -27,12 +30,13 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'permissions_overridden' => 'boolean',
         ];
     }
 
     public function isAdmin(): bool
     {
-        return $this->role === 'admin';
+        return in_array($this->role, ['admin_master', 'admin']);
     }
 
     public function isMaster(): bool
@@ -42,7 +46,18 @@ class User extends Authenticatable
 
     public function canManageUsers(): bool
     {
-        return in_array($this->role, ['admin_master', 'admin']);
+        return $this->hasPermission('usuarios.visualizar')
+            || $this->hasPermission('acesso.gerenciar');
+    }
+
+    public function tecnico()
+    {
+        return $this->hasOne(Tecnico::class);
+    }
+
+    public function userPermissions()
+    {
+        return $this->hasMany(UserPermission::class);
     }
 
     public function hasPermission(string $perm): bool
@@ -51,19 +66,38 @@ class User extends Authenticatable
             return true;
         }
 
-        // Se o usuário tem permissões individuais configuradas,
-        // elas prevalecem completamente sobre o role.
-        $hasIndividualConfig = UserPermission::where('user_id', $this->id)->exists();
+        return in_array($perm, $this->permissionNames(), true);
+    }
 
-        if ($hasIndividualConfig) {
-            return UserPermission::where('user_id', $this->id)
-                ->whereHas('permission', fn($q) => $q->where('name', $perm))
-                ->exists();
+    public function permissionNames(): array
+    {
+        if ($this->permissionNamesCache !== null) {
+            return $this->permissionNamesCache;
         }
 
-        // Sem configuração individual — usa as permissões do role.
-        return RolePermission::where('role', $this->role)
-            ->whereHas('permission', fn($q) => $q->where('name', $perm))
-            ->exists();
+        if ($this->permissions_overridden) {
+            $names = $this->userPermissions()
+                ->with('permission')
+                ->get()
+                ->pluck('permission.name');
+        } else {
+            $names = RolePermission::with('permission')
+                ->where('role', $this->role)
+                ->get()
+                ->pluck('permission.name');
+        }
+
+        $names = $names
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+
+        return $this->permissionNamesCache = $names;
+    }
+
+    public function clearPermissionCache(): void
+    {
+        $this->permissionNamesCache = null;
     }
 }

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Permission;
 use App\Models\RolePermission;
+use App\Models\UserPermission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserManagementController extends Controller
@@ -50,9 +52,7 @@ class UserManagementController extends Controller
         }
 
         $permissions = Permission::orderBy('modulo')->orderBy('name')->get()->groupBy('modulo');
-        $userPermissions = RolePermission::where('role', $user->role)
-            ->pluck('permission_id')
-            ->toArray();
+        $userPermissions = $this->effectivePermissionIds($user);
 
         return view('usuarios.edit', [
             'user' => $user,
@@ -81,7 +81,17 @@ class UserManagementController extends Controller
             $validated['password'] = Hash::make($validated['password']);
         }
 
-        $user->update($validated);
+        DB::transaction(function () use ($user, $validated) {
+            $roleChanged = array_key_exists('role', $validated) && $user->role !== $validated['role'];
+
+            $user->update($validated);
+
+            if ($roleChanged) {
+                UserPermission::where('user_id', $user->id)->delete();
+                $user->update(['permissions_overridden' => false]);
+                $user->clearPermissionCache();
+            }
+        });
 
         return redirect()->route('usuarios.index')
             ->with('success', 'Usuário atualizado com sucesso!');
@@ -106,14 +116,27 @@ class UserManagementController extends Controller
         }
 
         $permissions = Permission::orderBy('modulo')->orderBy('name')->get()->groupBy('modulo');
-        $userPermissions = RolePermission::where('role', $user->role)
-            ->pluck('permission_id')
-            ->toArray();
+        $userPermissions = $this->effectivePermissionIds($user);
 
         return view('usuarios.permissions', [
             'user' => $user,
             'permissions' => $permissions,
             'userPermissions' => $userPermissions,
         ]);
+    }
+
+    private function effectivePermissionIds(User $user): array
+    {
+        $individual = UserPermission::where('user_id', $user->id)
+            ->pluck('permission_id')
+            ->toArray();
+
+        if ($user->permissions_overridden) {
+            return $individual;
+        }
+
+        return RolePermission::where('role', $user->role)
+            ->pluck('permission_id')
+            ->toArray();
     }
 }

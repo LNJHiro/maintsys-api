@@ -55,7 +55,7 @@ class HistoricoController extends Controller
             'tempo_parada_horas' => 'nullable|numeric|min:0',
             'custo'              => 'nullable|numeric|min:0',
             'data_inicio'        => 'required|date',
-            'data_fim'           => 'nullable|date',
+            'data_fim'           => 'nullable|date|after_or_equal:data_inicio',
             'observacoes'        => 'nullable|string',
         ]);
         HistoricoManutencao::create($data);

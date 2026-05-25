@@ -15,8 +15,12 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
+        $user = $request->user();
+
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
+            'notifications' => $user->notifications()->latest()->limit(10)->get(),
+            'unreadNotificationsCount' => $user->unreadNotifications()->count(),
         ]);
     }
 
@@ -41,6 +45,15 @@ class ProfileController extends Controller
         $user->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
+    }
+
+    public function markNotificationsAsRead(Request $request): RedirectResponse
+    {
+        $request->user()
+            ->unreadNotifications()
+            ->update(['read_at' => now()]);
+
+        return Redirect::route('profile.edit')->with('status', 'notifications-read');
     }
 
     /**
