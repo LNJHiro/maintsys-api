@@ -1,11 +1,14 @@
 @extends('layouts.app')
 
+@section('title', 'Editar Usuario')
+@section('breadcrumb')
+    <a href="{{ route('usuarios.index') }}" style="color:var(--muted);text-decoration:none">usuários</a>
+    <span class="sep">/</span>
+    <span>editar</span>
+@endsection
+
 @section('content')
 <div style="background: var(--bg); min-height: 100vh; padding: 28px;">
-    <!-- BREADCRUMB -->
-    <a href="{{ route('usuarios.index') }}" style="font-family: var(--mono); font-size: 11px; color: var(--accent); text-decoration: none; letter-spacing: 1px; transition: all 0.15s;">
-        ← VOLTAR
-    </a>
 
     <!-- HEADER -->
     <div style="margin: 24px 0 32px 0;">
@@ -131,11 +134,15 @@
             <div style="background: var(--card); border: 1px solid var(--border); padding: 16px; border-radius: 4px; margin-bottom: 16px;">
                 <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">
                     <div style="font-family: var(--mono); font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px;">Nível Atual</div>
-                    <span style="display: inline-block; padding: 4px 12px; font-family: var(--mono); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; border: 1px solid;
-                        {{ $user->role === 'admin' ? 'color: var(--accent2); border-color: rgba(230,51,41,.4); background: rgba(230,51,41,.08);' : 'color: var(--blue); border-color: rgba(56,139,253,.4); background: rgba(56,139,253,.08);' }}
-                    ">
-                        {{ $user->role === 'admin' ? 'ADMIN' : 'USUÁRIO' }}
+                    @if($user->role === 'admin')
+                    <span style="display: inline-block; padding: 4px 12px; font-family: var(--mono); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; border: 1px solid; color: var(--accent2); border-color: rgba(230,51,41,.4); background: rgba(230,51,41,.08);">
+                        ADMIN
                     </span>
+                    @else
+                    <span style="display: inline-block; padding: 4px 12px; font-family: var(--mono); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; border: 1px solid; color: var(--blue); border-color: rgba(56,139,253,.4); background: rgba(56,139,253,.08);">
+                        USUÁRIO
+                    </span>
+                    @endif
                 </div>
 
                 <div style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border);">

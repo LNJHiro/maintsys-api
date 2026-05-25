@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('title', $maquina->modelo)
-@section('breadcrumb', '<a href="'.route('maquinas.index').'" style="color:var(--muted);text-decoration:none">máquinas</a> <span class="sep">/</span> <span>'.e($maquina->modelo).'</span>')
+@section('breadcrumb')
+    <a href="{{ route('maquinas.index') }}" style="color:var(--muted);text-decoration:none">máquinas</a>
+    <span class="sep">/</span>
+    <span>{{ $maquina->modelo }}</span>
+@endsection
 
 @section('content')
 

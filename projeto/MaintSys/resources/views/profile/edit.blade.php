@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('title', 'Meu Perfil')
-@section('breadcrumb', '<span>perfil</span>')
+@section('breadcrumb')
+    <span>perfil</span>
+@endsection
 
 @push('styles')
 <style>

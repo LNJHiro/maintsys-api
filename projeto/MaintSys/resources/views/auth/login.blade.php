@@ -49,9 +49,11 @@
         <button type="submit" class="btn-submit">→ Entrar no sistema</button>
     </form>
 
+    @if(Route::has('register'))
     <p class="auth-alt">
         Não tem conta? <a href="{{ route('register') }}">Criar conta</a>
     </p>
+    @endif
 
 </div>
 @endsection

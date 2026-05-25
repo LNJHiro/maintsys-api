@@ -817,7 +817,9 @@
             </form>
         @else
             <a href="{{ route('login') }}" class="btn-outline-nav">Entrar</a>
+            @if(Route::has('register'))
             <a href="{{ route('register') }}" class="btn-red-nav">Criar conta →</a>
+            @endif
         @endauth
     </div>
 </nav>
@@ -849,7 +851,9 @@
                     <a href="{{ route('dashboard') }}" class="btn-white">→ Acessar dashboard</a>
                 @else
                     <a href="{{ route('login') }}" class="btn-white">→ Entrar no sistema</a>
+                    @if(Route::has('register'))
                     <a href="{{ route('register') }}" class="btn-outline-white">Criar conta</a>
+                    @endif
                 @endauth
                 <a href="#recursos" class="btn-outline-white">Ver recursos ↓</a>
             </div>

@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('title', 'Registro #'.$historico->id)
-@section('breadcrumb', '<a href="'.route('historico.index').'" style="color:var(--muted);text-decoration:none">histórico</a> <span class="sep">/</span> <span>#{{ $historico->id }}</span>')
+@section('breadcrumb')
+    <a href="{{ route('historico.index') }}" style="color:var(--muted);text-decoration:none">histórico</a>
+    <span class="sep">/</span>
+    <span>#{{ $historico->id }}</span>
+@endsection
 
 @section('content')
 

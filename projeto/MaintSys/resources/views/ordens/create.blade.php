@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('title', 'Nova O.S.')
-@section('breadcrumb', '<a href="'.route('ordens.index').'" style="color:var(--muted);text-decoration:none">ordens</a> <span class="sep">/</span> <span>nova</span>')
+@section('breadcrumb')
+    <a href="{{ route('ordens.index') }}" style="color:var(--muted);text-decoration:none">ordens</a>
+    <span class="sep">/</span>
+    <span>nova</span>
+@endsection
 
 @section('content')
 

@@ -1,5 +1,12 @@
 @extends('layouts.app')
 
+@section('title', 'Novo Usuario')
+@section('breadcrumb')
+    <a href="{{ route('usuarios.index') }}" style="color:var(--muted);text-decoration:none">usuários</a>
+    <span class="sep">/</span>
+    <span>novo</span>
+@endsection
+
 @section('content')
 <div style="background: var(--bg); min-height: 100vh; padding: 28px;">
     <!-- BREADCRUMB -->

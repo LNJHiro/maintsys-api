@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php artisan *)",
+      "Bash(findstr /i \"register\")",
+      "Bash(Select-String \"register\")",
+      "Bash(php -l routes/auth.php routes/web.php bootstrap/app.php)"
+    ]
+  }
+}

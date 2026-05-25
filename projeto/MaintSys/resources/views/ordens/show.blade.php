@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('title', $ordem->numero)
-@section('breadcrumb', '<a href="'.route('ordens.index').'" style="color:var(--muted);text-decoration:none">ordens</a> <span class="sep">/</span> <span>'.e($ordem->numero).'</span>')
+@section('breadcrumb')
+    <a href="{{ route('ordens.index') }}" style="color:var(--muted);text-decoration:none">ordens</a>
+    <span class="sep">/</span>
+    <span>{{ $ordem->numero }}</span>
+@endsection
 
 @section('content')
 

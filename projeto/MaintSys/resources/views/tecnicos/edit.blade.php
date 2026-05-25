@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('title', 'Editar Técnico')
-@section('breadcrumb', '<a href="'.route('tecnicos.index').'" style="color:var(--muted);text-decoration:none">técnicos</a> <span class="sep">/</span> <span>editar</span>')
+@section('breadcrumb')
+    <a href="{{ route('tecnicos.index') }}" style="color:var(--muted);text-decoration:none">técnicos</a>
+    <span class="sep">/</span>
+    <span>editar</span>
+@endsection
 
 @section('content')
 

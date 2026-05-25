@@ -1,7 +1,11 @@
 @extends('layouts.app')
 
 @section('title', 'Novo Técnico')
-@section('breadcrumb', '<a href="'.route('tecnicos.index').'" style="color:var(--muted);text-decoration:none">técnicos</a> <span class="sep">/</span> <span>novo</span>')
+@section('breadcrumb')
+    <a href="{{ route('tecnicos.index') }}" style="color:var(--muted);text-decoration:none">técnicos</a>
+    <span class="sep">/</span>
+    <span>novo</span>
+@endsection
 
 @section('content')
 
