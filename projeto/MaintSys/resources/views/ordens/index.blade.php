@@ -13,9 +13,17 @@
         <small>// gestão de O.S.</small>
         Ordens de Serviço
     </div>
-    @if(auth()->user()->hasPermission('ordens.criar'))
-    <a href="{{ route('ordens.create') }}" class="btn btn-primary">+ Nova O.S.</a>
-    @endif
+    <div class="btn-export-group" style="display:flex;gap:8px;align-items:center">
+        <button onclick="window.print()" class="btn btn-secondary" title="Imprimir lista">
+            &#128438; Imprimir
+        </button>
+        <a href="{{ route('ordens.exportar') }}" class="btn btn-secondary" title="Exportar para CSV">
+            &#8659; Exportar CSV
+        </a>
+        @if(auth()->user()->hasPermission('ordens.criar'))
+        <a href="{{ route('ordens.create') }}" class="btn btn-primary">+ Nova O.S.</a>
+        @endif
+    </div>
 </div>
 
 <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">

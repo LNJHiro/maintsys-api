@@ -202,6 +202,71 @@ class OrdemServicoController extends Controller
         return redirect()->route('ordens.index')->with('success', "O.S. {$ordem->numero} atualizada!");
     }
 
+    public function exportarSingle(string $id)
+    {
+        $ordem = OrdemServico::with(['maquina', 'tecnico', 'historico'])->findOrFail($id);
+
+        return response()->streamDownload(function () use ($ordem) {
+            $f = fopen('php://output', 'w');
+            fputs($f, "\xEF\xBB\xBF");
+            fputcsv($f, ['Campo', 'Valor'], ';');
+
+            $rows = [
+                ['Número',              $ordem->numero],
+                ['Tipo',                $ordem->tipo_label],
+                ['Status',              $ordem->status_label],
+                ['Prioridade',          $ordem->prioridade_label],
+                ['Máquina',             $ordem->maquina->modelo ?? ''],
+                ['Nº Série',            $ordem->maquina->numero_serie ?? ''],
+                ['Localização',         $ordem->maquina->localizacao ?? ''],
+                ['Técnico',             $ordem->tecnico->nome ?? ''],
+                ['Abertura',            $ordem->data_abertura->format('d/m/Y H:i')],
+                ['Prevista',            $ordem->data_prevista ? $ordem->data_prevista->format('d/m/Y') : ''],
+                ['Conclusão',           $ordem->data_conclusao ? $ordem->data_conclusao->format('d/m/Y H:i') : ''],
+                ['Descrição',           $ordem->descricao],
+                ['Solução',             $ordem->solucao ?? ''],
+            ];
+
+            if ($ordem->historico) {
+                $rows[] = ['Início (Histórico)', $ordem->historico->data_inicio?->format('d/m/Y H:i') ?? ''];
+                $rows[] = ['Fim (Histórico)',    $ordem->historico->data_fim?->format('d/m/Y H:i') ?? ''];
+                $rows[] = ['Parada (h)',         $ordem->historico->tempo_parada_horas > 0 ? number_format($ordem->historico->tempo_parada_horas, 1, ',', '.') : ''];
+                $rows[] = ['Custo (R$)',         $ordem->historico->custo > 0 ? number_format($ordem->historico->custo, 2, ',', '.') : ''];
+                $rows[] = ['Peças Utilizadas',   $ordem->historico->pecas_utilizadas ?? ''];
+            }
+
+            foreach ($rows as $row) {
+                fputcsv($f, $row, ';');
+            }
+            fclose($f);
+        }, $ordem->numero . '-' . now()->format('Y-m-d') . '.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
+    public function exportar()
+    {
+        $ordens = OrdemServico::with(['maquina', 'tecnico'])->latest()->get();
+
+        return response()->streamDownload(function () use ($ordens) {
+            $f = fopen('php://output', 'w');
+            fputs($f, "\xEF\xBB\xBF");
+            fputcsv($f, ['Número','Tipo','Máquina','Técnico','Prioridade','Status','Abertura','Prevista','Conclusão'], ';');
+            foreach ($ordens as $os) {
+                fputcsv($f, [
+                    $os->numero,
+                    $os->tipo_label,
+                    $os->maquina->modelo ?? '',
+                    $os->tecnico->nome ?? '',
+                    $os->prioridade_label,
+                    $os->status_label,
+                    $os->data_abertura->format('d/m/Y'),
+                    $os->data_prevista ? $os->data_prevista->format('d/m/Y') : '',
+                    $os->data_conclusao ? $os->data_conclusao->format('d/m/Y') : '',
+                ], ';');
+            }
+            fclose($f);
+        }, 'ordens-servico-' . now()->format('Y-m-d') . '.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
     public function destroy(string $id)
     {
         $ordem = OrdemServico::findOrFail($id);

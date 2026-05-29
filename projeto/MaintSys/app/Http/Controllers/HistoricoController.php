@@ -42,6 +42,37 @@ class HistoricoController extends Controller
         return view('historico.por-maquina', compact('maquina', 'historicos', 'reincidencias'));
     }
 
+    public function exportar(Request $request)
+    {
+        $query = HistoricoManutencao::with(['maquina', 'tecnico', 'ordem']);
+        if ($request->filled('maquina_id')) $query->where('maquina_id', $request->maquina_id);
+        if ($request->filled('tipo'))       $query->where('tipo', $request->tipo);
+        if ($request->filled('tecnico_id')) $query->where('tecnico_id', $request->tecnico_id);
+        if ($request->filled('data_inicio')) $query->whereDate('data_inicio', '>=', $request->data_inicio);
+        if ($request->filled('data_fim'))    $query->whereDate('data_inicio', '<=', $request->data_fim);
+        $historicos = $query->latest()->get();
+
+        return response()->streamDownload(function () use ($historicos) {
+            $f = fopen('php://output', 'w');
+            fputs($f, "\xEF\xBB\xBF");
+            fputcsv($f, ['ID','Máquina','Tipo','Técnico','O.S. Vinculada','Início','Fim','Parada (h)','Custo (R$)'], ';');
+            foreach ($historicos as $h) {
+                fputcsv($f, [
+                    $h->id,
+                    $h->maquina->modelo ?? '',
+                    ucfirst($h->tipo),
+                    $h->tecnico->nome ?? '',
+                    $h->ordem->numero ?? '',
+                    $h->data_inicio->format('d/m/Y H:i'),
+                    $h->data_fim ? $h->data_fim->format('d/m/Y H:i') : '',
+                    $h->tempo_parada_horas > 0 ? number_format($h->tempo_parada_horas, 1, ',', '.') : '',
+                    $h->custo > 0 ? number_format($h->custo, 2, ',', '.') : '',
+                ], ';');
+            }
+            fclose($f);
+        }, 'historico-manutencoes-' . now()->format('Y-m-d') . '.csv', ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

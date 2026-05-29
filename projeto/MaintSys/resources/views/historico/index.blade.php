@@ -13,6 +13,15 @@
         <small>// log de intervenções</small>
         Histórico de Manutenções
     </div>
+    <div class="btn-export-group" style="display:flex;gap:8px;align-items:center">
+        <button onclick="window.print()" class="btn btn-secondary" title="Imprimir lista">
+            &#128438; Imprimir
+        </button>
+        <a href="{{ route('historico.exportar', request()->only(['maquina_id','tipo','tecnico_id','data_inicio','data_fim'])) }}"
+           class="btn btn-secondary" title="Exportar para CSV">
+            &#8659; Exportar CSV
+        </a>
+    </div>
 </div>
 
 {{-- FILTROS --}}

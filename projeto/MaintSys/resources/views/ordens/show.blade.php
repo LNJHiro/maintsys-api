@@ -14,7 +14,13 @@
         <small>// ordem de serviço</small>
         {{ $ordem->numero }}
     </div>
-    <div style="display:flex;gap:8px">
+    <div class="btn-export-group" style="display:flex;gap:8px">
+        <button onclick="window.print()" class="btn btn-secondary" title="Imprimir O.S.">
+            &#128438; Imprimir
+        </button>
+        <a href="{{ route('ordens.exportar-single', $ordem) }}" class="btn btn-secondary" title="Exportar para CSV">
+            &#8659; Exportar CSV
+        </a>
         @if(auth()->user()->hasPermission('ordens.editar'))
         <a href="{{ route('ordens.edit', $ordem) }}" class="btn btn-primary">Editar O.S.</a>
         @endif

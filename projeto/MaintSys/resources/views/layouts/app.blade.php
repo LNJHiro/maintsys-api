@@ -668,6 +668,25 @@
         ::-webkit-scrollbar-track { background: var(--bg); }
         ::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--red); }
+
+        /* ── PRINT ── */
+        @media print {
+            .sidebar, .topbar, .actions, .pagination,
+            .btn-export-group, .no-print { display: none !important; }
+            .main { margin-left: 0 !important; }
+            .content { padding: 0 !important; }
+            body { background: #fff !important; color: #000 !important; font-size: 11pt; }
+            .table-wrap { border: none !important; overflow: visible !important; }
+            table { font-size: 10pt; }
+            thead th { background: #f0f0f0 !important; color: #000 !important; }
+            .badge { border: 1px solid #999 !important; color: #000 !important; background: transparent !important; }
+            .stat-card { border: 1px solid #ccc !important; }
+            .stat-value { color: #000 !important; }
+            .page-header { border-bottom: 2px solid #000 !important; margin-bottom: 12pt; }
+            .page-title { color: #000 !important; }
+            .page-title small { color: #555 !important; }
+            a { color: #000 !important; }
+        }
     </style>
 
     @stack('styles')

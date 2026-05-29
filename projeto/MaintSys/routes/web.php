@@ -64,6 +64,8 @@ Route::middleware('auth')->group(function () {
     });
     Route::middleware('perm:ordens.visualizar')->group(function () {
         Route::get('/ordens', [OrdemServicoController::class, 'index'])->name('ordens.index');
+        Route::get('/ordens/exportar', [OrdemServicoController::class, 'exportar'])->name('ordens.exportar');
+        Route::get('/ordens/{id}/exportar', [OrdemServicoController::class, 'exportarSingle'])->name('ordens.exportar-single');
     });
     Route::middleware('perm:ordens.editar')->group(function () {
         Route::get('/ordens/{id}/edit', [OrdemServicoController::class, 'edit'])->name('ordens.edit');
@@ -75,6 +77,7 @@ Route::middleware('auth')->group(function () {
     // Histórico de manutenções
     Route::middleware('perm:historico.visualizar')->group(function () {
         Route::get('/historico', [HistoricoController::class, 'index'])->name('historico.index');
+        Route::get('/historico/exportar', [HistoricoController::class, 'exportar'])->name('historico.exportar');
         Route::get('/historico/maquina/{maquinaId}', [HistoricoController::class, 'porMaquina'])->name('historico.por-maquina');
     });
     Route::middleware('perm:historico.criar')->post('/historico', [HistoricoController::class, 'store'])->name('historico.store');
