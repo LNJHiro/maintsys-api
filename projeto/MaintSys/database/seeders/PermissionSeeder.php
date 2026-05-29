@@ -66,11 +66,15 @@ class PermissionSeeder extends Seeder
                 'maquinas.visualizar',
                 'tecnicos.visualizar',
                 'ordens.visualizar',
-                'historico.visualizar',
                 'ordens.criar',
                 'ordens.editar',
+                'historico.visualizar',
+                'historico.criar',
                 'dashboard.maquinas',
+                'dashboard.tecnicos',
                 'dashboard.ordens',
+                'dashboard.alertas',
+                'dashboard.historico',
             ])
             ->pluck('id')->toArray();
         foreach ($usuarioPerms as $permId) {

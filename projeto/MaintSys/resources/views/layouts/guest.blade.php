@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'MaintSys — SENAI')</title>
 
+    <script>
+    (function(){var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}})();
+    </script>
+
     <link rel="icon" href="/senai.webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -13,28 +17,35 @@
         *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --red:      #E3000F;
-            --red-dark: #b80009;
-            --red-lite: #ff2030;
-            --white:    #ffffff;
-            --bg:       #f5f6f8;
-            --text:     #111827;
-            --muted:    #6b7280;
-            --border:   #e0e4ea;
-            --error:    #dc2626;
-            --success:  #16a34a;
-            --mono:     'Share Tech Mono', monospace;
-            --sans:     'Barlow', sans-serif;
-            --cond:     'Barlow Condensed', sans-serif;
+            --red:       #E3000F;
+            --red-dark:  #b80009;
+            --red-lite:  #ff2030;
+            --white:     #ffffff;
+            --bg:        #f5f6f8;
+            --surface:   #ffffff;
+            --card:      #ffffff;
+            --border:    #e0e4ea;
+            --border-hi: #c8cdd6;
+            --text:      #111827;
+            --muted:     #6b7280;
+            --error:     #dc2626;
+            --success:   #16a34a;
+            --mono:      'Share Tech Mono', monospace;
+            --sans:      'Barlow', sans-serif;
+            --cond:      'Barlow Condensed', sans-serif;
         }
 
         [data-theme="dark"] {
-            --white:  #ffffff;
-            --bg:     #0d1117;
-            --text:   #e6edf3;
-            --muted:  #8b949e;
-            --border: #2a3040;
-            --red:    #ff3b47;
+            --white:     #ffffff;
+            --bg:        #0d1117;
+            --surface:   #161b22;
+            --card:      #1f2430;
+            --border:    #2a3040;
+            --border-hi: #374151;
+            --text:      #e6edf3;
+            --muted:     #8b949e;
+            --red:       #ff3b47;
+            --red-dark:  #cc0010;
         }
 
         html, body {
@@ -167,8 +178,8 @@
         }
 
         [data-theme="dark"] .auth-topbar {
-            background: #161b22;
-            border-color: #2a3040;
+            background: var(--surface);
+            border-color: var(--border);
         }
 
         .auth-topbar-link {
@@ -251,8 +262,8 @@
         }
 
         [data-theme="dark"] .form-group input {
-            background: #1f2430;
-            border-color: #374151;
+            background: var(--card);
+            border-color: var(--border-hi);
         }
 
         .form-group input::placeholder { color: var(--muted); }

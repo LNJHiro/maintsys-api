@@ -6,6 +6,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>MaintSys — @yield('title', 'Controle de Manutenção')</title>
 
+    <script>
+    (function(){var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.setAttribute('data-theme','dark');}})();
+    </script>
+
     <link rel="icon" href="/senai.webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600;700;900&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
@@ -139,6 +143,7 @@
             width: auto;
             display: block;
             margin-bottom: 10px;
+            filter: brightness(0) invert(1);
         }
 
         .sidebar-product {
@@ -667,6 +672,7 @@
 
     @stack('styles')
 </head>
+<body>
 
 {{-- MODAL DE CONFIRMAÇÃO --}}
 <div id="modal-confirm" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;">
@@ -701,8 +707,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
-
-<body>
 
 {{-- ── SIDEBAR ────────────────────────────────────────── --}}
 <aside class="sidebar">
