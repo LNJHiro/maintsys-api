@@ -14,14 +14,20 @@
  * - permissions_overridden: Flag indicando se permissões customizadas foram aplicadas
  */
 
+// Define o namespace deste model dentro da aplicação Laravel
 namespace App\Models;
 
+// Importa a trait HasFactory para geração de factories de teste
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+// Importa a classe base Authenticatable que fornece autenticação ao model User
 use Illuminate\Foundation\Auth\User as Authenticatable;
+// Importa a trait Notifiable para envio de notificações ao usuário
 use Illuminate\Notifications\Notifiable;
 
+// Declara a classe User que herda de Authenticatable (autenticação do Laravel)
 class User extends Authenticatable
 {
+    // Inclui as traits HasFactory (factories de teste) e Notifiable (notificações)
     use HasFactory, Notifiable;
 
     // Cache em memória para as permissões, evita múltiplas consultas ao banco
@@ -29,28 +35,34 @@ class User extends Authenticatable
 
     // Campos que podem ser preenchidos em massa (mass assignment)
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',
-        'permissions_overridden',
+        'name',                  // Nome completo do usuário
+        'email',                 // Email de login
+        'password',              // Senha (será armazenada como hash)
+        'role',                  // Papel do usuário no sistema
+        'permissions_overridden', // Se o usuário tem permissões customizadas
     ];
 
     // Campos que não devem ser retornados em respostas (segurança)
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password',       // Oculta a senha nas respostas JSON
+        'remember_token', // Oculta o token de "lembrar sessão"
     ];
 
-    // Conversão automática de tipos de dados
+    /**
+     * FUNÇÃO: casts()
+     * ENTRADA: Nenhuma
+     * PROCESSAMENTO: Define conversão automática de tipos de dados dos atributos
+     * SAÍDA: Array com as conversões de tipo para cada atributo
+     */
     protected function casts(): array
     {
+        // Retorna o mapeamento de atributos para seus tipos convertidos
         return [
-            'email_verified_at' => 'datetime',   // Data de verificação de email
-            'password' => 'hashed',              // Hash automático de senha
-            'permissions_overridden' => 'boolean', // Converte para booleano
+            'email_verified_at'      => 'datetime', // Data de verificação de email como Carbon
+            'password'               => 'hashed',   // Hash automático de senha ao salvar
+            'permissions_overridden' => 'boolean',  // Converte 0/1 para true/false
         ];
-    }
+    } // fim do método casts
 
     /**
      * FUNÇÃO: isAdmin()
@@ -60,8 +72,9 @@ class User extends Authenticatable
      */
     public function isAdmin(): bool
     {
+        // Retorna true se o role do usuário for admin_master ou admin
         return in_array($this->role, ['admin_master', 'admin']);
-    }
+    } // fim do método isAdmin
 
     /**
      * FUNÇÃO: isMaster()
@@ -71,8 +84,9 @@ class User extends Authenticatable
      */
     public function isMaster(): bool
     {
+        // Retorna true somente se o role for exatamente admin_master
         return $this->role === 'admin_master';
-    }
+    } // fim do método isMaster
 
     /**
      * FUNÇÃO: canManageUsers()
@@ -82,9 +96,10 @@ class User extends Authenticatable
      */
     public function canManageUsers(): bool
     {
-        return $this->hasPermission('usuarios.visualizar')
-            || $this->hasPermission('acesso.gerenciar');
-    }
+        // Retorna true se o usuário tiver pelo menos uma das permissões necessárias
+        return $this->hasPermission('usuarios.visualizar')  // Pode visualizar usuários
+            || $this->hasPermission('acesso.gerenciar');    // Pode gerenciar acessos
+    } // fim do método canManageUsers
 
     /**
      * Relacionamento: Um usuário pode ter um técnico
@@ -94,8 +109,9 @@ class User extends Authenticatable
      */
     public function tecnico()
     {
+        // Define que um usuário possui no máximo um técnico associado
         return $this->hasOne(Tecnico::class);
-    }
+    } // fim do método tecnico
 
     /**
      * Relacionamento: Um usuário pode ter múltiplas permissões customizadas
@@ -105,8 +121,9 @@ class User extends Authenticatable
      */
     public function userPermissions()
     {
+        // Define que um usuário pode ter vários registros de permissões individuais
         return $this->hasMany(UserPermission::class);
-    }
+    } // fim do método userPermissions
 
     /**
      * FUNÇÃO: hasPermission($perm)
@@ -118,14 +135,14 @@ class User extends Authenticatable
      */
     public function hasPermission(string $perm): bool
     {
-        // Master tem acesso a tudo
+        // Admin Master tem acesso irrestrito a tudo no sistema
         if ($this->isMaster()) {
             return true;
-        }
+        } // fim do if de admin_master
 
-        // Verifica se a permissão está na lista de nomes de permissões
+        // Verifica se o nome da permissão está na lista de permissões efetivas do usuário
         return in_array($perm, $this->permissionNames(), true);
-    }
+    } // fim do método hasPermission
 
     /**
      * FUNÇÃO: permissionNames()
@@ -142,35 +159,36 @@ class User extends Authenticatable
      */
     public function permissionNames(): array
     {
-        // Retorna do cache se já foi consultado (performance)
+        // Retorna do cache se já foi consultado anteriormente (evita N+1 queries)
         if ($this->permissionNamesCache !== null) {
             return $this->permissionNamesCache;
-        }
+        } // fim do if de cache
 
-        // Se usuário tem permissões customizadas, busca especificamente dele
+        // Se o usuário tem permissões customizadas (individuais), busca da tabela user_permissions
         if ($this->permissions_overridden) {
+            // Carrega as permissões individuais com seus relacionamentos e extrai os nomes
             $names = $this->userPermissions()
-                ->with('permission')
-                ->get()
-                ->pluck('permission.name');
+                ->with('permission')         // Carrega o relacionamento com Permission (eager loading)
+                ->get()                      // Executa a consulta ao banco
+                ->pluck('permission.name');  // Extrai apenas o campo 'name' de cada permissão
         } else {
-            // Caso contrário, busca permissões do seu role
-            $names = RolePermission::with('permission')
-                ->where('role', $this->role)
-                ->get()
-                ->pluck('permission.name');
-        }
+            // Caso contrário, busca as permissões do role do usuário
+            $names = RolePermission::with('permission')     // Carrega o relacionamento com Permission
+                ->where('role', $this->role)                // Filtra pelo role do usuário
+                ->get()                                     // Executa a consulta ao banco
+                ->pluck('permission.name');                 // Extrai apenas o campo 'name'
+        } // fim do if/else de permissões
 
-        // Limpa o resultado: remove nulos, duplicatas, reordena índices
+        // Limpa o resultado removendo nulos, duplicatas e reordenando os índices
         $names = $names
-            ->filter()           // Remove valores nulos
-            ->unique()           // Remove duplicatas
-            ->values()           // Reordena índices (0, 1, 2...)
-            ->all();             // Converte para array
+            ->filter()  // Remove valores nulos ou vazios
+            ->unique()  // Remove entradas duplicadas
+            ->values()  // Reordena os índices (0, 1, 2...)
+            ->all();    // Converte a coleção para array PHP
 
-        // Armazena no cache e retorna
+        // Armazena no cache em memória e retorna o resultado
         return $this->permissionNamesCache = $names;
-    }
+    } // fim do método permissionNames
 
     /**
      * FUNÇÃO: clearPermissionCache()
@@ -181,6 +199,7 @@ class User extends Authenticatable
      */
     public function clearPermissionCache(): void
     {
+        // Reseta o cache para null, forçando nova consulta ao banco na próxima vez
         $this->permissionNamesCache = null;
-    }
-}
+    } // fim do método clearPermissionCache
+} // fim da classe User

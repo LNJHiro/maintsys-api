@@ -20,38 +20,43 @@
  * - data_conclusao: Data real de conclusão
  */
 
+// Define o namespace deste model dentro da aplicação Laravel
 namespace App\Models;
 
+// Importa a trait HasFactory para geração de factories de teste
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+// Importa a classe base Model do Eloquent ORM
 use Illuminate\Database\Eloquent\Model;
 
+// Declara a classe OrdemServico que herda de Model (Eloquent ORM do Laravel)
 class OrdemServico extends Model
 {
+    // Inclui a trait HasFactory para suporte a factories de teste
     use HasFactory;
 
     // Define o nome da tabela no banco de dados
     protected $table = 'ordens_servico';
 
-    // Campos que podem ser preenchidos em massa
+    // Campos que podem ser preenchidos em massa (mass assignment)
     protected $fillable = [
-        'numero',           // Número único da OS
-        'tipo',             // Tipo: preventiva ou corretiva
-        'status',           // Status atual da OS
-        'prioridade',       // Nível de prioridade
-        'descricao',        // Descrição do problema/serviço
-        'solucao',          // Descrição da solução implementada
-        'maquina_id',       // ID da máquina
-        'tecnico_id',       // ID do técnico responsável
-        'data_abertura',    // Data/hora de abertura
-        'data_prevista',    // Data prevista para conclusão
-        'data_conclusao',   // Data/hora real de conclusão
+        'numero',         // Número único da OS no formato OS-YYYYMMDD-XXXX
+        'tipo',           // Tipo da manutenção: preventiva (planejada) ou corretiva (emergência)
+        'status',         // Status atual: aberta, em_andamento, concluida, cancelada
+        'prioridade',     // Nível de prioridade: baixa, media, alta, critica
+        'descricao',      // Descrição detalhada do problema ou serviço a realizar
+        'solucao',        // Solução aplicada após conclusão da manutenção
+        'maquina_id',     // ID da máquina que receberá a manutenção
+        'tecnico_id',     // ID do técnico responsável pela execução
+        'data_abertura',  // Data e hora em que a OS foi criada
+        'data_prevista',  // Data prevista para conclusão da manutenção
+        'data_conclusao', // Data e hora real em que a manutenção foi concluída
     ];
 
-    // Conversão automática de tipos de dados
+    // Conversão automática de tipos de dados dos atributos
     protected $casts = [
-        'data_abertura'  => 'datetime',  // Data com hora
-        'data_prevista'  => 'date',      // Apenas data
-        'data_conclusao' => 'datetime',  // Data com hora
+        'data_abertura'  => 'datetime', // Data de abertura com hora (objeto Carbon)
+        'data_prevista'  => 'date',     // Data prevista sem hora (apenas data)
+        'data_conclusao' => 'datetime', // Data de conclusão com hora (objeto Carbon)
     ];
 
     /**
@@ -62,8 +67,9 @@ class OrdemServico extends Model
      */
     public function maquina()
     {
+        // Uma OS sempre está vinculada a uma única máquina que receberá a manutenção
         return $this->belongsTo(Maquina::class, 'maquina_id');
-    }
+    } // fim do método maquina
 
     /**
      * Relacionamento: Uma OS é atribuída a um técnico
@@ -73,8 +79,9 @@ class OrdemServico extends Model
      */
     public function tecnico()
     {
+        // Uma OS é atribuída a um único técnico responsável pela execução
         return $this->belongsTo(Tecnico::class, 'tecnico_id');
-    }
+    } // fim do método tecnico
 
     /**
      * Relacionamento: Uma OS pode ter um registro no histórico de manutenção
@@ -84,8 +91,9 @@ class OrdemServico extends Model
      */
     public function historico()
     {
+        // Uma OS concluída gera exatamente um registro no histórico de manutenção
         return $this->hasOne(HistoricoManutencao::class, 'ordem_id');
-    }
+    } // fim do método historico
 
     /**
      * ATRIBUTO ACESSOR: getTipoLabelAttribute()
@@ -96,12 +104,13 @@ class OrdemServico extends Model
      */
     public function getTipoLabelAttribute(): string
     {
+        // Usa match para mapear o código do tipo para um rótulo legível em português
         return match($this->tipo) {
-            'preventiva' => 'Preventiva',  // Manutenção planejada
-            'corretiva'  => 'Corretiva',   // Manutenção de emergência
-            default      => 'Desconhecido',
+            'preventiva' => 'Preventiva', // Manutenção planejada para evitar falhas
+            'corretiva'  => 'Corretiva',  // Manutenção de emergência para corrigir falha
+            default      => 'Desconhecido', // Tipo não reconhecido pelo sistema
         };
-    }
+    } // fim do método getTipoLabelAttribute
 
     /**
      * ATRIBUTO ACESSOR: getStatusLabelAttribute()
@@ -112,14 +121,15 @@ class OrdemServico extends Model
      */
     public function getStatusLabelAttribute(): string
     {
+        // Usa match para mapear o código de status para um rótulo legível em português
         return match($this->status) {
-            'aberta'       => 'Aberta',        // Aguardando execução
-            'em_andamento' => 'Em Andamento',  // Técnico está executando
-            'concluida'    => 'Concluída',     // Manutenção finalizada
-            'cancelada'    => 'Cancelada',     // OS cancelada
-            default        => 'Desconhecido',
+            'aberta'       => 'Aberta',        // OS criada, aguardando início da execução
+            'em_andamento' => 'Em Andamento',  // Técnico está executando a manutenção
+            'concluida'    => 'Concluída',     // Manutenção finalizada com sucesso
+            'cancelada'    => 'Cancelada',     // OS cancelada antes da execução
+            default        => 'Desconhecido',  // Status não reconhecido pelo sistema
         };
-    }
+    } // fim do método getStatusLabelAttribute
 
     /**
      * ATRIBUTO ACESSOR: getPrioridadeLabelAttribute()
@@ -130,14 +140,15 @@ class OrdemServico extends Model
      */
     public function getPrioridadeLabelAttribute(): string
     {
+        // Usa match para mapear o código de prioridade para um rótulo legível em português
         return match($this->prioridade) {
-            'baixa'  => 'Baixa',      // Pode esperar
-            'media'  => 'Média',      // Prioridade normal
-            'alta'   => 'Alta',       // Deve ser resolvida logo
-            'critica'=> 'Crítica',    // Emergência, máquina parada
-            default  => 'Normal',
+            'baixa'  => 'Baixa',   // Manutenção pode ser agendada sem urgência
+            'media'  => 'Média',   // Prioridade normal, dentro do prazo padrão
+            'alta'   => 'Alta',    // Deve ser resolvida com brevidade
+            'critica'=> 'Crítica', // Emergência, máquina parada afetando produção
+            default  => 'Normal',  // Prioridade padrão para casos não mapeados
         };
-    }
+    } // fim do método getPrioridadeLabelAttribute
 
     /**
      * FUNÇÃO ESTÁTICA: gerarNumero()
@@ -153,21 +164,21 @@ class OrdemServico extends Model
      */
     public static function gerarNumero(): string
     {
-        // Cria prefixo da data para organizar OS por dia
+        // Gera o prefixo da OS com a data atual no formato OS-YYYYMMDD-
         $prefix = 'OS-' . now()->format('Ymd') . '-';
 
-        // lockForUpdate evita colisão do número quando duas O.S.
-        // são geradas em paralelo dentro da mesma transação.
-        // Ele bloqueia as linhas no banco até a transação terminar.
-        $ultimo = self::where('numero', 'like', $prefix . '%')
-            ->lockForUpdate()
-            ->orderByDesc('numero')
-            ->value('numero');
+        // Busca o número mais recente de OS criado hoje usando LIKE com o prefixo
+        // lockForUpdate() bloqueia as linhas no banco até a transação terminar,
+        // evitando colisão de números quando duas OS são geradas simultaneamente
+        $ultimo = self::where('numero', 'like', $prefix . '%') // Filtra apenas OS de hoje
+            ->lockForUpdate()  // Bloqueia as linhas para evitar condição de corrida (race condition)
+            ->orderByDesc('numero') // Ordena em ordem decrescente para pegar o mais recente
+            ->value('numero');  // Retorna apenas o valor do campo 'numero' (sem instância)
 
-        // Se existe OS hoje, incrementa. Senão, começa com 1
+        // Se existir OS hoje, extrai os últimos 4 dígitos e incrementa; senão começa do 1
         $proximo = $ultimo ? ((int) substr($ultimo, -4)) + 1 : 1;
 
-        // Formata número com zeros à esquerda (1 vira 0001)
+        // Formata o número com zeros à esquerda para garantir 4 dígitos (ex: 1 vira 0001)
         return $prefix . str_pad($proximo, 4, '0', STR_PAD_LEFT);
-    }
-}
+    } // fim do método gerarNumero
+} // fim da classe OrdemServico

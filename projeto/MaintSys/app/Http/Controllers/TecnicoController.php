@@ -20,15 +20,23 @@
  * destroy → deleta técnico após validações
  */
 
+// Define o namespace do controller dentro da estrutura do Laravel
 namespace App\Http\Controllers;
 
+// Importa a classe Request para receber e validar dados do formulário HTTP
 use Illuminate\Http\Request;
+// Importa a facade DB para operações de banco de dados em transação
 use Illuminate\Support\Facades\DB;
+// Importa a facade Hash para criptografar senhas com Bcrypt
 use Illuminate\Support\Facades\Hash;
+// Importa a classe Rule para regras de validação avançadas (ex: unique com ignore)
 use Illuminate\Validation\Rule;
+// Importa o model Tecnico para manipular os dados de técnicos
 use App\Models\Tecnico;
+// Importa o model User para criar e manipular contas de usuário associadas
 use App\Models\User;
 
+// Declara o controller que herda funcionalidades base do Controller do Laravel
 class TecnicoController extends Controller
 {
     /**
@@ -43,12 +51,14 @@ class TecnicoController extends Controller
      */
     public function index()
     {
-        // withCount('ordens') adiciona coluna com contagem de O.S. de cada técnico
-        // latest() ordena pela data de criação mais recente
-        // paginate(15) divide em páginas de 15 registros
+        // Adiciona coluna virtual 'ordens_count' com total de O.S. de cada técnico
+        // Ordena pelo mais recente (campo created_at decrescente)
+        // Divide o resultado em páginas de 15 registros
         $tecnicos = Tecnico::withCount('ordens')->latest()->paginate(15);
+
+        // Retorna a view de listagem passando a coleção paginada de técnicos
         return view('tecnicos.index', compact('tecnicos'));
-    }
+    } // fim do método index
 
     /**
      * FUNÇÃO: create()
@@ -59,8 +69,9 @@ class TecnicoController extends Controller
      */
     public function create()
     {
+        // Retorna a view com o formulário de cadastro sem dados preenchidos
         return view('tecnicos.create');
-    }
+    } // fim do método create
 
     /**
      * FUNÇÃO: store($request)
@@ -83,50 +94,65 @@ class TecnicoController extends Controller
      */
     public function store(Request $request)
     {
-        // Valida dados do formulário e retorna array com dados válidos
+        // Executa a validação dos dados enviados pelo formulário
+        // Retorna array somente com os campos declarados (mass assignment seguro)
         $data = $request->validate([
+            // Nome é obrigatório, deve ser texto e ter no máximo 255 caracteres
             'nome'          => 'required|string|max:255',
+            // Matrícula é obrigatória e deve ser única na tabela 'tecnicos'
             'matricula'     => 'required|string|max:50|unique:tecnicos,matricula',
+            // Email requer múltiplas regras em array para melhor legibilidade
             'email'         => [
+                // Campo obrigatório
                 'required',
+                // Deve ser um endereço de e-mail válido
                 'email',
+                // Máximo de 255 caracteres
                 'max:255',
-                'unique:tecnicos,email',        // Email único em tecnicos
-                'unique:users,email',           // Email único em users
+                // Não pode existir outro técnico com o mesmo e-mail
+                'unique:tecnicos,email',
+                // Não pode existir outro usuário do sistema com o mesmo e-mail
+                'unique:users,email',
             ],
-            'password'      => 'required|string|min:8|confirmed', // password_confirmation deve existir
+            // Senha obrigatória com mínimo de 8 caracteres; 'confirmed' exige campo password_confirmation igual
+            'password'      => 'required|string|min:8|confirmed',
+            // Especialidade é opcional (nullable)
             'especialidade' => 'nullable|string|max:255',
+            // Telefone é opcional (nullable)
             'telefone'      => 'nullable|string|max:20',
-        ]);
+        ]); // fim da validação
 
-        // DB::transaction garante que ambas operações (User e Tecnico) são realizadas
-        // ou nenhuma (atomicidade). Se erro no meio, tudo volta
+        // Abre uma transação de banco de dados: se qualquer instrução falhar, tudo é revertido (rollback)
         DB::transaction(function () use ($request, $data) {
-            // Faz hash da senha com algoritmo Bcrypt
+            // Criptografa a senha com o algoritmo Bcrypt antes de armazenar
             $hashedPassword = Hash::make($data['password']);
 
-            // Cria usuário no sistema para login
+            // Cria o registro de usuário no sistema para permitir login do técnico
             $user = User::create([
+                // Usa o nome informado no formulário como nome de exibição do usuário
                 'name'     => $data['nome'],
+                // Usa o e-mail do técnico como login de acesso
                 'email'    => $data['email'],
+                // Armazena a senha já criptografada
                 'password' => $hashedPassword,
-                'role'     => 'usuario',  // Role genérico de usuário
-            ]);
+                // Atribui role genérica de usuário (não administrador)
+                'role'     => 'usuario',
+            ]); // fim da criação do usuário
 
-            // Adiciona ID do usuário aos dados do técnico
+            // Vincula o ID do usuário recém-criado ao array de dados do técnico
             $data['user_id'] = $user->id;
-            // Armazena senha com hash no técnico também
+            // Substitui a senha em texto puro pela versão criptografada no array
             $data['password'] = $hashedPassword;
-            // ativo padrão é true (pode vir da request ou usa true)
+            // Define o técnico como ativo por padrão (true), podendo ser sobrescrito pela request
             $data['ativo'] = $request->boolean('ativo', true);
 
-            // Cria registro do técnico
+            // Cria o registro do técnico no banco usando os dados validados e complementados
             Tecnico::create($data);
-        });
+        }); // fim da transação DB
 
-        // Redireciona para lista com mensagem de sucesso
+        // Redireciona para a listagem de técnicos com mensagem de sucesso na sessão
         return redirect()->route('tecnicos.index')->with('success', 'Tecnico cadastrado com perfil de usuario!');
-    }
+    } // fim do método store
 
     /**
      * FUNÇÃO: show($id)
@@ -142,11 +168,15 @@ class TecnicoController extends Controller
      */
     public function show(string $id)
     {
-        // with() faz eager loading de relacionamentos (reduz queries)
-        // findOrFail() retorna 404 se não encontrar
+        // Carrega o técnico com seus relacionamentos em uma única consulta (evita o problema N+1)
+        // 'ordens.maquina' carrega todas as ordens de serviço e a máquina de cada ordem
+        // 'historicos.maquina' carrega todos os históricos de manutenção e a máquina de cada histórico
+        // findOrFail lança exceção 404 automaticamente se o ID não existir
         $tecnico = Tecnico::with(['ordens.maquina', 'historicos.maquina'])->findOrFail($id);
+
+        // Retorna a view de detalhes passando o técnico com todos os relacionamentos carregados
         return view('tecnicos.show', compact('tecnico'));
-    }
+    } // fim do método show
 
     /**
      * FUNÇÃO: edit($id)
@@ -159,9 +189,12 @@ class TecnicoController extends Controller
      */
     public function edit(string $id)
     {
+        // Busca o técnico pelo ID e lança 404 automaticamente se não encontrado
         $tecnico = Tecnico::findOrFail($id);
+
+        // Retorna a view de edição passando o técnico para preencher os campos do formulário
         return view('tecnicos.edit', compact('tecnico'));
-    }
+    } // fim do método edit
 
     /**
      * FUNÇÃO: update($request, $id)
@@ -181,72 +214,97 @@ class TecnicoController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // Busca o técnico pelo ID e retorna 404 se não encontrado
         $tecnico = Tecnico::findOrFail($id);
 
-        // Valida dados com regras específicas para update
+        // Valida os dados do formulário com regras adaptadas para a operação de atualização
         $data = $request->validate([
+            // Nome continua obrigatório
             'nome'          => 'required|string|max:255',
-            // Ignora matrícula do próprio registro na validação de unique
+            // Matrícula deve ser única, mas ignora o próprio registro atual pelo ID
             'matricula'     => 'required|string|max:50|unique:tecnicos,matricula,' . $id,
+            // E-mail requer múltiplas regras com ignore para o próprio técnico e usuário
             'email'         => [
+                // Campo obrigatório
                 'required',
+                // Deve ser um e-mail válido
                 'email',
+                // Máximo de 255 caracteres
                 'max:255',
-                // Ignora email do próprio técnico
+                // Permite manter o mesmo e-mail ignorando o próprio técnico na checagem de unicidade
                 Rule::unique('tecnicos', 'email')->ignore($tecnico->id),
-                // Ignora email do usuário associado
+                // Permite manter o mesmo e-mail ignorando o próprio usuário associado
                 Rule::unique('users', 'email')->ignore($tecnico->user_id),
             ],
+            // Especialidade continua opcional
             'especialidade' => 'nullable|string|max:255',
+            // Telefone continua opcional
             'telefone'      => 'nullable|string|max:20',
-        ]);
+        ]); // fim da validação
 
+        // Inicializa variável de senha como nula (só será preenchida se o campo foi enviado)
         $password = null;
 
-        // Se campo password foi preenchido, valida e faz hash
+        // Verifica se o campo de senha foi preenchido no formulário (não está vazio)
         if ($request->filled('password')) {
+            // Valida a nova senha: mínimo 8 caracteres e campo de confirmação igual
             $request->validate(['password' => 'string|min:8|confirmed']);
+            // Criptografa a nova senha com Bcrypt
             $password = Hash::make($request->password);
+            // Adiciona a senha criptografada ao array de dados a ser salvo
             $data['password'] = $password;
-        }
+        } // fim da verificação de senha
 
+        // Define o status ativo do técnico (checkbox do formulário ou true por padrão)
         $data['ativo'] = $request->boolean('ativo', true);
 
-        // Transação para garantir consistência entre User e Tecnico
+        // Abre transação para garantir consistência entre Tecnico e User
         DB::transaction(function () use ($tecnico, $data, $password) {
+            // Recupera o usuário associado ao técnico (pode ser null se não tiver)
             $user = $tecnico->user;
 
-            // Se técnico não tem usuário, cria um
+            // Se o técnico ainda não possui usuário vinculado, cria um novo
             if (!$user) {
+                // Cria novo usuário com os dados atualizados do técnico
                 $user = User::create([
+                    // Usa o nome atualizado como nome do usuário
                     'name'     => $data['nome'],
+                    // Usa o e-mail atualizado como login do usuário
                     'email'    => $data['email'],
+                    // Usa a nova senha se fornecida, ou mantém a senha atual criptografada do técnico
                     'password' => $password ?? $tecnico->password,
+                    // Atribui role genérica de usuário
                     'role'     => 'usuario',
-                ]);
+                ]); // fim da criação do usuário
 
+                // Vincula o novo usuário ao técnico pelo ID
                 $data['user_id'] = $user->id;
             } else {
-                // Se tem usuário, atualiza dados dele
+                // Se já existe usuário associado, prepara os dados para atualização
                 $userData = [
+                    // Atualiza o nome de exibição do usuário
                     'name'  => $data['nome'],
+                    // Atualiza o e-mail de login do usuário
                     'email' => $data['email'],
-                ];
+                ]; // fim do array de dados do usuário
 
-                // Só atualiza senha se foi fornecida
+                // Atualiza a senha do usuário somente se uma nova senha foi fornecida
                 if ($password) {
+                    // Adiciona a nova senha criptografada ao array de atualização
                     $userData['password'] = $password;
-                }
+                } // fim da verificação de senha
 
+                // Persiste as alterações no registro do usuário
                 $user->update($userData);
-            }
+            } // fim do bloco if/else de usuário
 
-            // Atualiza dados do técnico
+            // Persiste todas as alterações no registro do técnico
             $tecnico->update($data);
-        });
+        }); // fim da transação DB
 
+        // Redireciona para a listagem com mensagem de sucesso
         return redirect()->route('tecnicos.index')->with('success', 'Técnico atualizado com sucesso!');
-    }
+    } // fim do método update
 
     /**
      * FUNÇÃO: destroy($id)
@@ -264,35 +322,41 @@ class TecnicoController extends Controller
      */
     public function destroy(string $id)
     {
+        // Busca o técnico pelo ID e retorna 404 se não encontrado
         $tecnico = Tecnico::findOrFail($id);
 
-        // Validação: não permite deletar se há ordens de serviço
+        // Verifica se existe pelo menos uma ordem de serviço vinculada ao técnico
         if ($tecnico->ordens()->exists()) {
+            // Retorna para a listagem com mensagem de erro informando o bloqueio
             return redirect()->route('tecnicos.index')
                 ->with('error', 'Não é possível excluir: existem O.S. vinculadas a este técnico.');
-        }
+        } // fim da verificação de ordens
 
-        // Validação: não permite deletar se há históricos
+        // Verifica se existe pelo menos um histórico de manutenção vinculado ao técnico
         if ($tecnico->historicos()->exists()) {
+            // Retorna para a listagem com mensagem de erro informando o bloqueio
             return redirect()->route('tecnicos.index')
                 ->with('error', 'Nao e possivel excluir: existem historicos vinculados a este tecnico.');
-        }
+        } // fim da verificação de históricos
 
-        // Transação para deletar técnico e usuário associado
+        // Abre transação para deletar técnico e usuário de forma atômica
         DB::transaction(function () use ($tecnico) {
+            // Recupera o usuário associado ao técnico antes de deletá-lo
             $user = $tecnico->user;
 
-            // Deleta técnico primeiro
+            // Remove o registro do técnico do banco de dados
             $tecnico->delete();
 
-            // Deleta usuário apenas se:
-            // 1. Existe usuário associado
-            // 2. Usuário tem role 'usuario' (não delete admins acidentalmente)
+            // Remove o usuário associado somente se:
+            // - o usuário existe (não é nulo)
+            // - tem role 'usuario' (evita deletar administradores acidentalmente)
             if ($user && $user->role === 'usuario') {
+                // Deleta o usuário do sistema
                 $user->delete();
-            }
-        });
+            } // fim da verificação e deleção do usuário
+        }); // fim da transação DB
 
+        // Redireciona para a listagem com mensagem de sucesso após a exclusão
         return redirect()->route('tecnicos.index')->with('success', 'Técnico excluído com sucesso!');
-    }
-}
+    } // fim do método destroy
+} // fim da classe TecnicoController

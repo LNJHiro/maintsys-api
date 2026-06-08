@@ -16,32 +16,37 @@
  * - descricao: Descrição adicional ou observações
  */
 
+// Define o namespace deste model dentro da aplicação Laravel
 namespace App\Models;
 
+// Importa a trait HasFactory para geração de factories de teste
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+// Importa a classe base Model do Eloquent ORM
 use Illuminate\Database\Eloquent\Model;
 
+// Declara a classe Maquina que herda de Model (Eloquent ORM do Laravel)
 class Maquina extends Model
 {
+    // Inclui a trait HasFactory para suporte a factories de teste
     use HasFactory;
 
     // Define o nome da tabela no banco de dados
     protected $table = 'maquinas';
 
-    // Campos que podem ser preenchidos em massa
+    // Campos que podem ser preenchidos em massa (mass assignment)
     protected $fillable = [
-        'numero_serie',   // Número/série único da máquina
-        'modelo',         // Modelo da máquina
-        'fabricante',     // Fabricante
-        'localizacao',    // Local de instalação
-        'data_cadastro',  // Data de cadastro no sistema
-        'status',         // Status atual da máquina
-        'descricao',      // Descrição ou observações
+        'numero_serie',  // Número de série único que identifica fisicamente a máquina
+        'modelo',        // Modelo ou tipo da máquina (ex: Compressor, Torno, Prensa)
+        'fabricante',    // Nome do fabricante da máquina
+        'localizacao',   // Localização física onde a máquina está instalada
+        'data_cadastro', // Data em que a máquina foi registrada no sistema
+        'status',        // Status atual: operacional, em_manutencao, parada_critica, inativa
+        'descricao',     // Descrição detalhada ou observações sobre a máquina
     ];
 
-    // Conversão automática de tipos de dados
+    // Conversão automática de tipos de dados dos atributos
     protected $casts = [
-        'data_cadastro' => 'date', // Converte data para formato Carbon
+        'data_cadastro' => 'date', // Converte a data para objeto Carbon (sem hora)
     ];
 
     /**
@@ -52,8 +57,9 @@ class Maquina extends Model
      */
     public function ordens()
     {
+        // Uma máquina pode ser objeto de várias ordens de serviço ao longo do tempo
         return $this->hasMany(OrdemServico::class, 'maquina_id');
-    }
+    } // fim do método ordens
 
     /**
      * Relacionamento: Uma máquina pode ter múltiplos históricos de manutenção
@@ -63,8 +69,9 @@ class Maquina extends Model
      */
     public function historicos()
     {
+        // Uma máquina pode ter várias manutenções registradas em seu histórico
         return $this->hasMany(HistoricoManutencao::class, 'maquina_id');
-    }
+    } // fim do método historicos
 
     /**
      * QUERY SCOPE: scopeOperacional($query)
@@ -75,8 +82,9 @@ class Maquina extends Model
      */
     public function scopeOperacional($query)
     {
+        // Adiciona filtro WHERE status = 'operacional' à query atual
         return $query->where('status', 'operacional');
-    }
+    } // fim do scope scopeOperacional
 
     /**
      * QUERY SCOPE: scopeEmManutencao($query)
@@ -87,8 +95,9 @@ class Maquina extends Model
      */
     public function scopeEmManutencao($query)
     {
+        // Adiciona filtro WHERE status = 'em_manutencao' à query atual
         return $query->where('status', 'em_manutencao');
-    }
+    } // fim do scope scopeEmManutencao
 
     /**
      * QUERY SCOPE: scopeParadaCritica($query)
@@ -99,8 +108,9 @@ class Maquina extends Model
      */
     public function scopeParadaCritica($query)
     {
+        // Adiciona filtro WHERE status = 'parada_critica' à query atual
         return $query->where('status', 'parada_critica');
-    }
+    } // fim do scope scopeParadaCritica
 
     /**
      * ATRIBUTO ACESSOR: getStatusLabelAttribute()
@@ -111,14 +121,15 @@ class Maquina extends Model
      */
     public function getStatusLabelAttribute(): string
     {
+        // Usa match para mapear o código de status para um rótulo legível em português
         return match($this->status) {
-            'operacional'    => 'Operacional',
-            'em_manutencao'  => 'Em Manutenção',
-            'parada_critica' => 'Parada Crítica',
-            'inativa'        => 'Inativa',
-            default          => 'Desconhecido',
+            'operacional'    => 'Operacional',    // Máquina funcionando normalmente
+            'em_manutencao'  => 'Em Manutenção',  // Máquina em processo de manutenção
+            'parada_critica' => 'Parada Crítica', // Máquina parada por falha grave
+            'inativa'        => 'Inativa',        // Máquina desativada ou fora de uso
+            default          => 'Desconhecido',   // Status não reconhecido pelo sistema
         };
-    }
+    } // fim do método getStatusLabelAttribute
 
     /**
      * ATRIBUTO ACESSOR: getStatusColorAttribute()
@@ -129,12 +140,13 @@ class Maquina extends Model
      */
     public function getStatusColorAttribute(): string
     {
+        // Usa match para mapear o código de status para uma cor de indicação visual
         return match($this->status) {
-            'operacional'    => 'green',     // Verde = funcionando normalmente
-            'em_manutencao'  => 'yellow',    // Amarelo = em manutenção
-            'parada_critica' => 'red',       // Vermelho = máquina parada
-            'inativa'        => 'gray',      // Cinza = máquina inativa
-            default          => 'gray',
+            'operacional'    => 'green',  // Verde = máquina funcionando normalmente
+            'em_manutencao'  => 'yellow', // Amarelo = máquina em processo de manutenção
+            'parada_critica' => 'red',    // Vermelho = máquina parada por falha crítica
+            'inativa'        => 'gray',   // Cinza = máquina inativa ou desativada
+            default          => 'gray',   // Cinza para status não reconhecidos
         };
-    }
-}
+    } // fim do método getStatusColorAttribute
+} // fim da classe Maquina

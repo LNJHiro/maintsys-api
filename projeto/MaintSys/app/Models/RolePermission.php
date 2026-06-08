@@ -16,16 +16,19 @@
  * - permission_id: ID da permissão associada
  */
 
+// Define o namespace deste model dentro da aplicação Laravel
 namespace App\Models;
 
+// Importa a classe base Model do Eloquent ORM
 use Illuminate\Database\Eloquent\Model;
 
+// Declara a classe RolePermission que herda de Model (Eloquent ORM do Laravel)
 class RolePermission extends Model
 {
-    // Campos que podem ser preenchidos em massa
+    // Campos que podem ser preenchidos em massa (mass assignment)
     protected $fillable = [
-        'role',           // Nome do papel/grupo (ex: 'admin', 'tecnico')
-        'permission_id',  // ID da permissão associada
+        'role',           // Nome do papel/grupo ao qual a permissão é atribuída (ex: 'admin')
+        'permission_id',  // ID da permissão que está sendo associada ao role
     ];
 
     /**
@@ -36,6 +39,7 @@ class RolePermission extends Model
      */
     public function permission()
     {
+        // Um registro de RolePermission aponta para uma única permissão do sistema
         return $this->belongsTo(Permission::class);
-    }
-}
+    } // fim do método permission
+} // fim da classe RolePermission
