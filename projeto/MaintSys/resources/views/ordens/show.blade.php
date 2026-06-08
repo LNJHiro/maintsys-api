@@ -14,7 +14,13 @@
         <small>// ordem de serviço</small>
         {{ $ordem->numero }}
     </div>
+    {{-- GRUPO DE BOTÕES: IMPRIMIR / EXPORTAR / EDITAR
+         - Botão Imprimir: abre caixa de diálogo de impressão (window.print)
+         - Botão Exportar CSV: faz download do arquivo
+         - Botão Editar: link para edição (visível só com permissão)
+    --}}
     <div class="btn-export-group" style="display:flex;gap:8px">
+        {{-- BOTÃO IMPRIMIR: chama window.print() nativo do navegador --}}
         <button onclick="window.print()" class="btn btn-secondary" title="Imprimir O.S.">
             &#128438; Imprimir
         </button>

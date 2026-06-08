@@ -10,8 +10,29 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
+/**
+ * CONTROLLER: UserManagementController
+ *
+ * Responsável pelo CRUD completo de usuários (não técnicos).
+ * Funcionalidades:
+ * - Listar usuários
+ * - Criar novo usuário
+ * - Editar usuário (name, email, password, role)
+ * - Deletar usuário
+ * - Visualizar permissões de um usuário
+ */
+
 class UserManagementController extends Controller
 {
+    /**
+     * FUNÇÃO: index()
+     * ENTRADA: Nenhuma
+     * PROCESSAMENTO:
+     *   1. Busca todos os usuários exceto admin_master
+     *   2. Ordena por nome
+     * SAÍDA: View de listagem com botões Ver / Editar / Deletar
+     * USO: GET /usuarios
+     */
     public function index()
     {
         $users = User::where('role', '!=', 'admin_master')->get();
@@ -21,6 +42,13 @@ class UserManagementController extends Controller
         ]);
     }
 
+    /**
+     * FUNÇÃO: create()
+     * ENTRADA: Nenhuma
+     * PROCESSAMENTO: Prepara view com lista de roles disponíveis
+     * SAÍDA: Form de criação de novo usuário
+     * USO: GET /usuarios/criar
+     */
     public function create()
     {
         return view('usuarios.create', [
@@ -28,6 +56,21 @@ class UserManagementController extends Controller
         ]);
     }
 
+    /**
+     * FUNÇÃO: store(Request $request)
+     * ENTRADA:
+     *   - name: nome completo
+     *   - email: email (unique)
+     *   - password: senha (mínimo 6 caracteres)
+     *   - role: 'admin' ou 'usuario'
+     * PROCESSAMENTO:
+     *   1. Valida todos os campos
+     *   2. Hash da senha com Hash::make()
+     *   3. Cria novo User no banco
+     *   4. Usuário herda permissões do seu role automaticamente
+     * SAÍDA: Redirecionamento para listagem com mensagem de sucesso
+     * USO: POST /usuarios
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -45,6 +88,16 @@ class UserManagementController extends Controller
             ->with('success', 'Usuário criado com sucesso!');
     }
 
+    /**
+     * FUNÇÃO: edit(User $user)
+     * ENTRADA: User (model binding)
+     * PROCESSAMENTO:
+     *   1. Bloqueia edição de admin_master (403)
+     *   2. Busca todas as permissões organizadas por módulo
+     *   3. Calcula permissões efetivas do usuário (individual ou do role)
+     * SAÍDA: Form de edição com campos: name, email, password (opcional), role
+     * USO: GET /usuarios/{user}/editar
+     */
     public function edit(User $user)
     {
         if ($user->role === 'admin_master') {
@@ -62,6 +115,25 @@ class UserManagementController extends Controller
         ]);
     }
 
+    /**
+     * FUNÇÃO: update(Request $request, User $user)
+     * ENTRADA:
+     *   - User (model binding)
+     *   - name: novo nome
+     *   - email: novo email (unique)
+     *   - password: nova senha (opcional — deixar em branco = não muda)
+     *   - role: novo role
+     * PROCESSAMENTO:
+     *   1. Bloqueia edição de admin_master (403)
+     *   2. Valida todos os campos
+     *   3. Se password preenchida, faz hash; senão remove do array
+     *   4. Transação DB:
+     *      a. Atualiza dados do usuário
+     *      b. Se role mudou: deleta permissões individuais e seta permissions_overridden=false
+     *   5. Limpa cache de permissões
+     * SAÍDA: Redirecionamento para listagem com sucesso
+     * USO: PUT /usuarios/{user}
+     */
     public function update(Request $request, User $user)
     {
         if ($user->role === 'admin_master') {
@@ -97,6 +169,16 @@ class UserManagementController extends Controller
             ->with('success', 'Usuário atualizado com sucesso!');
     }
 
+    /**
+     * FUNÇÃO: destroy(User $user)
+     * ENTRADA: User (model binding)
+     * PROCESSAMENTO:
+     *   1. Bloqueia deleção de admin_master (403)
+     *   2. Deleta o usuário (cascade deleta user_permissions)
+     * SAÍDA: Redirecionamento para listagem com sucesso
+     * USO: DELETE /usuarios/{user}
+     * NOTA: Técnicos não são deletados, apenas desvinculados
+     */
     public function destroy(User $user)
     {
         if ($user->role === 'admin_master') {
@@ -109,6 +191,17 @@ class UserManagementController extends Controller
             ->with('success', 'Usuário deletado com sucesso!');
     }
 
+    /**
+     * FUNÇÃO: showPermissions(User $user)
+     * ENTRADA: User (model binding)
+     * PROCESSAMENTO:
+     *   1. Bloqueia visualização de admin_master (403)
+     *   2. Busca todas as permissões por módulo
+     *   3. Calcula permissões efetivas do usuário (individual ou role)
+     * SAÍDA: View read-only com grid de permissões (✓ ativo / ✗ bloqueado)
+     * USO: GET /usuarios/{user}/permissoes
+     * NOTA: Apenas visualização; edição feita via /acesso
+     */
     public function showPermissions(User $user)
     {
         if ($user->role === 'admin_master') {
@@ -125,6 +218,17 @@ class UserManagementController extends Controller
         ]);
     }
 
+    /**
+     * FUNÇÃO: effectivePermissionIds(User $user) [PRIVADA]
+     * ENTRADA: User
+     * PROCESSAMENTO:
+     *   1. Busca todas as permissões individuais do usuário (user_permissions)
+     *   2. Se permissions_overridden=true → retorna as permissões individuais
+     *   3. Se permissions_overridden=false → retorna as permissões do role dele
+     * SAÍDA: Array de permission_ids que o usuário tem acesso
+     * USO: Interno (edit, showPermissions)
+     * LÓGICA: Implementa a hierarquia: individual > role > nada
+     */
     private function effectivePermissionIds(User $user): array
     {
         $individual = UserPermission::where('user_id', $user->id)

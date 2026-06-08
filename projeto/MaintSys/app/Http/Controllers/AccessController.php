@@ -9,8 +9,31 @@ use App\Models\UserPermission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * CONTROLLER: AccessController
+ *
+ * Responsável pela administração do sistema de permissões e acesso.
+ * Funcionalidades:
+ * - Gerenciar permissões por role (admin/usuario)
+ * - Gerenciar permissões individuais de usuários
+ * - Alterar role de usuários
+ * - Visualizar e alterar permissões de forma centralizada
+ */
+
 class AccessController extends Controller
 {
+    /**
+     * FUNÇÃO: index()
+     * ENTRADA: Nenhuma
+     * PROCESSAMENTO:
+     *   1. Busca todas as permissões ordenadas por módulo
+     *   2. Busca todos os usuários (exceto admin_master)
+     *   3. Para cada usuário, determina se usa permissões individuais ou do role
+     *   4. Monta array com permissões efetivas de cada usuário
+     *   5. Monta array com permissões de cada role (admin/usuario)
+     * SAÍDA: View com grid de permissões: 2 colunas (admin vs usuario) com checkboxes AJAX
+     * USO: GET /acesso
+     */
     public function index()
     {
         $permissions = Permission::orderBy('modulo')->orderBy('name')->get()->groupBy('modulo');
@@ -51,6 +74,22 @@ class AccessController extends Controller
         ]);
     }
 
+    /**
+     * FUNÇÃO: updateUserPermissions(Request $request, User $user)
+     * ENTRADA:
+     *   - User (model binding)
+     *   - inherit (boolean): true = volta a herdar do role, false = usa individual
+     *   - permissions[] (array): IDs das permissões individuais (se inherit=false)
+     * PROCESSAMENTO:
+     *   1. Bloqueia alteração de admin_master (403)
+     *   2. Valida os IDs das permissões (devem existir no banco)
+     *   3. Deleta todas as permissões individuais antigas
+     *   4. Se inherit=false, insere as novas permissões individuais
+     *   5. Atualiza flag `permissions_overridden` do usuário
+     *   6. Limpa cache de permissões em memória
+     * SAÍDA: JSON com mensagem de sucesso
+     * USO: POST /acesso/usuario/{user}/permissoes (AJAX)
+     */
     public function updateUserPermissions(Request $request, User $user)
     {
         if ($user->role === 'admin_master') {
@@ -89,6 +128,21 @@ class AccessController extends Controller
         return response()->json(['message' => $message]);
     }
 
+    /**
+     * FUNÇÃO: updateRole(Request $request, string $role)
+     * ENTRADA:
+     *   - role: 'admin' ou 'usuario'
+     *   - permissions[] (array): IDs das permissões que este role deve ter
+     * PROCESSAMENTO:
+     *   1. Valida se role é 'admin' ou 'usuario'
+     *   2. Valida se os IDs das permissões existem no banco
+     *   3. Deleta TODAS as permissões antigas deste role
+     *   4. Insere as novas permissões em DB::transaction() (atômico)
+     *   5. Qualquer usuário que herda deste role passará a ter as novas perms
+     * SAÍDA: JSON com mensagem de sucesso
+     * USO: POST /acesso/role/{role} (AJAX)
+     * NOTA: Crítico — alterando permissões de um role afeta todos os usuários que herdam dele
+     */
     public function updateRole(Request $request, string $role)
     {
         if (!in_array($role, ['admin', 'usuario'])) {
@@ -116,6 +170,15 @@ class AccessController extends Controller
         return response()->json(['message' => "Permissoes de '$role' atualizadas com sucesso"]);
     }
 
+    /**
+     * FUNÇÃO: usuarios()
+     * ENTRADA: Nenhuma
+     * PROCESSAMENTO:
+     *   1. Busca todos os usuários (exceto admin_master)
+     *   2. Prepara array com roles disponíveis
+     * SAÍDA: View com grid de usuários e suas alterações de role
+     * USO: GET /acesso/usuarios
+     */
     public function usuarios()
     {
         $users = User::where('role', '!=', 'admin_master')->get();
@@ -127,6 +190,24 @@ class AccessController extends Controller
         ]);
     }
 
+    /**
+     * FUNÇÃO: updateUsuario(Request $request, User $user)
+     * ENTRADA:
+     *   - User (model binding)
+     *   - role: novo role ('admin' ou 'usuario')
+     * PROCESSAMENTO:
+     *   1. Bloqueia alteração de admin_master (403)
+     *   2. Valida que role é 'admin' ou 'usuario'
+     *   3. Se role mudou:
+     *      - Atualiza o role do usuário
+     *      - Deleta permissões individuais (volta a herdar)
+     *      - Seta permissions_overridden=false
+     *      - Limpa cache
+     *   4. Se role não mudou, não faz nada
+     * SAÍDA: JSON com mensagem de sucesso
+     * USO: PATCH /acesso/usuario/{user} (AJAX)
+     * NOTA: Ao mudar role, permissões individuais são perdidas (volta ao padrão)
+     */
     public function updateUsuario(Request $request, User $user)
     {
         if ($user->role === 'admin_master') {

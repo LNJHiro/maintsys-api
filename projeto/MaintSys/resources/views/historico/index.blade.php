@@ -13,7 +13,12 @@
         <small>// log de intervenções</small>
         Histórico de Manutenções
     </div>
+    {{-- GRUPO DE BOTÕES: IMPRIMIR / EXPORTAR
+         - Botão Imprimir: abre caixa de diálogo de impressão (window.print)
+         - Botão Exportar CSV: faz download do arquivo com filtros aplicados
+    --}}
     <div class="btn-export-group" style="display:flex;gap:8px;align-items:center">
+        {{-- BOTÃO IMPRIMIR: chama window.print() nativo do navegador --}}
         <button onclick="window.print()" class="btn btn-secondary" title="Imprimir lista">
             &#128438; Imprimir
         </button>

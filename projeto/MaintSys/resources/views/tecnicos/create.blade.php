@@ -1,3 +1,20 @@
+{{--
+    VIEW: tecnicos/create.blade.php
+    ROTA:    GET  /tecnicos/create  →  TecnicoController::create()
+    SUBMETE: POST /tecnicos         →  TecnicoController::store()
+    SEÇÕES:
+      Linha 20 — Formulário principal
+      Linha 24 — Campo: Nome Completo
+      Linha 31 — Campo: Matrícula
+      Linha 39 — Campo: E-mail
+      Linha 46 — Campo: Especialidade
+      Linha 53 — Campo: Senha
+      Linha 60 — Campo: Confirmar Senha
+      Linha 67 — Campo: Telefone (com máscara JS no final do arquivo)
+      Linha 73 — Checkbox: Técnico Ativo
+      Linha 84 — Botões: Cadastrar / Cancelar
+      Linha 91 — Script JS de máscara de telefone
+--}}
 @extends('layouts.app')
 
 @section('title', 'Novo Técnico')

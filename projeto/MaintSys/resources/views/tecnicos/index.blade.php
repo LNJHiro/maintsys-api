@@ -1,3 +1,16 @@
+{{--
+    VIEW: tecnicos/index.blade.php
+    ROTA:    GET /tecnicos  →  TecnicoController::index()
+    DADOS:   $tecnicos (paginado, com ordens_count)
+    SEÇÕES:
+      Linha 16 — Cabeçalho da página + botão "Novo Técnico"
+      Linha 21 — Tabela de listagem de técnicos
+      Linha 36 — Loop @forelse: cada linha da tabela
+      Linha 44 — Coluna telefone com formatação automática
+      Linha 59 — Coluna de status (badge verde/cinza)
+      Linha 65 — Coluna de ações: Ver, Editar, Deletar
+      Linha 88 — Paginação
+--}}
 @extends('layouts.app')
 
 @section('title', 'Técnicos')
@@ -8,6 +21,7 @@
 
 @section('content')
 
+{{-- CABEÇALHO: título da página + botão "Novo Técnico" (visível só com permissão tecnicos.criar) --}}
 <div class="page-header">
     <div class="page-title">
         <small>// equipe de manutenção</small>
@@ -18,6 +32,7 @@
     @endif
 </div>
 
+{{-- TABELA: lista todos os técnicos cadastrados --}}
 <div class="table-wrap">
     <table>
         <thead>
@@ -41,6 +56,8 @@
                 <td style="font-weight:500">{{ $t->nome }}</td>
                 <td style="color:var(--muted)">{{ $t->especialidade ?? '—' }}</td>
                 <td style="color:var(--muted);font-size:12px">{{ $t->email }}</td>
+
+                {{-- Formata telefone: (99) 99999-9999 ou (99) 9999-9999 --}}
                 <td class="mono" style="font-size:11px;color:var(--muted)">
                     @if($t->telefone)
                         @php
@@ -56,12 +73,18 @@
                         —
                     @endif
                 </td>
+
+                {{-- ordens_count vem de withCount('ordens') no controller --}}
                 <td class="mono" style="text-align:center">{{ $t->ordens_count }}</td>
+
+                {{-- Badge verde = ativo, cinza = inativo --}}
                 <td>
                     <span class="badge {{ $t->ativo ? 'badge-green' : 'badge-gray' }}">
                         {{ $t->ativo ? 'Ativo' : 'Inativo' }}
                     </span>
                 </td>
+
+                {{-- Ações: Ver (sempre), Editar (permissão), Deletar (permissão) --}}
                 <td>
                     <div class="actions">
                         <a href="{{ route('tecnicos.show', $t) }}" class="btn btn-secondary btn-sm">Ver</a>

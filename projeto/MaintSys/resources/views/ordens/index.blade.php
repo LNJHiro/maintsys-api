@@ -13,7 +13,13 @@
         <small>// gestão de O.S.</small>
         Ordens de Serviço
     </div>
+    {{-- GRUPO DE BOTÕES: IMPRIMIR / EXPORTAR / CRIAR
+         - Botão Imprimir: abre caixa de diálogo de impressão (window.print)
+         - Botão Exportar CSV: faz download do arquivo
+         - Botão Nova O.S.: cria nova ordem (visível só com permissão)
+    --}}
     <div class="btn-export-group" style="display:flex;gap:8px;align-items:center">
+        {{-- BOTÃO IMPRIMIR: chama window.print() nativo do navegador --}}
         <button onclick="window.print()" class="btn btn-secondary" title="Imprimir lista">
             &#128438; Imprimir
         </button>
